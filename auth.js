@@ -35,7 +35,7 @@ function SignOut() {
     .then(() => {
       console.log('Logout already');
       sessionStorage.removeItem('loginUser');
-      indow.location.replace('../index.html');
+      window.location.replace('../index.html');
     })
     .catch((error) => {
       console.log('ERROR: ' + error);
