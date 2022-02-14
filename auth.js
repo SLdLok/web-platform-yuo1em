@@ -16,8 +16,10 @@ function SignIn() {
       console.log('LogIn already');
       // store the user's account data in sessionStorage
       sessionStorage.setItem('loginUser', JSON.stringify(user));
+      CheckAccountAccess();
       // Direct to panel
-      window.location.href = './student/panel.html';
+      window.location.href =
+        './' + sessionStorage.getItem('loginUserRole') + '/panel.html';
     })
     .catch((error) => {
       var errorCode = error.code;
