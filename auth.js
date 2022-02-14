@@ -18,8 +18,13 @@ function SignIn() {
       sessionStorage.setItem('loginUser', JSON.stringify(user));
       CheckAccountAccess();
       // Direct to panel
-      window.location.href =
-        './' + sessionStorage.getItem('loginUserRole') + '/panel.html';
+      setTimeout(
+        () =>
+          window.location.replace(
+            './' + sessionStorage.getItem('loginUserRole') + '/panel.html'
+          ),
+        500
+      );
     })
     .catch((error) => {
       var errorCode = error.code;
@@ -38,6 +43,7 @@ function SignOut() {
     .then(() => {
       console.log('Logout already');
       sessionStorage.removeItem('loginUser');
+      sessionStorage.removeItem('loginUserRole');
       window.location.replace('../index.html');
     })
     .catch((error) => {
