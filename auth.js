@@ -45,22 +45,25 @@ function SignOut() {
 
 // For Checking Is it in correct access (Method)
 function CheckAccountAccess() {
-  var user = JSON.parse(sessionStorage.getItem("loginUser"));
-  var personalUserData = db.collection("UserData").doc(user.uid);
-personalUserData.get().then((doc) => {
-  if (doc.exists) {
-      console.log("Document data:", doc.data());
-      sessionStorage.getItem("loginUserRole") = doc.data().Role;
-      console.log("His Role is " + sessionStorage.getItem("loginUserRole"));
-  } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-  }
-}).catch((error) => {
-  console.log("Error getting document:", error);
-});
+  var user = JSON.parse(sessionStorage.getItem('loginUser'));
+  var personalUserData = db.collection('UserData').doc(user.uid);
+  personalUserData
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        console.log('Document data:', doc.data());
+        sessionStorage.setItem('loginUserRole', doc.data().Role);
+        console.log('His Role is ' + sessionStorage.getItem('loginUserRole'));
+        return doc.data.Role;
+      } else {
+        // doc.data() will be undefined in this case
+        console.log('No such document!');
+      }
+    })
+    .catch((error) => {
+      console.log('Error getting document:', error);
+    });
 }
-
 
 // For Checking Is it logined (& correct access page)
 if (window.hasOwnProperty('IsAuthPage') == false) {
