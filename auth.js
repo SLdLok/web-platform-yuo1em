@@ -54,7 +54,6 @@ function CheckAccountAccess() {
         console.log('Document data:', doc.data());
         sessionStorage.setItem('loginUserRole', doc.data().Role);
         console.log('His Role is ' + sessionStorage.getItem('loginUserRole'));
-        return doc.data().Role;
       } else {
         // doc.data() will be undefined in this case
         console.log('No such document!');
@@ -63,6 +62,7 @@ function CheckAccountAccess() {
     .catch((error) => {
       console.log('Error getting document:', error);
     });
+  return sessionStorage.loginUserRole;
 }
 
 // For Checking Is it logined (& correct access page)
