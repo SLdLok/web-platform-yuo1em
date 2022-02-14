@@ -65,6 +65,9 @@ function CheckAccountAccess() {
       } else {
         // doc.data() will be undefined in this case
         console.log('No such document!');
+        obj = {
+          // -------------- USERDATA SET PLS --------------- //
+        };
         sessionStorage.setItem('loginUserRole', 'notGiven');
       }
     })
