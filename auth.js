@@ -12,7 +12,7 @@ function SignIn() {
     .then((result) => {
       var credential = result.credential;
       var token = credential.accessToken;
-      user = result.user;
+      var user = result.user;
       console.log('LogIn already');
       // store the user's account data in sessionStorage
       sessionStorage.setItem('loginUser', JSON.stringify(user));
@@ -43,7 +43,24 @@ function SignOut() {
     });
 }
 
-// FOr Checking Is it in correct access
+// For Checking Is it in correct access (Method)
+function CheckAccountAccess() {
+  var user = JSON.parse(sessionStorage.getItem("loginUser"));
+  var personalUserData = db.collection("UserData").doc(user.uid);
+personalUserData.get().then((doc) => {
+  if (doc.exists) {
+      console.log("Document data:", doc.data());
+      sessionStorage.getItem("loginUserRole") = doc.data().Role;
+      console.log("His Role is " + sessionStorage.getItem("loginUserRole"));
+  } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+  }
+}).catch((error) => {
+  console.log("Error getting document:", error);
+});
+}
+
 
 // For Checking Is it logined (& correct access page)
 if (window.hasOwnProperty('IsAuthPage') == false) {
