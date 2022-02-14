@@ -75,6 +75,7 @@ if (CheckAccountAccess() != pageNeedAccess) {
       pageNeedAccess +
       '\n\n Website will sign out immediately \n Please Contact Admin to slove problem.'
   );
+  SignOut();
 }
 
 // For Checking Is it logined (& correct access page)
