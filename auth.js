@@ -57,12 +57,24 @@ function CheckAccountAccess() {
       } else {
         // doc.data() will be undefined in this case
         console.log('No such document!');
+        sessionStorage.setItem('loginUserRole', 'notGiven');
       }
     })
     .catch((error) => {
       console.log('Error getting document:', error);
     });
   return sessionStorage.loginUserRole;
+}
+
+// Direct to correct Access page
+if (CheckAccountAccess() != pageNeedAccess) {
+  window.alert(
+    'ERROR: Access Denied \n Your Access: ' +
+      CheckAccountAccess() +
+      '\n Access Allowed: ' +
+      pageNeedAccess +
+      '\n\n Website will sign out immediately \n Please Contact Admin to slove problem.'
+  );
 }
 
 // For Checking Is it logined (& correct access page)
