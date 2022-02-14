@@ -68,7 +68,7 @@ function CheckAccountAccess() {
         obj = {
           // -------------- USERDATA SET PLS --------------- //
         };
-        sessionStorage.setItem('loginUserRole', 'notGiven');
+        // add new userData in Database
       }
     })
     .catch((error) => {
