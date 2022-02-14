@@ -27,6 +27,7 @@ function SignIn() {
       console.log('ERROR: ' + error);
     });
 }
+
 // SignOut Method
 function SignOut() {
   firebase
