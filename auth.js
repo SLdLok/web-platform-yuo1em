@@ -66,21 +66,22 @@ function CheckAccountAccess() {
   return sessionStorage.loginUserRole;
 }
 
-// Direct to correct Access page
-if (CheckAccountAccess() != pageNeedAccess) {
-  window.alert(
-    'ERROR: Access Denied \n Your Access: ' +
-      CheckAccountAccess() +
-      '\n Access Allowed: ' +
-      pageNeedAccess +
-      '\n\n Website will sign out immediately \n Please Contact Admin to slove problem.'
-  );
-  SignOut();
-}
-
 // For Checking Is it logined (& correct access page)
 if (window.hasOwnProperty('IsAuthPage') == false) {
   console.log('Not In Auth');
+
+  // Direct to correct Access page
+  if (CheckAccountAccess() != pageNeedAccess) {
+    window.alert(
+      'ERROR: Access Denied \n Your Access: ' +
+        CheckAccountAccess() +
+        '\n Access Allowed: ' +
+        pageNeedAccess +
+        '\n\n Website will sign out immediately \n Please Contact Admin to slove problem.'
+    );
+    SignOut();
+  }
+
   if (sessionStorage.hasOwnProperty('loginUser') == false) {
     console.log('not Have Login');
 
