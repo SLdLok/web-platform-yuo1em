@@ -77,7 +77,7 @@ if (window.hasOwnProperty('IsAuthPage') == false) {
         CheckAccountAccess() +
         '\n Access Allowed: ' +
         pageNeedAccess +
-        '\n\n Website will sign out immediately \n Please Contact Admin to slove problem.'
+        '\n\n Website will sign out immediately \n Please Contact Admin to slove the problem.'
     );
     SignOut();
   }
