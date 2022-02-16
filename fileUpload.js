@@ -4,8 +4,6 @@ var storageRef = storage.ref();
 // Point to Folder Path
 var forumStorage = storageRef.child('Forum');
 
-//
-
 // Create the file metadata
 var metadata = {
   contentType: 'image/jpeg',
@@ -64,3 +62,4 @@ function uploadFile(file, putFolder, metadata) {
 function btnUpload() {
   uploadFile(document.getElementById('fileButton').value, 'test', metadata);
 }
+console.log('Loading Upload Script');
