@@ -81,6 +81,7 @@ function CheckAccountAccess() {
           })
           .then(() => {
             console.log('Document successfully written!');
+            CheckAccountAccess();
           })
           .catch((error) => {
             console.error('Error writing document: ', error);

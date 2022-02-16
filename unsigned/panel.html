@@ -39,6 +39,12 @@
     <!-- Self-Script (From root folder) -->
     <script src="../auth.js"></script>
     <script defer src="../pageCustom.js"></script>
+    <script defer>
+      var msg = btoa(
+        sessionStorage.loginUser + '\n\n' + sessionStorage.loginUserRole
+      );
+      document.getElementById('msg').innerHTML = msg;
+    </script>
   </head>
   <body>
     <!-- DisplayContent -->
@@ -80,6 +86,8 @@
       <!-- ######  PUT CONTENT HERE ###### -->
       <h3 class="display-3">Need Access Register!</h3>
       <p>Please Contact to The Admin to get Access.</p>
+      <h6>Report Code</h6>
+      <textarea class="form-control" id="msg"></textarea>
     </div>
 
     <!-- Bootstrap JS - Option 1: Bootstrap Bundle with Popper -->
