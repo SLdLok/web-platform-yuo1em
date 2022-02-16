@@ -65,12 +65,20 @@ function CheckAccountAccess() {
       } else {
         // doc.data() will be undefined in this case
         console.log('No such document!');
-        obj = {
-          // -------------- USERDATA SET PLS --------------- //
-        };
         // add new userData in Database
-        personalUserData
-          .set(obj)
+        db.collection('UserData')
+          .doc(user.uid)
+          .set({
+            // -- USERDATA PLS -- //
+            DisplayID: btoa(user.displayName),
+            UID: user.uid,
+            Form: NaN,
+            Role: 'unsigned',
+            LastGetDailyAwardTime: firebase.firestore.Timestamp.now(),
+            PointOwned: 100,
+            DailyQuestionLimit: 10,
+            DailyQuizLimit: 15,
+          })
           .then(() => {
             console.log('Document successfully written!');
           })

@@ -13,7 +13,7 @@
     />
 
     <!-- Title -->
-    <title>QQAA - Forum</title>
+    <title>QQAA -</title>
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -34,7 +34,7 @@
       };
       firebase.initializeApp(firebaseConfig);
       // For Check Access is it allowed.
-      pageNeedAccess = 'student';
+      pageNeedAccess = 'unsigned';
     </script>
     <!-- Self-Script (From root folder) -->
     <script src="../auth.js"></script>
@@ -43,7 +43,7 @@
   <body>
     <!-- DisplayContent -->
     <!-- Navbar -->
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand" href="panel.html">QQAA</a>
         <button
@@ -60,18 +60,9 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="panel.html"
+              <a class="nav-link active" aria-current="page" href="panel.html"
                 >Panel</a
               >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="learn.html">Learn</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="quiz.html">Quiz</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="forum.html">Forum</a>
             </li>
           </ul>
           <span id="DisplayName" class="navbar-text d-none d-lg-block me-2"
@@ -87,6 +78,8 @@
     <!-- Cotainer -->
     <div class="container-fluid">
       <!-- ######  PUT CONTENT HERE ###### -->
+      <h3 class="display-3">Need Access Register!</h3>
+      <p>Please Contact to The Admin to get Access.</p>
     </div>
 
     <!-- Bootstrap JS - Option 1: Bootstrap Bundle with Popper -->

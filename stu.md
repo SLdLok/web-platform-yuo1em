@@ -32,3 +32,17 @@ stu. 1
 - Q photo/ Q text
 - MC 4 Ans select 1
 - quiz: level1-3 \* 1pt / only 15Q everyday will give point
+
+
+# Data Stu.
+## auth.UserData
+{
+  "DisplayID": "BASE64?",
+  "UID": "uid",
+  "Form": NaN,
+  "Role": "unsigned"
+  "LastGetDailyAwardTime": Timestrap,
+  "PointOwned": 50,
+  "DailyQuestionLimit": 10,
+  "DailyQuizLimit": 15
+}
