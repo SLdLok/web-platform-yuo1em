@@ -9,10 +9,12 @@ var metadata = {
   contentType: 'image/jpeg',
 };
 
-// Upload Method (putFolder eg. "forum")
-function uploadFile(file, putFolder) {
+// Upload Function (putFolder eg. "forum")
+function uploadFile(file, putFolder, metadata) {
   // Upload file with metadata
-  var uploadTask = storageRef.child(putFolder + '/' + file.name).put(file);
+  var uploadTask = storageRef
+    .child(putFolder + '/' + file.name)
+    .put(file, metadata);
 
   // listen the state change
   uploadTask.on(
@@ -58,6 +60,5 @@ function uploadFile(file, putFolder) {
 }
 //  uploadButton Test(Remove)
 function btnUpload() {
-  uploadFile(document.getElementById('fileButton').value, 'test', metadata);
+  uploadFile(document.getElementById('fileButton').files[0], 'test', metadata);
 }
-console.log('Loading Upload Script');
