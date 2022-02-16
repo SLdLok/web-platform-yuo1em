@@ -10,11 +10,9 @@ var metadata = {
 };
 
 // Upload Method (putFolder eg. "forum")
-function uploadFile(file, putFolder, metadata) {
+function uploadFile(file, putFolder) {
   // Upload file with metadata
-  var uploadTask = storageRef
-    .child(putFolder + '/' + file.name)
-    .put(file, metadata);
+  var uploadTask = storageRef.child(putFolder + '/' + file.name).put(file);
 
   // listen the state change
   uploadTask.on(
