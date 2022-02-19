@@ -177,6 +177,7 @@ function updateText() {
   ).innerHTML = document.getElementById(
     "editorTextInput"
   ).value;
+  MathJax.typeset();
 }
 
 document

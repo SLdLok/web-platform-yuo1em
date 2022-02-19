@@ -25,9 +25,6 @@ function readMSG(Group, Form, Post) {
           doc.data().EditTime.toDate() +
           `</small>` +
           `<div class="row-4 border">` +
-          `<img src="` +
-          doc.data().PostImage +
-          `" class="img-fluid img-thumbnail">` +
           doc.data().PostText +
           `</div>`;
 
@@ -36,7 +33,7 @@ function readMSG(Group, Form, Post) {
         ).innerHTML =
           // Post Comment Area
           `<div class="row-4 border-top-0"><h3>Comment The Post</h3>` +
-          `<textarea id='SelfCommentText' class="form-control" style="font-size: 0.5rem;"></textarea>` +
+          `<iframe id="textEditor" class="embed-responsive" style="width: 100%; min-height: 20rem;" src="../textEditor.html"></iframe>` +
           `<button class="btn btn-success" onclick="sendComment('` +
           Group +
           `','` +
@@ -67,10 +64,7 @@ function readMSG(Group, Form, Post) {
             array[i].EditTime.toDate() +
             `</small>` +
             `<br/>` +
-            `<img src="` +
-            array[i].CommentImage +
-            `" class="img-fluid img-thumbnail">` +
-            `<br/><label>` +
+            `<label>` +
             array[i].CommentText +
             `</label></div>`;
         }
@@ -91,9 +85,12 @@ function readMSG(Group, Form, Post) {
 
 // Normal
 function listMSG(Group, Form) {
-  document.getElementById(
-    "PostList"
-  ).innerHTML = `<div class="row-1 border"><button class="btn btn-success" onclick="newPost()">New Post</button></div>`;
+  document.getElementById("PostList").innerHTML =
+    `<div class="row-1 border"><button class="btn btn-success" onclick="newPost('` +
+    Group +
+    `','` +
+    Form +
+    `')">New Post</button></div>`;
   var docRef = db.collection("Forum").doc(Group);
   var array = [];
   docRef
@@ -159,10 +156,11 @@ function sendComment(Group, Form, Post) {
     .update({
       Comment: firebase.firestore.FieldValue.arrayUnion(
         {
-          CommentText: document.getElementById(
-            "SelfCommentText"
-          ).value,
-          CommentImage: "",
+          CommentText: document
+            .getElementById("textEditor")
+            .contentWindow.document.getElementById(
+              "editorTextInput"
+            ).value,
           EditTime: firebase.firestore.Timestamp.now(),
           CommenterUID: JSON.parse(
             sessionStorage.loginUser
@@ -182,11 +180,122 @@ function sendComment(Group, Form, Post) {
     });
 }
 
-function newPost() {
-  document.getElementById(
-    "PostArea"
-  ).innerHTML = `<iframe class="embed-responsive" style="width: 100%; height: 90vh;" src="../textEditor.html"></iframe>`;
+function newPost(Group, Form) {
+  document.getElementById("PostArea").innerHTML =
+    `<h5>Post Title</h5><input id="PostTitleInput"class="form-control"></input><h5>Content</h5>` +
+    `<iframe class="embed-responsive" id="textEditor" style="width: 100%; height: 72.5vh;" src="../textEditor.html"></iframe>` +
+    `<button class="btn btn-success" onclick="sendPost('` +
+    Group +
+    `','` +
+    Form +
+    `')">Post</button>`;
   document.getElementById(
     "CommentArea"
   ).innerHTML = "";
+}
+
+function sendPost(Group, Form) {
+  var titleInput = document.getElementById(
+    "PostTitleInput"
+  );
+  var input = document
+    .getElementById("textEditor")
+    .contentWindow.document.getElementById(
+      "editorTextInput"
+    );
+  if ((titleInput.value == "") | " " | "   ") {
+    titleInput.value =
+      "Untitled Post on" + Date.now();
+  }
+  db.collection("Forum")
+    .doc(Group)
+    .collection(Form)
+    .add({
+      PostTitle: titleInput.value,
+      EditTime: firebase.firestore.Timestamp.now(),
+      PostText: input.value,
+      Comment: [],
+      PosterUID: JSON.parse(
+        sessionStorage.loginUser
+      ).uid
+    })
+    .then((docRef) => {
+      console.log(
+        "Document written with ID: ",
+        docRef.id
+      );
+      if (Form === "F1") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F1DocArray: firebase.firestore.FieldValue.arrayUnion(
+              {
+                id: docRef.id,
+                title: titleInput.value
+              }
+            )
+          });
+      } else if (Form === "F2") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F2DocArray: firebase.firestore.FieldValue.arrayUnion(
+              {
+                id: docRef.id,
+                title: titleInput.value
+              }
+            )
+          });
+      } else if (Form === "F3") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F3DocArray: firebase.firestore.FieldValue.arrayUnion(
+              {
+                id: docRef.id,
+                title: titleInput.value
+              }
+            )
+          });
+      } else if (Form === "F4") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F4DocArray: firebase.firestore.FieldValue.arrayUnion(
+              {
+                id: docRef.id,
+                title: titleInput.value
+              }
+            )
+          });
+      } else if (Form === "F5") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F5DocArray: firebase.firestore.FieldValue.arrayUnion(
+              {
+                id: docRef.id,
+                title: titleInput.value
+              }
+            )
+          });
+      } else if (Form === "F6") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F6DocArray: firebase.firestore.FieldValue.arrayUnion(
+              {
+                id: docRef.id,
+                title: titleInput.value
+              }
+            )
+          });
+      }
+    })
+    .catch((error) => {
+      console.error(
+        "Error adding document: ",
+        error
+      );
+    });
 }
