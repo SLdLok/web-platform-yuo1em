@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
 
     <!-- Bootstrap -->
     <link
@@ -24,18 +27,30 @@
     <script>
       // For Firebase JS SDK v7.20.0 and later, measurementId is optional
       const firebaseConfig = {
-        apiKey: "AIzaSyAjq1lBaXKKsrREWHBRD9I6HWYnixGaDHY",
+        apiKey:
+          "AIzaSyAjq1lBaXKKsrREWHBRD9I6HWYnixGaDHY",
         authDomain: "appm-87da8.firebaseapp.com",
         projectId: "appm-87da8",
         storageBucket: "appm-87da8.appspot.com",
         messagingSenderId: "737891521283",
-        appId: "1:737891521283:web:50f0956a00849e40314f36",
+        appId:
+          "1:737891521283:web:50f0956a00849e40314f36",
         measurementId: "G-CTZBC8X25J"
       };
       firebase.initializeApp(firebaseConfig);
       // For Check Access is it allowed.
       pageNeedAccess = "student";
     </script>
+    <!-- Mathjax (TESTING) -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+      });
+    </script>
+    <script
+      type="text/javascript"
+      src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    ></script>
     <!-- Self-Script (From root folder) -->
     <script src="../auth.js"></script>
     <script defer src="../pageCustom.js"></script>
@@ -53,9 +68,13 @@
   <body>
     <!-- DisplayContent -->
     <!-- Navbar -->
-    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+    <nav
+      class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark"
+    >
       <div class="container-fluid">
-        <a class="navbar-brand" href="panel.html">QQAA</a>
+        <a class="navbar-brand" href="panel.html"
+          >QQAA</a
+        >
         <button
           class="navbar-toggler"
           type="button"
@@ -65,30 +84,55 @@
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span
+            class="navbar-toggler-icon"
+          ></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <div
+          class="collapse navbar-collapse"
+          id="navbarSupportedContent"
+        >
+          <ul
+            class="navbar-nav me-auto mb-2 mb-lg-0"
+          >
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="panel.html"
+              <a
+                class="nav-link"
+                aria-current="page"
+                href="panel.html"
                 >Panel</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="learn.html">Learn</a>
+              <a
+                class="nav-link active"
+                href="learn.html"
+                >Learn</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="quiz.html">Quiz</a>
+              <a class="nav-link" href="quiz.html"
+                >Quiz</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="forum.html">Forum</a>
+              <a
+                class="nav-link"
+                href="forum.html"
+                >Forum</a
+              >
             </li>
           </ul>
-          <span id="DisplayName" class="navbar-text d-none d-lg-block me-2"
+          <span
+            id="DisplayName"
+            class="navbar-text d-none d-lg-block me-2"
             >Welcome Back, HUMAN.</span
           >
           <div class="d-flex">
-            <button class="btn btn-light" onclick="SignOut();">
+            <button
+              class="btn btn-light"
+              onclick="SignOut();"
+            >
               Logout
             </button>
           </div>
@@ -100,7 +144,9 @@
     <div class="container-fluid">
       <!-- ######  PUT CONTENT HERE ###### -->
       <div class="secondary_list">
-        <h2 style="text-align: center;">Secondary 1</h2>
+        <h2 style="text-align: center;">
+          Secondary 1
+        </h2>
         <iframe
           class="d-flex justify-content-center"
           width="1280"
@@ -116,23 +162,33 @@
       </div>
 
       <div class="secondary_list">
-        <h2 style="text-align: center;">Secondary 2</h2>
+        <h2 style="text-align: center;">
+          Secondary 2
+        </h2>
       </div>
 
       <div class="secondary_list">
-        <h2 style="text-align: center;">Secondary 3</h2>
+        <h2 style="text-align: center;">
+          Secondary 3
+        </h2>
       </div>
 
       <div class="secondary_list">
-        <h2 style="text-align: center;">Secondary 4</h2>
+        <h2 style="text-align: center;">
+          Secondary 4
+        </h2>
       </div>
 
       <div class="secondary_list">
-        <h2 style="text-align: center;">Secondary 5</h2>
+        <h2 style="text-align: center;">
+          Secondary 5
+        </h2>
       </div>
 
       <div class="secondary_list">
-        <h2 style="text-align: center;">Secondary 6</h2>
+        <h2 style="text-align: center;">
+          Secondary 6
+        </h2>
       </div>
       <!--list end -->
     </div>

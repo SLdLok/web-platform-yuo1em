@@ -15,6 +15,12 @@
       crossorigin="anonymous"
     />
 
+    <!-- SeldCSS-->
+    <link
+      rel="stylesheet"
+      href="../scrollbar.css"
+    />
+
     <!-- Title -->
     <title>QQAA - Forum</title>
 
@@ -41,6 +47,13 @@
       // For Check Access is it allowed.
       pageNeedAccess = "student";
     </script>
+    <!-- MATHJAX TESTING -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
     <!-- Self-Script (From root folder) -->
     <script src="../auth.js"></script>
     <script defer src="../pageCustom.js"></script>
@@ -128,8 +141,8 @@
     <div class="container-fluid">
       <!-- ######  PUT CONTENT HERE ###### -->
       <div class="d-none d-lg-block">
-        <div class="row">
-          <div class="col-3 border">
+        <div class="row" style="height: 90vh;">
+          <div class="col-3 border overflow-auto">
             <!-- GroupList -->
             <div class="row-1 border">
               <button
@@ -180,20 +193,27 @@
               </button>
             </div>
           </div>
-          <div class="col-3 border" id="PostList">
+          <div
+            class="col-3 border overflow-auto"
+            id="PostList"
+            style="height: 90vh;"
+          >
             <!-- PostList -->
             <div class="row-1 border">
-              <button class="btn">
-                Book A Q13: 102+19=?
-              </button>
+              Nothing Here
             </div>
           </div>
-          <div class="col-6 border">
+          <div
+            class="col-6 border overflow-auto"
+            style="height: 90vh;"
+          >
             <!-- MSGList -->
             <div
               class="row-4 border"
               id="PostArea"
             >
+              <!-- OPOST -->
+              Nothing Here
               <!-- OPOST -->
             </div>
             <div
