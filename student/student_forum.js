@@ -205,7 +205,7 @@ function sendPost(Group, Form) {
     );
   if ((titleInput.value == "") | " " | "   ") {
     titleInput.value =
-      "Untitled Post on" + Date.now();
+      "Untitled Post on" + Date(Date.now());
   }
   db.collection("Forum")
     .doc(Group)
@@ -291,6 +291,8 @@ function sendPost(Group, Form) {
             )
           });
       }
+      readMSG(Group, Form, docRef.id);
+      listMSG(Group, Form);
     })
     .catch((error) => {
       console.error(
