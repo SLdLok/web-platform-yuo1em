@@ -2,7 +2,7 @@ console.log("Loading Forum");
 var db = firebase.firestore();
 
 // Basic Function
-function readData(Group, Form, Post) {
+function readMSG(Group, Form, Post) {
   var docRef = db
     .collection("Forum")
     .doc(Group)
@@ -14,11 +14,20 @@ function readData(Group, Form, Post) {
     .then((doc) => {
       if (doc.exists) {
         console.log("Document data:", doc.data());
+        document.getElementById(
+          "PostArea"
+        ).innerHTML =
+          `<div class="row-4 border"><h1>` +
+          doc.data().PostTitle +
+          `</h1></div>` +
+          `<div class="row-4 border">` +
+          doc.data().PostText +
+          `</div>`;
       } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
       }
-      return doc.data();
+      return doc.data(); //
     })
     .catch((error) => {
       console.log(
@@ -30,6 +39,9 @@ function readData(Group, Form, Post) {
 
 // Normal
 function listMSG(Group, Form) {
+  document.getElementById(
+    "PostList"
+  ).innerHTML = `<div class="row-1 border"><button class="btn btn-success">New Post</button></div>`;
   var docRef = db.collection("Forum").doc(Group);
   var array = [];
   docRef
@@ -51,16 +63,19 @@ function listMSG(Group, Form) {
           array = doc.data().F6DocArray;
         }
         for (let i = 0; i < array.length; i++) {
-          var x = readData(Group, Form, array[i]);
-          setTimeout(() => {
-            document.getElementById(
-              "PostList"
-            ).innerHTML +=
-              `<div class="row-1 border"><button class="btn">` +
-              x +
-              `</button>
-          </div>`;
-          }, 500);
+          console.log(array[i]);
+          document.getElementById(
+            "PostList"
+          ).innerHTML +=
+            `<div class="row-1 border"><button class="btn" onclick="readMSG('` +
+            Group +
+            `','` +
+            Form +
+            `','` +
+            array[i].id +
+            `')">` +
+            array[i].title +
+            `</button></div>`;
         }
       } else {
         // doc.data() will be undefined in this case
