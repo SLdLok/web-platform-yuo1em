@@ -15,18 +15,64 @@ function readMSG(Group, Form, Post) {
       if (doc.exists) {
         console.log("Document data:", doc.data());
         // POST MESSAGE
-        document.getElementById(
-          "PostArea"
-        ).innerHTML =
-          `<div class="row-4 border"><h1>` +
-          doc.data().PostTitle +
-          `</h1></div>` +
-          `<small class="text-muted">Last Edit Date: ` +
-          doc.data().EditTime.toDate() +
-          `</small>` +
-          `<div class="row-4 border">` +
-          doc.data().PostText +
-          `</div>`;
+        if (
+          sessionStorage.loginUserRole ===
+            "admin" ||
+          doc.data().PosterUID ===
+            JSON.parse(sessionStorage.loginUser)
+              .uid
+        ) {
+          document.getElementById(
+            "PostArea"
+          ).innerHTML =
+            `` +
+            `<div class="d-md-flex justify-content-md-end">` +
+            `<button class="btn btn-warning btn-sm" onclick="editPostPage('` +
+            Group +
+            `','` +
+            Form +
+            `','` +
+            Post +
+            `','` +
+            doc.data().PostTitle +
+            `','` +
+            doc.data().PostText +
+            `')">Edit</button>&nbsp;` +
+            `<button class="btn btn-danger btn-sm" onclick="delPost('` +
+            Group +
+            `','` +
+            Form +
+            `','` +
+            Post +
+            `','` +
+            doc.data().PostTitle +
+            `')">Delete</button></div>` +
+            `<div class="row-4 border"><h1>` +
+            doc.data().PostTitle +
+            `</h1></div>` +
+            `<small class="text-muted">Last Edit Date: ` +
+            doc.data().EditTime.toDate() +
+            `</small>` +
+            `<br/><small class="text-muted">Post by [` +
+            doc.data().PosterUID +
+            `]</small>` +
+            `<div class="border">` +
+            doc.data().PostText +
+            `</div></div>`;
+        } else {
+          document.getElementById(
+            "PostArea"
+          ).innerHTML =
+            `<div class="row-4 border"><h1>` +
+            doc.data().PostTitle +
+            `</h1></div>` +
+            `<small class="text-muted">Last Edit Date: ` +
+            doc.data().EditTime.toDate() +
+            `</small>` +
+            `<div class="row-4 border">` +
+            doc.data().PostText +
+            `</div>`;
+        }
 
         document.getElementById(
           "CommentArea"
@@ -53,20 +99,79 @@ function readMSG(Group, Form, Post) {
           console.log(i);
 
           // Read Comment Area
-          document.getElementById(
-            "CommentArea"
-          ).innerHTML +=
-            `<div class="row-4 border">` +
-            `<small class="">&num;` +
-            i.toString() +
-            `&nbsp;&nbsp;&nbsp;&nbsp;</small>` +
-            `<small class="text-muted">` +
-            array[i].EditTime.toDate() +
-            `</small>` +
-            `<br/>` +
-            `<label>` +
-            array[i].CommentText +
-            `</label></div>`;
+          if (
+            sessionStorage.loginUserRole ===
+              "admin" ||
+            doc.data().Comment[i].CommenterUID ===
+              JSON.parse(sessionStorage.loginUser)
+                .uid
+          ) {
+            document.getElementById(
+              "CommentArea"
+            ).innerHTML +=
+              `<div id="c-` +
+              i +
+              `">` +
+              `<div class="d-md-flex justify-content-md-end">` +
+              `<button class="btn btn-warning btn-sm" onclick="editCommentPage('` +
+              Group +
+              `','` +
+              Form +
+              `','` +
+              Post +
+              `','` +
+              array[i].CommentText +
+              `','` +
+              array[i].CommenterUID +
+              `',` +
+              doc
+                .data()
+                .Comment[i].EditTime.toMillis() +
+              `,` +
+              i +
+              `)">edit</button><span>&nbsp;</span>` +
+              `<button class="btn btn-danger btn-sm" onclick="delComment('` +
+              Group +
+              `','` +
+              Form +
+              `','` +
+              Post +
+              `','` +
+              array[i].CommentText +
+              `','` +
+              array[i].CommenterUID +
+              `',` +
+              doc
+                .data()
+                .Comment[i].EditTime.toMillis() +
+              `)">delete</button></div>` +
+              `<div class="row-4 border">` +
+              `<small class="">&num;` +
+              i.toString() +
+              `&nbsp;&nbsp;&nbsp;&nbsp;</small>` +
+              `<small class="text-muted">` +
+              array[i].EditTime.toDate() +
+              `</small>` +
+              `<br/>` +
+              `<label>` +
+              array[i].CommentText +
+              `</label></div></div>`;
+          } else {
+            document.getElementById(
+              "CommentArea"
+            ).innerHTML +=
+              `<div class="row-4 border">` +
+              `<small class="">&num;` +
+              i.toString() +
+              `&nbsp;&nbsp;&nbsp;&nbsp;</small>` +
+              `<small class="text-muted">` +
+              array[i].EditTime.toDate() +
+              `</small>` +
+              `<br/>` +
+              `<label>` +
+              array[i].CommentText +
+              `</label></div>`;
+          }
         }
         MathJax.typeset();
       } else {
@@ -299,5 +404,386 @@ function sendPost(Group, Form) {
         "Error adding document: ",
         error
       );
+    });
+}
+
+function delPost(Group, Form, Post, Title) {
+  var docRef = db
+    .collection("Forum")
+    .doc(Group)
+    .collection(Form)
+    .doc(Post);
+  docRef
+    .delete()
+    .then(() => {
+      console.log(
+        "Document successfully deleted!"
+      );
+      // Array Del
+      if (Form == "F1") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F1DocArray: firebase.firestore.FieldValue.arrayRemove(
+              { title: Title, id: Post }
+            )
+          });
+      } else if (Form == "F2") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F2DocArray: firebase.firestore.FieldValue.arrayRemove(
+              { title: Title, id: Post }
+            )
+          });
+      } else if (Form == "F3") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F3DocArray: firebase.firestore.FieldValue.arrayRemove(
+              { title: Title, id: Post }
+            )
+          });
+      } else if (Form == "F4") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F4DocArray: firebase.firestore.FieldValue.arrayRemove(
+              { title: Title, id: Post }
+            )
+          });
+      } else if (Form == "F5") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F5DocArray: firebase.firestore.FieldValue.arrayRemove(
+              { title: Title, id: Post }
+            )
+          });
+      } else if (Form == "F6") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F6DocArray: firebase.firestore.FieldValue.arrayRemove(
+              { title: Title, id: Post }
+            )
+          });
+      }
+      window.location.reload();
+    })
+    .catch((error) => {
+      console.error(
+        "Error removing document: ",
+        error
+      );
+    });
+}
+function delComment(
+  Group,
+  Form,
+  Post,
+  CommentT,
+  CommentU,
+  CommentE
+) {
+  var docRef = db
+    .collection("Forum")
+    .doc(Group)
+    .collection(Form)
+    .doc(Post);
+  console.log({
+    CommentText: CommentT,
+    CommenterUID: CommentU,
+    EditTime: CommentE
+  });
+  docRef
+    .update({
+      Comment: firebase.firestore.FieldValue.arrayRemove(
+        {
+          CommentText: CommentT,
+          CommenterUID: CommentU,
+          EditTime: firebase.firestore.Timestamp.fromMillis(
+            CommentE
+          )
+        }
+      )
+    })
+    .then(readMSG(Group, Form, Post));
+}
+
+function editCommentPage(
+  Group,
+  Form,
+  Post,
+  CommentT,
+  CommentU,
+  CommentE,
+  id
+) {
+  document.getElementById("c-" + id).innerHTML =
+    `<iframe class="embed-responsive" id="textEditor-` +
+    id +
+    `" style="width: 100%; height: 50vh;" src="../textEditor.html"></iframe>` +
+    `<button class="btn btn-warning" onclick="editComment('` +
+    Group +
+    `','` +
+    Form +
+    `','` +
+    Post +
+    `','` +
+    CommentT +
+    `','` +
+    CommentU +
+    `',` +
+    CommentE +
+    `,` +
+    id +
+    `)">Edit Comment</button>`;
+  document
+    .getElementById("textEditor-" + id)
+    .addEventListener("load", function () {
+      document
+        .getElementById("textEditor-" + id)
+        .contentWindow.document.getElementById(
+          "editorTextInput"
+        ).value = CommentT;
+    });
+}
+
+function editComment(
+  Group,
+  Form,
+  Post,
+  CommentT,
+  CommentU,
+  CommentE,
+  id
+) {
+  delComment(
+    Group,
+    Form,
+    Post,
+    CommentT,
+    CommentU,
+    CommentE
+  );
+
+  var docRef = db
+    .collection("Forum")
+    .doc(Group)
+    .collection(Form)
+    .doc(Post);
+
+  // Set the "capital" field of the city 'DC'
+  return docRef
+    .update({
+      Comment: firebase.firestore.FieldValue.arrayUnion(
+        {
+          CommentText: document
+            .getElementById("textEditor-" + id)
+            .contentWindow.document.getElementById(
+              "editorTextInput"
+            ).value,
+          EditTime: firebase.firestore.Timestamp.now(),
+          CommenterUID: JSON.parse(
+            sessionStorage.loginUser
+          ).uid
+        }
+      )
+    })
+    .then(() => {
+      readMSG(Group, Form, Post);
+    })
+    .catch((error) => {
+      // The document probably doesn't exist.
+      console.error(
+        "Error updating document: ",
+        error
+      );
+    });
+}
+
+function editPostPage(
+  Group,
+  Form,
+  Post,
+  Title,
+  text
+) {
+  document.getElementById("PostArea").innerHTML =
+    `<h5>Post title</h5>` +
+    `<input id="PostTitleInput-"class="form-control">` +
+    `<h5>Content</h5>` +
+    `<iframe class="embed-responsive" id="textEditor-` +
+    `" style="width: 100%; height: 50vh;" src="../textEditor.html"></iframe>` +
+    `<button class="btn btn-warning" onclick="editPost('` +
+    Group +
+    `','` +
+    Form +
+    `','` +
+    Post +
+    `','` +
+    Title +
+    `')">Edit</button>`;
+  document
+    .getElementById("textEditor-")
+    .addEventListener("load", function () {
+      document
+        .getElementById("textEditor-")
+        .contentWindow.document.getElementById(
+          "editorTextInput"
+        ).value = text;
+    });
+  document.getElementById(
+    "PostTitleInput-"
+  ).value = Title;
+}
+
+function editPost(Group, Form, Post, oldTitle) {
+  var titleInput = document.getElementById(
+    "PostTitleInput-"
+  );
+  var input = document
+    .getElementById("textEditor-")
+    .contentWindow.document.getElementById(
+      "editorTextInput"
+    );
+  if ((titleInput.value == "") | " " | "   ") {
+    titleInput.value =
+      "Untitled Post on" + Date(Date.now());
+  }
+  db.collection("Forum")
+    .doc(Group)
+    .collection(Form)
+    .doc(Post)
+    .update({
+      PostTitle: titleInput.value,
+      EditTime: firebase.firestore.Timestamp.now(),
+      PostText: input.value,
+      PosterUID: JSON.parse(
+        sessionStorage.loginUser
+      ).uid
+    })
+    .then(() => {
+      // Array Remove
+      if (Form == "F1") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F1DocArray: firebase.firestore.FieldValue.arrayRemove(
+              { title: oldTitle, id: Post }
+            )
+          });
+      } else if (Form == "F2") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F2DocArray: firebase.firestore.FieldValue.arrayRemove(
+              { title: oldTitle, id: Post }
+            )
+          });
+      } else if (Form == "F3") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F3DocArray: firebase.firestore.FieldValue.arrayRemove(
+              { title: oldTitle, id: Post }
+            )
+          });
+      } else if (Form == "F4") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F4DocArray: firebase.firestore.FieldValue.arrayRemove(
+              { title: oldTitle, id: Post }
+            )
+          });
+      } else if (Form == "F5") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F5DocArray: firebase.firestore.FieldValue.arrayRemove(
+              { title: oldTitle, id: Post }
+            )
+          });
+      } else if (Form == "F6") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F6DocArray: firebase.firestore.FieldValue.arrayRemove(
+              { title: oldTitle, id: Post }
+            )
+          });
+      }
+      // Array Update
+      if (Form === "F1") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F1DocArray: firebase.firestore.FieldValue.arrayUnion(
+              {
+                id: Post,
+                title: titleInput.value
+              }
+            )
+          });
+      } else if (Form === "F2") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F2DocArray: firebase.firestore.FieldValue.arrayUnion(
+              {
+                id: Post,
+                title: titleInput.value
+              }
+            )
+          });
+      } else if (Form === "F3") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F3DocArray: firebase.firestore.FieldValue.arrayUnion(
+              {
+                id: Post,
+                title: titleInput.value
+              }
+            )
+          });
+      } else if (Form === "F4") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F4DocArray: firebase.firestore.FieldValue.arrayUnion(
+              {
+                id: Post,
+                title: titleInput.value
+              }
+            )
+          });
+      } else if (Form === "F5") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F5DocArray: firebase.firestore.FieldValue.arrayUnion(
+              {
+                id: Post,
+                title: titleInput.value
+              }
+            )
+          });
+      } else if (Form === "F6") {
+        db.collection("Forum")
+          .doc(Group)
+          .update({
+            F6DocArray: firebase.firestore.FieldValue.arrayUnion(
+              {
+                id: Post,
+                title: titleInput.value
+              }
+            )
+          });
+      }
+      listMSG(Group, Form);
+      readMSG(Group, Form, Post);
     });
 }

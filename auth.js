@@ -1,4 +1,4 @@
-console.log('Started');
+console.log("Started");
 // Required for side-effects
 
 var db = firebase.firestore();
@@ -13,15 +13,22 @@ function SignIn() {
       var credential = result.credential;
       var token = credential.accessToken;
       var user = result.user;
-      console.log('LogIn already');
+      console.log("LogIn already");
       // store the user's account data in sessionStorage
-      sessionStorage.setItem('loginUser', JSON.stringify(user));
+      sessionStorage.setItem(
+        "loginUser",
+        JSON.stringify(user)
+      );
       CheckAccountAccess();
       // Direct to panel
       setTimeout(
         () =>
           window.location.replace(
-            './' + sessionStorage.getItem('loginUserRole') + '/panel.html'
+            "./" +
+              sessionStorage.getItem(
+                "loginUserRole"
+              ) +
+              "/panel.html"
           ),
         500
       );
@@ -31,7 +38,7 @@ function SignIn() {
       var errorMessage = error.message;
       var email = error.email;
       var credential = error.credential;
-      console.log('ERROR: ' + error);
+      console.log("ERROR: " + error);
     });
 }
 
@@ -41,78 +48,109 @@ function SignOut() {
     .auth()
     .signOut()
     .then(() => {
-      console.log('Logout already');
-      sessionStorage.removeItem('loginUser');
-      sessionStorage.removeItem('loginUserRole');
-      window.location.replace('../index.html');
+      console.log("Logout already");
+      sessionStorage.removeItem("loginUser");
+      sessionStorage.removeItem("loginUserRole");
+      window.location.replace("../index.html");
     })
     .catch((error) => {
-      console.log('ERROR: ' + error);
+      console.log("ERROR: " + error);
     });
 }
 
 // For Checking Is it in correct access (Method)
 function CheckAccountAccess() {
-  var user = JSON.parse(sessionStorage.getItem('loginUser'));
-  var personalUserData = db.collection('UserData').doc(user.uid);
-  personalUserData
-    .get()
-    .then((doc) => {
-      if (doc.exists) {
-        console.log('Document data:', doc.data());
-        sessionStorage.setItem('loginUserRole', doc.data().Role);
-        console.log('His Role is ' + sessionStorage.getItem('loginUserRole'));
-      } else {
-        // doc.data() will be undefined in this case
-        console.log('No such document!');
-        // add new userData in Database
-        db.collection('UserData')
-          .doc(user.uid)
-          .set({
-            // -- USERDATA PLS -- //
-            DisplayID: btoa(user.displayName),
-            UID: user.uid,
-            Form: NaN,
-            Role: 'unsigned',
-            LastGetDailyAwardTime: firebase.firestore.Timestamp.now(),
-            PointOwned: 100,
-            DailyQuestionLimit: 10,
-            DailyQuizLimit: 15,
-          })
-          .then(() => {
-            console.log('Document successfully written!');
-            CheckAccountAccess();
-          })
-          .catch((error) => {
-            console.error('Error writing document: ', error);
-          });
-      }
-    })
-    .catch((error) => {
-      console.log('Error getting document:', error);
-    });
-  return sessionStorage.loginUserRole;
+  var user = JSON.parse(
+    sessionStorage.getItem("loginUser")
+  );
+  console.log(user);
+  if (user != undefined || user != null) {
+    var personalUserData = db
+      .collection("UserData")
+      .doc(user.uid);
+    personalUserData
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          console.log(
+            "Document data:",
+            doc.data()
+          );
+          sessionStorage.setItem(
+            "loginUserRole",
+            doc.data().Role
+          );
+          console.log(
+            "His Role is " +
+              sessionStorage.getItem(
+                "loginUserRole"
+              )
+          );
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+          // add new userData in Database
+          db.collection("UserData")
+            .doc(user.uid)
+            .set({
+              // -- USERDATA PLS -- //
+              DisplayID: btoa(user.displayName),
+              UID: user.uid,
+              Form: NaN,
+              Role: "unsigned",
+              LastGetDailyAwardTime: firebase.firestore.Timestamp.now(),
+              PointOwned: 100,
+              DailyQuestionLimit: 10,
+              DailyQuizLimit: 15
+            })
+            .then(() => {
+              console.log(
+                "Document successfully written!"
+              );
+              CheckAccountAccess();
+            })
+            .catch((error) => {
+              console.error(
+                "Error writing document: ",
+                error
+              );
+            });
+        }
+      })
+      .catch((error) => {
+        console.log(
+          "Error getting document:",
+          error
+        );
+      });
+    return sessionStorage.loginUserRole;
+  }
 }
 
 // For Checking Is it logined (& correct access page)
-if (window.hasOwnProperty('IsAuthPage') == false) {
-  console.log('Not In Auth');
+if (
+  window.hasOwnProperty("IsAuthPage") == false
+) {
+  console.log("Not In Auth");
 
   // Direct to correct Access page
   if (CheckAccountAccess() != pageNeedAccess) {
     window.alert(
-      'ERROR: Access Denied \n Your Access: ' +
+      "ERROR: Access Denied \n Your Access: " +
         CheckAccountAccess() +
-        '\n Access Allowed: ' +
+        "\n Access Allowed: " +
         pageNeedAccess +
-        '\n\n Website will sign out immediately \n Please Contact Admin to slove the problem.'
+        "\n\n Website will sign out immediately \n Please Contact Admin to slove the problem."
     );
     SignOut();
   }
 
-  if (sessionStorage.hasOwnProperty('loginUser') == false) {
-    console.log('not Have Login');
+  if (
+    sessionStorage.hasOwnProperty("loginUser") ==
+    false
+  ) {
+    console.log("not Have Login");
 
-    window.location.replace('../index.html');
+    window.location.replace("../index.html");
   }
 }

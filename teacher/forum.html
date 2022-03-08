@@ -12,6 +12,9 @@
       crossorigin="anonymous"
     />
 
+    <!-- SeldCSS-->
+    <link rel="stylesheet" href="../scrollbar.css" />
+
     <!-- Title -->
     <title>QQAA - Forum</title>
 
@@ -36,9 +39,18 @@
       // For Check Access is it allowed.
       pageNeedAccess = "teacher";
     </script>
+    <!-- MATHJAX TESTING -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
     <!-- Self-Script (From root folder) -->
     <script src="../auth.js"></script>
     <script defer src="../pageCustom.js"></script>
+
+    <script defer src="./student_forum.js"></script>
   </head>
   <body>
     <!-- DisplayContent -->
@@ -78,7 +90,9 @@
             >Welcome Back, HUMAN.</span
           >
           <div class="d-flex">
-            <button class="btn btn-light" onclick="SignOut();">Logout</button>
+            <button class="btn btn-light" onclick="SignOut();">
+              Logout
+            </button>
           </div>
         </div>
       </div>
@@ -87,6 +101,64 @@
     <!-- Cotainer -->
     <div class="container-fluid">
       <!-- ######  PUT CONTENT HERE ###### -->
+      <div class="d-block">
+        <div class="row" style="height: 90vh;">
+          <div class="col-3 border overflow-auto">
+            <!-- GroupList -->
+            <div class="row-1 border">
+              <button class="btn" onclick="listMSG('LowerForm','F1')">
+                Form 1
+              </button>
+            </div>
+            <div class="row-1 border">
+              <button class="btn" onclick="listMSG('LowerForm','F2')">
+                Form 2
+              </button>
+            </div>
+            <div class="row-1 border">
+              <button class="btn" onclick="listMSG('LowerForm','F3')">
+                Form 3
+              </button>
+            </div>
+            <div class="row-1 border">
+              <button class="btn" onclick="listMSG('HigherForm','F4')">
+                Form 4
+              </button>
+            </div>
+            <div class="row-1 border">
+              <button class="btn" onclick="listMSG('HigherForm','F5')">
+                Form 5
+              </button>
+            </div>
+            <div class="row-1 border">
+              <button class="btn" onclick="listMSG('HigherForm','F6')">
+                Form 6
+              </button>
+            </div>
+          </div>
+          <div
+            class="col-3 border overflow-auto"
+            id="PostList"
+            style="height: 90vh;"
+          >
+            <!-- PostList -->
+            <div class="row-1 border">
+              Nothing Here
+            </div>
+          </div>
+          <div class="col-6 border overflow-auto" style="height: 90vh;">
+            <!-- MSGList -->
+            <div class="row-4 border" id="PostArea">
+              <!-- OPOST -->
+              Nothing Here
+              <!-- OPOST -->
+            </div>
+            <div class="row-8 border" id="CommentArea">
+              <!-- COMMENT -->
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Bootstrap JS - Option 1: Bootstrap Bundle with Popper -->
