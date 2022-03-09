@@ -18,7 +18,7 @@ function readMSG(Group, Form, Post) {
         if (
           sessionStorage.loginUserRole ===
             "admin" ||
-          doc.data().PosterUID ===
+          doc.data().PosFterUID ===
             JSON.parse(sessionStorage.loginUser)
               .uid
         ) {
@@ -48,7 +48,7 @@ function readMSG(Group, Form, Post) {
             doc.data().PostTitle +
             `')">Delete</button></div>` +
             `<div class="row-4 border"><h1>` +
-            doc.data().PostTitle +
+            atob(doc.data().PostTitle) +
             `</h1></div>` +
             `<small class="text-muted">Last Edit Date: ` +
             doc.data().EditTime.toDate() +
@@ -57,20 +57,20 @@ function readMSG(Group, Form, Post) {
             doc.data().PosterUID +
             `]</small>` +
             `<div class="border">` +
-            doc.data().PostText +
+            atob(doc.data().PostText) +
             `</div></div>`;
         } else {
           document.getElementById(
             "PostArea"
           ).innerHTML =
             `<div class="row-4 border"><h1>` +
-            doc.data().PostTitle +
+            atob(doc.data().PostTitle) +
             `</h1></div>` +
             `<small class="text-muted">Last Edit Date: ` +
             doc.data().EditTime.toDate() +
             `</small>` +
             `<div class="row-4 border">` +
-            doc.data().PostText +
+            atob(doc.data().PostText) +
             `</div>`;
         }
 
@@ -154,7 +154,7 @@ function readMSG(Group, Form, Post) {
               `</small>` +
               `<br/>` +
               `<label>` +
-              array[i].CommentText +
+              atob(array[i].CommentText) +
               `</label></div></div>`;
           } else {
             document.getElementById(
@@ -169,7 +169,7 @@ function readMSG(Group, Form, Post) {
               `</small>` +
               `<br/>` +
               `<label>` +
-              array[i].CommentText +
+              atob(array[i].CommentText) +
               `</label></div>`;
           }
         }
@@ -232,7 +232,7 @@ function listMSG(Group, Form) {
             `','` +
             array[i].id +
             `')">` +
-            array[i].title +
+            atob(array[i].title) +
             `</button></div>`;
         }
         MathJax.typeset();
@@ -261,11 +261,13 @@ function sendComment(Group, Form, Post) {
     .update({
       Comment: firebase.firestore.FieldValue.arrayUnion(
         {
-          CommentText: document
-            .getElementById("textEditor")
-            .contentWindow.document.getElementById(
-              "editorTextInput"
-            ).value,
+          CommentText: btoa(
+            document
+              .getElementById("textEditor")
+              .contentWindow.document.getElementById(
+                "editorTextInput"
+              ).value
+          ),
           EditTime: firebase.firestore.Timestamp.now(),
           CommenterUID: JSON.parse(
             sessionStorage.loginUser
@@ -316,9 +318,9 @@ function sendPost(Group, Form) {
     .doc(Group)
     .collection(Form)
     .add({
-      PostTitle: titleInput.value,
+      PostTitle: btoa(titleInput.value),
       EditTime: firebase.firestore.Timestamp.now(),
-      PostText: input.value,
+      PostText: btoa(input.value),
       Comment: [],
       PosterUID: JSON.parse(
         sessionStorage.loginUser
@@ -336,7 +338,7 @@ function sendPost(Group, Form) {
             F1DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: docRef.id,
-                title: titleInput.value
+                title: btoa(titleInput.value)
               }
             )
           });
@@ -347,7 +349,7 @@ function sendPost(Group, Form) {
             F2DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: docRef.id,
-                title: titleInput.value
+                title: btoa(titleInput.value)
               }
             )
           });
@@ -358,7 +360,7 @@ function sendPost(Group, Form) {
             F3DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: docRef.id,
-                title: titleInput.value
+                title: btoa(titleInput.value)
               }
             )
           });
@@ -369,7 +371,7 @@ function sendPost(Group, Form) {
             F4DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: docRef.id,
-                title: titleInput.value
+                title: btoa(titleInput.value)
               }
             )
           });
@@ -380,7 +382,7 @@ function sendPost(Group, Form) {
             F5DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: docRef.id,
-                title: titleInput.value
+                title: btoa(titleInput.value)
               }
             )
           });
@@ -391,7 +393,7 @@ function sendPost(Group, Form) {
             F6DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: docRef.id,
-                title: titleInput.value
+                title: btoa(titleInput.value)
               }
             )
           });
@@ -546,7 +548,7 @@ function editCommentPage(
         .getElementById("textEditor-" + id)
         .contentWindow.document.getElementById(
           "editorTextInput"
-        ).value = CommentT;
+        ).value = atob(CommentT);
     });
 }
 
@@ -579,11 +581,13 @@ function editComment(
     .update({
       Comment: firebase.firestore.FieldValue.arrayUnion(
         {
-          CommentText: document
-            .getElementById("textEditor-" + id)
-            .contentWindow.document.getElementById(
-              "editorTextInput"
-            ).value,
+          CommentText: btoa(
+            document
+              .getElementById("textEditor-" + id)
+              .contentWindow.document.getElementById(
+                "editorTextInput"
+              ).value
+          ),
           EditTime: firebase.firestore.Timestamp.now(),
           CommenterUID: JSON.parse(
             sessionStorage.loginUser
@@ -632,11 +636,11 @@ function editPostPage(
         .getElementById("textEditor-")
         .contentWindow.document.getElementById(
           "editorTextInput"
-        ).value = text;
+        ).value = atob(text);
     });
   document.getElementById(
     "PostTitleInput-"
-  ).value = Title;
+  ).value = atob(Title);
 }
 
 function editPost(Group, Form, Post, oldTitle) {
@@ -657,9 +661,9 @@ function editPost(Group, Form, Post, oldTitle) {
     .collection(Form)
     .doc(Post)
     .update({
-      PostTitle: titleInput.value,
+      PostTitle: btoa(titleInput.value),
       EditTime: firebase.firestore.Timestamp.now(),
-      PostText: input.value,
+      PostText: btoa(input.value),
       PosterUID: JSON.parse(
         sessionStorage.loginUser
       ).uid
@@ -723,7 +727,7 @@ function editPost(Group, Form, Post, oldTitle) {
             F1DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: Post,
-                title: titleInput.value
+                title: btoa(titleInput.value)
               }
             )
           });
@@ -734,7 +738,7 @@ function editPost(Group, Form, Post, oldTitle) {
             F2DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: Post,
-                title: titleInput.value
+                title: btoa(titleInput.value)
               }
             )
           });
@@ -745,7 +749,7 @@ function editPost(Group, Form, Post, oldTitle) {
             F3DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: Post,
-                title: titleInput.value
+                title: btoa(titleInput.value)
               }
             )
           });
@@ -756,7 +760,7 @@ function editPost(Group, Form, Post, oldTitle) {
             F4DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: Post,
-                title: titleInput.value
+                title: btoa(titleInput.value)
               }
             )
           });
@@ -767,7 +771,7 @@ function editPost(Group, Form, Post, oldTitle) {
             F5DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: Post,
-                title: titleInput.value
+                title: btoa(titleInput.value)
               }
             )
           });
@@ -778,7 +782,7 @@ function editPost(Group, Form, Post, oldTitle) {
             F6DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: Post,
-                title: titleInput.value
+                title: btoa(titleInput.value)
               }
             )
           });
