@@ -1,4 +1,4 @@
-console.log("Learning area");
+console.log("Quiz area");
 var db = firebase.firestore();
 
 // ucs-2 string to base64 encoded ascii
@@ -12,7 +12,7 @@ function atou(str) {
 
 // Basic Function
 function readMSG(Group, Form, Post) {
-  var docRef = db.collection("Learn").doc(Group).collection(Form).doc(Post);
+  var docRef = db.collection("Quiz").doc(Group).collection(Form).doc(Post);
 
   docRef
     .get()
@@ -24,7 +24,7 @@ function readMSG(Group, Form, Post) {
           sessionStorage.loginUserRole === "admin" ||
           doc.data().PosFterUID === JSON.parse(sessionStorage.loginUser).uid
         ) {
-          document.getElementById("PostAreaforlearn").innerHTML =
+          document.getElementById("PostAreaforquiz").innerHTML =
             `` +
             `<div class="d-md-flex justify-content-md-end">` +
             `<button class="btn btn-warning btn-sm" onclick="editPostPage('` +
@@ -60,7 +60,7 @@ function readMSG(Group, Form, Post) {
             atou(doc.data().PostText) +
             `</div></div>`;
         } else {
-          document.getElementById("PostAreaforlearn").innerHTML =
+          document.getElementById("PostAreaforquiz").innerHTML =
             `<div class="row-4 border"><h1>` +
             atou(doc.data().PostTitle) +
             `</h1></div>` +
@@ -84,13 +84,8 @@ function readMSG(Group, Form, Post) {
 
 // Normal
 function listMSG(Group, Form) {
-  document.getElementById("PostListforlearn").innerHTML =
-    `<div class="row-1 border"><button class="btn btn-success" onclick="newPost('` +
-    Group +
-    `','` +
-    Form +
-    `')">New Post</button></div>`;
-  var docRef = db.collection("Learn").doc(Group);
+  document.getElementById("PostListforquiz").innerHTML = "";
+  var docRef = db.collection("Quiz").doc(Group);
   var array = [];
   docRef
     .get()
@@ -112,7 +107,7 @@ function listMSG(Group, Form) {
         }
         for (let i = array.length - 1; i >= 0; i--) {
           console.log(array[i]);
-          document.getElementById("PostListforlearn").innerHTML +=
+          document.getElementById("PostListforquiz").innerHTML +=
             `<div class="row-1 border"><button class="btn" onclick="readMSG('` +
             Group +
             `','` +
@@ -135,7 +130,7 @@ function listMSG(Group, Form) {
 }
 
 function sendComment(Group, Form, Post) {
-  var docRef = db.collection("Learn").doc(Group).collection(Form).doc(Post);
+  var docRef = db.collection("Quiz").doc(Group).collection(Form).doc(Post);
 
   // Set the "capital" field of the city 'DC'
   return docRef
@@ -160,7 +155,7 @@ function sendComment(Group, Form, Post) {
 }
 
 function newPost(Group, Form) {
-  document.getElementById("PostAreaforlearn").innerHTML =
+  document.getElementById("PostAreaforquiz").innerHTML =
     `<h5>Post Title</h5><input id="PostTitleInput"class="form-control"></input><h5>Content</h5>` +
     `<iframe class="embed-responsive" id="textEditor" style="width: 100%; height: 72.5vh;" src="../textEditor.html"></iframe>` +
     `<button class="btn btn-success" onclick="sendPost('` +
@@ -168,7 +163,8 @@ function newPost(Group, Form) {
     `','` +
     Form +
     `')">Post</button>`;
-  document.getElementById("CommentAreaforlearn").innerHTML = "";
+
+  document.getElementById("CommentAreaforquiz").innerHTML = "";
 }
 
 function sendPost(Group, Form) {
@@ -179,7 +175,7 @@ function sendPost(Group, Form) {
   if ((titleInput.value == "") | " " | "   ") {
     titleInput.value = "Untitled Post on" + Date(Date.now());
   }
-  db.collection("Learn")
+  db.collection("Quiz")
     .doc(Group)
     .collection(Form)
     .add({
@@ -192,7 +188,7 @@ function sendPost(Group, Form) {
     .then((docRef) => {
       console.log("Document written with ID: ", docRef.id);
       if (Form === "F1") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F1DocArray: firebase.firestore.FieldValue.arrayUnion({
@@ -201,7 +197,7 @@ function sendPost(Group, Form) {
             })
           });
       } else if (Form === "F2") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F2DocArray: firebase.firestore.FieldValue.arrayUnion({
@@ -210,7 +206,7 @@ function sendPost(Group, Form) {
             })
           });
       } else if (Form === "F3") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F3DocArray: firebase.firestore.FieldValue.arrayUnion({
@@ -219,7 +215,7 @@ function sendPost(Group, Form) {
             })
           });
       } else if (Form === "F4") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F4DocArray: firebase.firestore.FieldValue.arrayUnion({
@@ -228,7 +224,7 @@ function sendPost(Group, Form) {
             })
           });
       } else if (Form === "F5") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F5DocArray: firebase.firestore.FieldValue.arrayUnion({
@@ -237,7 +233,7 @@ function sendPost(Group, Form) {
             })
           });
       } else if (Form === "F6") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F6DocArray: firebase.firestore.FieldValue.arrayUnion({
@@ -255,14 +251,14 @@ function sendPost(Group, Form) {
 }
 
 function delPost(Group, Form, Post, Title) {
-  var docRef = db.collection("Learn").doc(Group).collection(Form).doc(Post);
+  var docRef = db.collection("Quiz").doc(Group).collection(Form).doc(Post);
   docRef
     .delete()
     .then(() => {
       console.log("Document successfully deleted!");
       // Array Del
       if (Form == "F1") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F1DocArray: firebase.firestore.FieldValue.arrayRemove({
@@ -271,7 +267,7 @@ function delPost(Group, Form, Post, Title) {
             })
           });
       } else if (Form == "F2") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F2DocArray: firebase.firestore.FieldValue.arrayRemove({
@@ -280,7 +276,7 @@ function delPost(Group, Form, Post, Title) {
             })
           });
       } else if (Form == "F3") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F3DocArray: firebase.firestore.FieldValue.arrayRemove({
@@ -289,7 +285,7 @@ function delPost(Group, Form, Post, Title) {
             })
           });
       } else if (Form == "F4") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F4DocArray: firebase.firestore.FieldValue.arrayRemove({
@@ -298,7 +294,7 @@ function delPost(Group, Form, Post, Title) {
             })
           });
       } else if (Form == "F5") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F5DocArray: firebase.firestore.FieldValue.arrayRemove({
@@ -307,7 +303,7 @@ function delPost(Group, Form, Post, Title) {
             })
           });
       } else if (Form == "F6") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F6DocArray: firebase.firestore.FieldValue.arrayRemove({
@@ -323,7 +319,7 @@ function delPost(Group, Form, Post, Title) {
     });
 }
 function delComment(Group, Form, Post, CommentT, CommentU, CommentE) {
-  var docRef = db.collection("Learn").doc(Group).collection(Form).doc(Post);
+  var docRef = db.collection("Quiz").doc(Group).collection(Form).doc(Post);
   console.log({
     CommentText: CommentT,
     CommenterUID: CommentU,
@@ -374,7 +370,7 @@ function editCommentPage(Group, Form, Post, CommentT, CommentU, CommentE, id) {
 function editComment(Group, Form, Post, CommentT, CommentU, CommentE, id) {
   delComment(Group, Form, Post, CommentT, CommentU, CommentE);
 
-  var docRef = db.collection("Learn").doc(Group).collection(Form).doc(Post);
+  var docRef = db.collection("Quiz").doc(Group).collection(Form).doc(Post);
 
   // Set the "capital" field of the city 'DC'
   return docRef
@@ -399,7 +395,7 @@ function editComment(Group, Form, Post, CommentT, CommentU, CommentE, id) {
 }
 
 function editPostPage(Group, Form, Post, Title, text) {
-  document.getElementById("PostAreaforlearn").innerHTML =
+  document.getElementById("PostAreaforquiz").innerHTML =
     `<h5>Post title</h5>` +
     `<input id="PostTitleInput-"class="form-control">` +
     `<h5>Content</h5>` +
@@ -432,7 +428,7 @@ function editPost(Group, Form, Post, oldTitle) {
   if ((titleInput.value == "") | " " | "   ") {
     titleInput.value = "Untitled Post on" + Date(Date.now());
   }
-  db.collection("Learn")
+  db.collection("Quiz")
     .doc(Group)
     .collection(Form)
     .doc(Post)
@@ -445,7 +441,7 @@ function editPost(Group, Form, Post, oldTitle) {
     .then(() => {
       // Array Remove
       if (Form == "F1") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F1DocArray: firebase.firestore.FieldValue.arrayRemove({
@@ -454,7 +450,7 @@ function editPost(Group, Form, Post, oldTitle) {
             })
           });
       } else if (Form == "F2") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F2DocArray: firebase.firestore.FieldValue.arrayRemove({
@@ -463,7 +459,7 @@ function editPost(Group, Form, Post, oldTitle) {
             })
           });
       } else if (Form == "F3") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F3DocArray: firebase.firestore.FieldValue.arrayRemove({
@@ -472,7 +468,7 @@ function editPost(Group, Form, Post, oldTitle) {
             })
           });
       } else if (Form == "F4") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F4DocArray: firebase.firestore.FieldValue.arrayRemove({
@@ -481,7 +477,7 @@ function editPost(Group, Form, Post, oldTitle) {
             })
           });
       } else if (Form == "F5") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F5DocArray: firebase.firestore.FieldValue.arrayRemove({
@@ -490,7 +486,7 @@ function editPost(Group, Form, Post, oldTitle) {
             })
           });
       } else if (Form == "F6") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F6DocArray: firebase.firestore.FieldValue.arrayRemove({
@@ -501,7 +497,7 @@ function editPost(Group, Form, Post, oldTitle) {
       }
       // Array Update
       if (Form === "F1") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F1DocArray: firebase.firestore.FieldValue.arrayUnion({
@@ -510,7 +506,7 @@ function editPost(Group, Form, Post, oldTitle) {
             })
           });
       } else if (Form === "F2") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F2DocArray: firebase.firestore.FieldValue.arrayUnion({
@@ -519,7 +515,7 @@ function editPost(Group, Form, Post, oldTitle) {
             })
           });
       } else if (Form === "F3") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F3DocArray: firebase.firestore.FieldValue.arrayUnion({
@@ -528,7 +524,7 @@ function editPost(Group, Form, Post, oldTitle) {
             })
           });
       } else if (Form === "F4") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F4DocArray: firebase.firestore.FieldValue.arrayUnion({
@@ -537,7 +533,7 @@ function editPost(Group, Form, Post, oldTitle) {
             })
           });
       } else if (Form === "F5") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F5DocArray: firebase.firestore.FieldValue.arrayUnion({
@@ -546,7 +542,7 @@ function editPost(Group, Form, Post, oldTitle) {
             })
           });
       } else if (Form === "F6") {
-        db.collection("Learn")
+        db.collection("Quiz")
           .doc(Group)
           .update({
             F6DocArray: firebase.firestore.FieldValue.arrayUnion({

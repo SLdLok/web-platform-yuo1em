@@ -12,6 +12,8 @@
       crossorigin="anonymous"
     />
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
     <!-- Title -->
     <title>QQAA - Forum</title>
 
@@ -39,6 +41,21 @@
     <!-- Self-Script (From root folder) -->
     <script src="../auth.js"></script>
     <script defer src="../pageCustom.js"></script>
+    <script>
+      setInterval(() => {
+        if (sessionStorage.LastGetDailyAwardTime < firebase.firestore.Timestamp.now().toMillis()) {
+          document.getElementById("awardBtn").className = ("btn btn-primary");
+          document.getElementById("awardBtn").innerHTML = "Get Today Award"
+        } else {
+          document.getElementById("awardBtn").className = ("btn btn-primary disabled");
+          document.getElementById("awardBtn").innerHTML = "Already Got Today"
+        }
+      }, 500);
+      function signIn(){
+        dailyAward();
+      }
+      </script>
+      <script defer src="../pointSystem.js"></script>
   </head>
   <body>
     <!-- DisplayContent -->
@@ -97,24 +114,28 @@
         <br /><br />
         <tr>
           <td>
-              <div class="card text-center" style="height: 200px; width: 300px;">
-                  <div class="card-header" style="height: 100px; width: 300px;">icon</div>
+              <div class="card text-center" style="height: 270px; width: 300px;">
+                  <div class="card-header" style="height: 80px; width: 300px;"><svg xmlns="http://www.w3.org/2000/svg" width="70" height="60" fill="currentColor" class="bi bi-bank2" viewBox="0 0 16 16">
+                    <path d="M8.277.084a.5.5 0 0 0-.554 0l-7.5 5A.5.5 0 0 0 .5 6h1.875v7H1.5a.5.5 0 0 0 0 1h13a.5.5 0 1 0 0-1h-.875V6H15.5a.5.5 0 0 0 .277-.916l-7.5-5zM12.375 6v7h-1.25V6h1.25zm-2.5 0v7h-1.25V6h1.25zm-2.5 0v7h-1.25V6h1.25zm-2.5 0v7h-1.25V6h1.25zM8 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM.5 15a.5.5 0 0 0 0 1h15a.5.5 0 1 0 0-1H.5z"/>
+                  </svg></div>
                   <div class="card-body">
                     <h5 class="card-title">Forum</h5>
                     <p class="card-text">Forum is a place where students can post and answer questions</p>
-                    <a href="#" class="btn btn-primary">Button</a>
+                    <a href="forum.html" class="btn btn-primary">Enter</a>
                   </div>
                   
                 </div>
           </td>
           <td>&emsp;&emsp;&emsp;&emsp;</td>
           <td>
-              <div class="card text-center" style="height: 200px; width: 300px;">
-                  <div class="card-header" style="height: 100px; width: 300px;">icon</div>
+              <div class="card text-center" style="height: 270px; width: 300px;">
+                  <div class="card-header" style="height: 80px; width: 300px;"><svg xmlns="http://www.w3.org/2000/svg" width="70" height="60" fill="currentColor" class="bi bi-book-half" viewBox="0 0 16 16">
+                    <path d="M8.5 2.687c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+                  </svg></div>
                   <div class="card-body">
                     <h5 class="card-title">Learn</h5>
                     <p class="card-text">You can find some useful materials which helps you to learn:)</p>
-                    <a href="#" class="btn btn-primary">Button</a>
+                    <a href="learn.html" class="btn btn-primary">Enter</a>
                   </div>
                   
                 </div>
@@ -123,24 +144,28 @@
         
        
           <td>
-              <div class="card text-center" style="height: 200px; width: 300px;">
-                  <div class="card-header" style="height: 100px; width: 300px;">icon</div>
+              <div class="card text-center" style="height: 270px; width: 300px;">
+                  <div class="card-header" style="height: 80px; width: 300px;"><svg xmlns="http://www.w3.org/2000/svg" width="70" height="60" fill="currentColor" class="bi bi-box" viewBox="0 0 16 16">
+                    <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5 8.186 1.113zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+                  </svg></div>
                   <div class="card-body">
                     <h5 class="card-title">Quiz</h5>
                     <p class="card-text">You can find some quiz which can helps you to improve</p>
-                    <a href="#" class="btn btn-primary">Button</a>
+                    <a href="quiz.html" class="btn btn-primary">Enter</a>
                   </div>
                   
                 </div>
           </td>
           <td></td>
           <td>
-              <div class="card text-center" style="height: 200px; width: 300px;">
-                  <div class="card-header" style="height: 100px; width: 300px;">icon</div>
+              <div class="card text-center" style="height: 270px; width: 300px;">
+                  <div class="card-header" style="height: 80px; width: 300px;"><svg xmlns="http://www.w3.org/2000/svg" width="70" height="60" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                    <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
+                  </svg></div>
                   <div class="card-body">
-                    <h5 class="card-title">Sign up</h5>
-                    <p class="card-text">sign up everyday to get some chance to post questions</p>
-                    <a href="#" class="btn btn-primary">Button</a>
+                    <h5 class="card-title">Reward</h5>
+                    <p class="card-text">sign in everyday to get some chance to post questions</p>
+                    <a class="btn btn-primary" id="awardBtn" onclick="signIn()">Click</a>
                   </div>
                   
                 </div>

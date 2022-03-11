@@ -80,6 +80,10 @@ function CheckAccountAccess() {
             "loginUserRole",
             doc.data().Role
           );
+          // ex: PointSystem Daily Award Time Check
+          sessionStorage.LastGetDailyAwardTime = doc
+            .data()
+            .LastGetDailyAwardTime.toMillis();
           console.log(
             "His Role is " +
               sessionStorage.getItem(

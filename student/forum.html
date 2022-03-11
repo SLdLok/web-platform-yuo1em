@@ -2,10 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Bootstrap -->
     <link
@@ -16,10 +13,7 @@
     />
 
     <!-- SeldCSS-->
-    <link
-      rel="stylesheet"
-      href="../scrollbar.css"
-    />
+    <link rel="stylesheet" href="../scrollbar.css" />
 
     <!-- Title -->
     <title>QQAA - Forum</title>
@@ -33,14 +27,12 @@
     <script>
       // For Firebase JS SDK v7.20.0 and later, measurementId is optional
       const firebaseConfig = {
-        apiKey:
-          "AIzaSyAjq1lBaXKKsrREWHBRD9I6HWYnixGaDHY",
+        apiKey: "AIzaSyAjq1lBaXKKsrREWHBRD9I6HWYnixGaDHY",
         authDomain: "appm-87da8.firebaseapp.com",
         projectId: "appm-87da8",
         storageBucket: "appm-87da8.appspot.com",
         messagingSenderId: "737891521283",
-        appId:
-          "1:737891521283:web:50f0956a00849e40314f36",
+        appId: "1:737891521283:web:50f0956a00849e40314f36",
         measurementId: "G-CTZBC8X25J"
       };
       firebase.initializeApp(firebaseConfig);
@@ -57,21 +49,15 @@
     <!-- Self-Script (From root folder) -->
     <script src="../auth.js"></script>
     <script defer src="../pageCustom.js"></script>
-    <script
-      defer
-      src="./student_forum.js"
-    ></script>
+    <script defer src="./student_forum.js"></script>
+    <script defer src="../pointSystem.js"></script>
   </head>
   <body>
     <!-- DisplayContent -->
     <!-- Navbar -->
-    <nav
-      class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark"
-    >
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="panel.html"
-          >QQAA</a
-        >
+        <a class="navbar-brand" href="panel.html">QQAA</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -81,55 +67,30 @@
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span
-            class="navbar-toggler-icon"
-          ></span>
+          <span class="navbar-toggler-icon"></span>
         </button>
-        <div
-          class="collapse navbar-collapse"
-          id="navbarSupportedContent"
-        >
-          <ul
-            class="navbar-nav me-auto mb-2 mb-lg-0"
-          >
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a
-                class="nav-link"
-                aria-current="page"
-                href="panel.html"
+              <a class="nav-link" aria-current="page" href="panel.html"
                 >Panel</a
               >
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link"
-                href="learn.html"
-                >Learn</a
-              >
+              <a class="nav-link" href="learn.html">Learn</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="quiz.html"
-                >Quiz</a
-              >
+              <a class="nav-link" href="quiz.html">Quiz</a>
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link active"
-                href="forum.html"
-                >Forum</a
-              >
+              <a class="nav-link active" href="forum.html">Forum</a>
             </li>
           </ul>
-          <span
-            id="DisplayName"
-            class="navbar-text d-none d-lg-block me-2"
+          <span id="DisplayName" class="navbar-text d-none d-lg-block me-2"
             >Welcome Back, HUMAN.</span
           >
           <div class="d-flex">
-            <button
-              class="btn btn-light"
-              onclick="SignOut();"
-            >
+            <button class="btn btn-light" onclick="SignOut();">
               Logout
             </button>
           </div>
@@ -141,54 +102,37 @@
     <div class="container-fluid">
       <!-- ######  PUT CONTENT HERE ###### -->
       <div class="d-block">
+        <div class="row" id="alertBox"></div>
         <div class="row" style="height: 90vh;">
           <div class="col-3 border overflow-auto">
             <!-- GroupList -->
             <div class="row-1 border">
-              <button
-                class="btn"
-                onclick="listMSG('LowerForm','F1')"
-              >
+              <button class="btn" onclick="listMSG('LowerForm','F1')">
                 Form 1
               </button>
             </div>
             <div class="row-1 border">
-              <button
-                class="btn"
-                onclick="listMSG('LowerForm','F2')"
-              >
+              <button class="btn" onclick="listMSG('LowerForm','F2')">
                 Form 2
               </button>
             </div>
             <div class="row-1 border">
-              <button
-                class="btn"
-                onclick="listMSG('LowerForm','F3')"
-              >
+              <button class="btn" onclick="listMSG('LowerForm','F3')">
                 Form 3
               </button>
             </div>
             <div class="row-1 border">
-              <button
-                class="btn"
-                onclick="listMSG('HigherForm','F4')"
-              >
+              <button class="btn" onclick="listMSG('HigherForm','F4')">
                 Form 4
               </button>
             </div>
             <div class="row-1 border">
-              <button
-                class="btn"
-                onclick="listMSG('HigherForm','F5')"
-              >
+              <button class="btn" onclick="listMSG('HigherForm','F5')">
                 Form 5
               </button>
             </div>
             <div class="row-1 border">
-              <button
-                class="btn"
-                onclick="listMSG('HigherForm','F6')"
-              >
+              <button class="btn" onclick="listMSG('HigherForm','F6')">
                 Form 6
               </button>
             </div>
@@ -203,23 +147,14 @@
               Nothing Here
             </div>
           </div>
-          <div
-            class="col-6 border overflow-auto"
-            style="height: 90vh;"
-          >
+          <div class="col-6 border overflow-auto" style="height: 90vh;">
             <!-- MSGList -->
-            <div
-              class="row-4 border"
-              id="PostArea"
-            >
+            <div class="row-4 border" id="PostArea">
               <!-- OPOST -->
               Nothing Here
               <!-- OPOST -->
             </div>
-            <div
-              class="row-8 border"
-              id="CommentArea"
-            >
+            <div class="row-8 border" id="CommentArea">
               <!-- COMMENT -->
             </div>
           </div>

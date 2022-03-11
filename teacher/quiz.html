@@ -13,7 +13,7 @@
     />
 
     <!-- Title -->
-    <title>QQAA - Forum</title>
+    <title>QQAA - Quiz</title>
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -39,6 +39,7 @@
     <!-- Self-Script (From root folder) -->
     <script src="../auth.js"></script>
     <script defer src="../pageCustom.js"></script>
+    <script defer src="./teacher_quiz.js"></script>
   </head>
   <body>
     <!-- DisplayContent -->
@@ -65,10 +66,10 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="learn.html">Learn</a>
+              <a class="nav-link active" href="learn.html">Learn</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="quiz.html">Quiz</a>
+              <a class="nav-link" href="quiz.html">Quiz</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="forum.html">Forum</a>
@@ -87,71 +88,77 @@
     <!-- Cotainer -->
     <div class="container-fluid">
       <!-- ######  PUT CONTENT HERE ###### -->
-      <div class="d-block">
-        <div class="row" style="height: 90vh;">
-          <div class="col-3 border overflow-auto">
-            <!-- GroupList -->
-            <div class="row-1 border">
-              <button class="btn" onclick="listMSG('LowerForm','F1')">
-                Form 1
-              </button>
-            </div>
-            <div class="row-1 border">
-              <button class="btn" onclick="listMSG('LowerForm','F2')">
-                Form 2
-              </button>
-            </div>
-            <div class="row-1 border">
-              <button class="btn" onclick="listMSG('LowerForm','F3')">
-                Form 3
-              </button>
-            </div>
-            <div class="row-1 border">
-              <button class="btn" onclick="listMSG('HigherForm','F4')">
-                Form 4
-              </button>
-            </div>
-            <div class="row-1 border">
-              <button class="btn" onclick="listMSG('HigherForm','F5')">
-                Form 5
-              </button>
-            </div>
-            <div class="row-1 border">
-              <button class="btn" onclick="listMSG('HigherForm','F6')">
-                Form 6
-              </button>
-            </div>
+
+    <div class="d-none d-lg-block">
+      <div class="row" style="height: 90vh;">
+        <div class="col-3 border overflow-auto">
+          <!-- formList -->
+          <div class="row-1 border">
+            <button class="btn" onclick="listMSG('LowerForm','F1')">
+              Form 1
+            </button>
           </div>
-          <div
-            class="col-3 border overflow-auto"
-            id="PostList"
-            style="height: 90vh;"
-          >
-            <!-- PostList -->
-            <div class="row-1 border">
-              Nothing Here
-            </div>
+          <div class="row-1 border">
+            <button class="btn" onclick="listMSG('LowerForm','F2')">
+              Form 2
+            </button>
           </div>
-          <div class="col-6 border overflow-auto" style="height: 90vh;">
-            <!-- MSGList -->
-            <div class="row-4 border" id="PostArea">
-              <!-- OPOST -->
-              Nothing Here
-              <!-- OPOST -->
-            </div>
-            <div class="row-8 border" id="CommentArea">
-              <!-- COMMENT -->
-            </div>
+          <div class="row-1 border">
+            <button class="btn" onclick="listMSG('LowerForm','F3')">
+              Form 3
+            </button>
+          </div>
+          <div class="row-1 border">
+            <button class="btn" onclick="listMSG('HigherForm','F4')">
+              Form 4
+            </button>
+          </div>
+          <div class="row-1 border">
+            <button class="btn" onclick="listMSG('HigherForm','F5')">
+              Form 5
+            </button>
+          </div>
+          <div class="row-1 border">
+            <button class="btn" onclick="listMSG('HigherForm','F6')">
+              Form 6
+            </button>
+          </div>
+        </div>
+        <div
+          class="col-3 border overflow-auto"
+          id="PostListforquiz"
+          style="height: 90vh;">
+          <div id=postbtn> 
+          <button class="btn" onclick="">Post
+          
+          </div>
+          <!-- PostList -->
+          <div class="row-1 border">
+            Nothing Here
+          </div>
+        </div>
+        <div class="col-6 border overflow-auto" style="height: 90vh;">
+          <!-- MSGList -->
+          <div class="row-4 border" id="PostAreaforquiz">
+            <!-- OPOST -->
+            Nothing Here
+            <!-- OPOST -->
+          </div>
+          <div class="row-8 border" id="CommentAreaforquiz">
+            <!-- COMMENT -->
+            <iframe textEditor.html 
           </div>
         </div>
       </div>
     </div>
-
+  </div>
+    
     <!-- Bootstrap JS - Option 1: Bootstrap Bundle with Popper -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
+      iframe 
     ></script>
   </body>
 </html>

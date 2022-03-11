@@ -1,6 +1,22 @@
 console.log("Loading Forum");
 var db = firebase.firestore();
 
+// data
+postPointUsed = 10;
+
+// ucs-2 string to base64 encoded ascii
+function utoa(str) {
+  return window.btoa(
+    unescape(encodeURIComponent(str))
+  );
+}
+// base64 encoded ascii to ucs-2 string
+function atou(str) {
+  return decodeURIComponent(
+    escape(window.atob(str))
+  );
+}
+
 // Basic Function
 function readMSG(Group, Form, Post) {
   var docRef = db
@@ -48,7 +64,7 @@ function readMSG(Group, Form, Post) {
             doc.data().PostTitle +
             `')">Delete</button></div>` +
             `<div class="row-4 border"><h1>` +
-            atob(doc.data().PostTitle) +
+            atou(doc.data().PostTitle) +
             `</h1></div>` +
             `<small class="text-muted">Last Edit Date: ` +
             doc.data().EditTime.toDate() +
@@ -57,20 +73,20 @@ function readMSG(Group, Form, Post) {
             doc.data().PosterUID +
             `]</small>` +
             `<div class="border">` +
-            atob(doc.data().PostText) +
+            atou(doc.data().PostText) +
             `</div></div>`;
         } else {
           document.getElementById(
             "PostArea"
           ).innerHTML =
             `<div class="row-4 border"><h1>` +
-            atob(doc.data().PostTitle) +
+            atou(doc.data().PostTitle) +
             `</h1></div>` +
             `<small class="text-muted">Last Edit Date: ` +
             doc.data().EditTime.toDate() +
             `</small>` +
             `<div class="row-4 border">` +
-            atob(doc.data().PostText) +
+            atou(doc.data().PostText) +
             `</div>`;
         }
 
@@ -154,7 +170,7 @@ function readMSG(Group, Form, Post) {
               `</small>` +
               `<br/>` +
               `<label>` +
-              atob(array[i].CommentText) +
+              atou(array[i].CommentText) +
               `</label></div></div>`;
           } else {
             document.getElementById(
@@ -169,7 +185,7 @@ function readMSG(Group, Form, Post) {
               `</small>` +
               `<br/>` +
               `<label>` +
-              atob(array[i].CommentText) +
+              atou(array[i].CommentText) +
               `</label></div>`;
           }
         }
@@ -232,7 +248,7 @@ function listMSG(Group, Form) {
             `','` +
             array[i].id +
             `')">` +
-            atob(array[i].title) +
+            atou(array[i].title) +
             `</button></div>`;
         }
         MathJax.typeset();
@@ -261,7 +277,7 @@ function sendComment(Group, Form, Post) {
     .update({
       Comment: firebase.firestore.FieldValue.arrayUnion(
         {
-          CommentText: btoa(
+          CommentText: utoa(
             document
               .getElementById("textEditor")
               .contentWindow.document.getElementById(
@@ -302,111 +318,131 @@ function newPost(Group, Form) {
 }
 
 function sendPost(Group, Form) {
-  var titleInput = document.getElementById(
-    "PostTitleInput"
-  );
-  var input = document
-    .getElementById("textEditor")
-    .contentWindow.document.getElementById(
-      "editorTextInput"
+  if (readPoint() > 0 + postPointUsed) {
+    var titleInput = document.getElementById(
+      "PostTitleInput"
     );
-  if ((titleInput.value == "") | " " | "   ") {
-    titleInput.value =
-      "Untitled Post on" + Date(Date.now());
+    var input = document
+      .getElementById("textEditor")
+      .contentWindow.document.getElementById(
+        "editorTextInput"
+      );
+    if ((titleInput.value == "") | " " | "   ") {
+      titleInput.value =
+        "Untitled Post on" + Date(Date.now());
+    }
+    db.collection("Forum")
+      .doc(Group)
+      .collection(Form)
+      .add({
+        PostTitle: utoa(titleInput.value),
+        EditTime: firebase.firestore.Timestamp.now(),
+        PostText: utoa(input.value),
+        Comment: [],
+        PosterUID: JSON.parse(
+          sessionStorage.loginUser
+        ).uid
+      })
+      .then((docRef) => {
+        console.log(
+          "Document written with ID: ",
+          docRef.id
+        );
+        if (Form === "F1") {
+          db.collection("Forum")
+            .doc(Group)
+            .update({
+              F1DocArray: firebase.firestore.FieldValue.arrayUnion(
+                {
+                  id: docRef.id,
+                  title: utoa(titleInput.value)
+                }
+              )
+            });
+        } else if (Form === "F2") {
+          db.collection("Forum")
+            .doc(Group)
+            .update({
+              F2DocArray: firebase.firestore.FieldValue.arrayUnion(
+                {
+                  id: docRef.id,
+                  title: utoa(titleInput.value)
+                }
+              )
+            });
+        } else if (Form === "F3") {
+          db.collection("Forum")
+            .doc(Group)
+            .update({
+              F3DocArray: firebase.firestore.FieldValue.arrayUnion(
+                {
+                  id: docRef.id,
+                  title: utoa(titleInput.value)
+                }
+              )
+            });
+        } else if (Form === "F4") {
+          db.collection("Forum")
+            .doc(Group)
+            .update({
+              F4DocArray: firebase.firestore.FieldValue.arrayUnion(
+                {
+                  id: docRef.id,
+                  title: utoa(titleInput.value)
+                }
+              )
+            });
+        } else if (Form === "F5") {
+          db.collection("Forum")
+            .doc(Group)
+            .update({
+              F5DocArray: firebase.firestore.FieldValue.arrayUnion(
+                {
+                  id: docRef.id,
+                  title: utoa(titleInput.value)
+                }
+              )
+            });
+        } else if (Form === "F6") {
+          db.collection("Forum")
+            .doc(Group)
+            .update({
+              F6DocArray: firebase.firestore.FieldValue.arrayUnion(
+                {
+                  id: docRef.id,
+                  title: utoa(titleInput.value)
+                }
+              )
+            });
+        }
+        delPoint(postPointUsed);
+        alertBox(
+          "Posted. " +
+            postPointUsed +
+            "pt is used to post. <br/>You have " +
+            readPoint() +
+            "pt now. ",
+          "success",
+          5000
+        );
+        readMSG(Group, Form, docRef.id);
+        listMSG(Group, Form);
+      })
+      .catch((error) => {
+        console.error(
+          "Error adding document: ",
+          error
+        );
+      });
+  } else {
+    alertBox(
+      "You're only have " +
+        readPoint() +
+        "pt. You don't have enough Point to Post the Question",
+      "danger",
+      5000
+    );
   }
-  db.collection("Forum")
-    .doc(Group)
-    .collection(Form)
-    .add({
-      PostTitle: btoa(titleInput.value),
-      EditTime: firebase.firestore.Timestamp.now(),
-      PostText: btoa(input.value),
-      Comment: [],
-      PosterUID: JSON.parse(
-        sessionStorage.loginUser
-      ).uid
-    })
-    .then((docRef) => {
-      console.log(
-        "Document written with ID: ",
-        docRef.id
-      );
-      if (Form === "F1") {
-        db.collection("Forum")
-          .doc(Group)
-          .update({
-            F1DocArray: firebase.firestore.FieldValue.arrayUnion(
-              {
-                id: docRef.id,
-                title: btoa(titleInput.value)
-              }
-            )
-          });
-      } else if (Form === "F2") {
-        db.collection("Forum")
-          .doc(Group)
-          .update({
-            F2DocArray: firebase.firestore.FieldValue.arrayUnion(
-              {
-                id: docRef.id,
-                title: btoa(titleInput.value)
-              }
-            )
-          });
-      } else if (Form === "F3") {
-        db.collection("Forum")
-          .doc(Group)
-          .update({
-            F3DocArray: firebase.firestore.FieldValue.arrayUnion(
-              {
-                id: docRef.id,
-                title: btoa(titleInput.value)
-              }
-            )
-          });
-      } else if (Form === "F4") {
-        db.collection("Forum")
-          .doc(Group)
-          .update({
-            F4DocArray: firebase.firestore.FieldValue.arrayUnion(
-              {
-                id: docRef.id,
-                title: btoa(titleInput.value)
-              }
-            )
-          });
-      } else if (Form === "F5") {
-        db.collection("Forum")
-          .doc(Group)
-          .update({
-            F5DocArray: firebase.firestore.FieldValue.arrayUnion(
-              {
-                id: docRef.id,
-                title: btoa(titleInput.value)
-              }
-            )
-          });
-      } else if (Form === "F6") {
-        db.collection("Forum")
-          .doc(Group)
-          .update({
-            F6DocArray: firebase.firestore.FieldValue.arrayUnion(
-              {
-                id: docRef.id,
-                title: btoa(titleInput.value)
-              }
-            )
-          });
-      }
-      readMSG(Group, Form, docRef.id);
-      listMSG(Group, Form);
-    })
-    .catch((error) => {
-      console.error(
-        "Error adding document: ",
-        error
-      );
-    });
 }
 
 function delPost(Group, Form, Post, Title) {
@@ -548,7 +584,7 @@ function editCommentPage(
         .getElementById("textEditor-" + id)
         .contentWindow.document.getElementById(
           "editorTextInput"
-        ).value = atob(CommentT);
+        ).value = atou(CommentT);
     });
 }
 
@@ -581,7 +617,7 @@ function editComment(
     .update({
       Comment: firebase.firestore.FieldValue.arrayUnion(
         {
-          CommentText: btoa(
+          CommentText: utoa(
             document
               .getElementById("textEditor-" + id)
               .contentWindow.document.getElementById(
@@ -636,11 +672,11 @@ function editPostPage(
         .getElementById("textEditor-")
         .contentWindow.document.getElementById(
           "editorTextInput"
-        ).value = atob(text);
+        ).value = atou(text);
     });
   document.getElementById(
     "PostTitleInput-"
-  ).value = atob(Title);
+  ).value = atou(Title);
 }
 
 function editPost(Group, Form, Post, oldTitle) {
@@ -661,9 +697,9 @@ function editPost(Group, Form, Post, oldTitle) {
     .collection(Form)
     .doc(Post)
     .update({
-      PostTitle: btoa(titleInput.value),
+      PostTitle: utoa(titleInput.value),
       EditTime: firebase.firestore.Timestamp.now(),
-      PostText: btoa(input.value),
+      PostText: utoa(input.value),
       PosterUID: JSON.parse(
         sessionStorage.loginUser
       ).uid
@@ -727,7 +763,7 @@ function editPost(Group, Form, Post, oldTitle) {
             F1DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: Post,
-                title: btoa(titleInput.value)
+                title: utoa(titleInput.value)
               }
             )
           });
@@ -738,7 +774,7 @@ function editPost(Group, Form, Post, oldTitle) {
             F2DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: Post,
-                title: btoa(titleInput.value)
+                title: utoa(titleInput.value)
               }
             )
           });
@@ -749,7 +785,7 @@ function editPost(Group, Form, Post, oldTitle) {
             F3DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: Post,
-                title: btoa(titleInput.value)
+                title: utoa(titleInput.value)
               }
             )
           });
@@ -760,7 +796,7 @@ function editPost(Group, Form, Post, oldTitle) {
             F4DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: Post,
-                title: btoa(titleInput.value)
+                title: utoa(titleInput.value)
               }
             )
           });
@@ -771,7 +807,7 @@ function editPost(Group, Form, Post, oldTitle) {
             F5DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: Post,
-                title: btoa(titleInput.value)
+                title: utoa(titleInput.value)
               }
             )
           });
@@ -782,7 +818,7 @@ function editPost(Group, Form, Post, oldTitle) {
             F6DocArray: firebase.firestore.FieldValue.arrayUnion(
               {
                 id: Post,
-                title: btoa(titleInput.value)
+                title: utoa(titleInput.value)
               }
             )
           });
@@ -790,4 +826,24 @@ function editPost(Group, Form, Post, oldTitle) {
       listMSG(Group, Form);
       readMSG(Group, Form, Post);
     });
+}
+
+// Alert
+
+function alertBox(msg, type, time) {
+  var id = Math.random * 1000;
+  document.getElementById("alertBox").innerHTML +=
+    `<div id="alert-` +
+    id +
+    `" class="alert alert-` +
+    type +
+    `" role="alert">` +
+    msg +
+    `</div>`;
+
+  setTimeout(() => {
+    document
+      .getElementById("alert-" + id)
+      .remove();
+  }, time);
 }
