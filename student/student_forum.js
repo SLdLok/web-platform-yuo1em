@@ -3,6 +3,8 @@ var db = firebase.firestore();
 
 // data
 postPointUsed = 10;
+let se1 = new Audio("../SE_success.ogg");
+let se2 = new Audio("../SE_fail.ogg");
 
 // ucs-2 string to base64 encoded ascii
 function utoa(str) {
@@ -420,7 +422,7 @@ function sendPost(Group, Form) {
           "Posted. " +
             postPointUsed +
             "pt is used to post. <br/>You have " +
-            readPoint() +
+            (readPoint() - postPointUsed) +
             "pt now. ",
           "success",
           5000
@@ -831,16 +833,26 @@ function editPost(Group, Form, Post, oldTitle) {
 // Alert
 
 function alertBox(msg, type, time) {
+  if (type == "danger") {
+    se2.play();
+  } else if (type == "success") {
+    se1.play();
+  }
   var id = Math.random * 1000;
   document.getElementById("alertBox").innerHTML +=
     `<div id="alert-` +
     id +
-    `" class="alert alert-` +
+    `" class="alert animated-alert alert-` +
     type +
     `" role="alert">` +
     msg +
     `</div>`;
 
+  setTimeout(() => {
+    document
+      .getElementById("alert-" + id)
+      .classList.add("animated-alert-del");
+  }, time - 150);
   setTimeout(() => {
     document
       .getElementById("alert-" + id)

@@ -42,16 +42,35 @@
     <script src="../auth.js"></script>
     <script defer src="../pageCustom.js"></script>
     <script>
+      let se1 = new Audio("../SE_success.ogg");
+      let se2 = new Audio("../SE_fail.ogg");
+      var leftTime = {
+            day: 0,
+            hour: 0,
+            minute: 0,
+            second: 0,
+            ms: 0
+          }
       setInterval(() => {
         if (sessionStorage.LastGetDailyAwardTime < firebase.firestore.Timestamp.now().toMillis()) {
           document.getElementById("awardBtn").className = ("btn btn-primary");
           document.getElementById("awardBtn").innerHTML = "Get Today Award"
+          document.getElementById("awardInfo").innerHTML= "sign in everyday to get some chance to post questions<br/><span class='text-secondary' style='font-size: 0.75rem;'>Today's Daily Award isn't been got yet. </span>"
         } else {
           document.getElementById("awardBtn").className = ("btn btn-primary disabled");
           document.getElementById("awardBtn").innerHTML = "Already Got Today"
+          NATime = firebase.firestore.Timestamp.fromMillis(sessionStorage.LastGetDailyAwardTime).toDate();
+          nowTime = firebase.firestore.Timestamp.fromMillis(firebase.firestore.Timestamp.now().toMillis()).toDate();
+          leftTimeMS = NATime.getTime() - nowTime.getTime()
+          leftTime.day = Math.floor(leftTimeMS/(1000 * 3600 * 24))
+          leftTime.hour = Math.floor(leftTimeMS/(1000 * 3600)) - (leftTime.day*24)
+          leftTime.minute = Math.floor(leftTimeMS/(1000 * 60)) - (leftTime.hour *60) - (leftTime.day*24*60)
+          leftTime.second = Math.floor(leftTimeMS/(1000)) - (leftTime.hour * 60 *60) - (leftTime.minute * 60) - (leftTime.day*24*60*60)
+          document.getElementById("awardInfo").innerHTML= "sign in everyday to get some chance to post questions<br/><span class='text-secondary' style='font-size: 0.75rem;'>Today's Daily Award have been got yet. </span><br/>" + "<span class='text-secondary' style='font-size: 0.5rem;'>Remain Time: " + ((leftTime.day*24)+(leftTime.hour)) + " Hour " + leftTime.minute + " Minute " + leftTime.second + " Second " + ". </span>"
         }
       }, 500);
       function signIn(){
+        se1.play();
         dailyAward();
       }
       </script>
@@ -164,7 +183,7 @@
                   </svg></div>
                   <div class="card-body">
                     <h5 class="card-title">Reward</h5>
-                    <p class="card-text">sign in everyday to get some chance to post questions</p>
+                    <p class="card-text" id="awardInfo">sign in everyday to get some chance to post questions</p>
                     <a class="btn btn-primary" id="awardBtn" onclick="signIn()">Click</a>
                   </div>
                   

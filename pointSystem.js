@@ -1,6 +1,7 @@
 var db = firebase.firestore();
 sessionStorage.PointOwned = undefined;
 PS_readPoint();
+readPoint();
 
 Date.prototype.addDays = function (days) {
   this.setDate(this.getDate() + days);
@@ -93,12 +94,15 @@ function dailyAward() {
           addPoint(50);
           var today = new Date();
           var date = today.addDays(1);
-          return docRef.update({
-            LastGetDailyAwardTime: firebase.firestore.Timestamp.fromDate(
-              date
-            )
-          });
-          console.log("Add Point");
+          return docRef
+            .update({
+              LastGetDailyAwardTime: firebase.firestore.Timestamp.fromDate(
+                date
+              )
+            })
+            .then(() => {
+              window.location.reload();
+            });
         }
       } else {
         // do(c.data() will be undefined in this case
