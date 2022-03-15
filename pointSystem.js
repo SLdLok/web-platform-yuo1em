@@ -1,7 +1,11 @@
 var db = firebase.firestore();
 sessionStorage.PointOwned = undefined;
-PS_readPoint();
 readPoint();
+readQuestionLimit();
+readQuizLimit();
+setTimeout(() => {
+  PS_readPoint();
+}, 1000);
 
 Date.prototype.addDays = function (days) {
   this.setDate(this.getDate() + days);
@@ -35,6 +39,7 @@ function PS_readPoint() {
       );
     });
 }
+
 function readPoint() {
   PS_readPoint();
   return sessionStorage.PointOwned;
@@ -48,9 +53,8 @@ function addPoint(num) {
     );
   return docRef
     .update({
-      PointOwned: firebase.firestore.FieldValue.increment(
-        num
-      )
+      PointOwned:
+        parseInt(sessionStorage.PointOwned) + num
     })
     .then(() => {
       PS_readPoint();
@@ -65,11 +69,15 @@ function delPoint(num) {
     );
   return docRef
     .update({
-      PointOwned: firebase.firestore.FieldValue.increment(
-        -num
-      )
+      PointOwned:
+        parseInt(sessionStorage.PointOwned) + -num
     })
     .then(() => {
+      console.log(
+        "LOG: ",
+        num,
+        sessionStorage.PointOwned
+      );
       PS_readPoint();
     });
 }
@@ -98,7 +106,9 @@ function dailyAward() {
             .update({
               LastGetDailyAwardTime: firebase.firestore.Timestamp.fromDate(
                 date
-              )
+              ),
+              DailyQuestionLimit: 10,
+              DailyQuizLimit: 15
             })
             .then(() => {
               window.location.reload();
@@ -114,5 +124,102 @@ function dailyAward() {
         "Error getting document:",
         error
       );
+    });
+}
+
+function PS_readQuestionLimit() {
+  pt = undefined;
+  var docRef = db
+    .collection("UserData")
+    .doc(
+      JSON.parse(sessionStorage.loginUser).uid
+    );
+
+  docRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        console.log("Document data:", doc.data());
+        console.log(doc.data().PointOwned);
+        sessionStorage.DailyQuestionLimit = doc.data().DailyQuestionLimit;
+      } else {
+        // do(c.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    })
+    .catch((error) => {
+      console.log(
+        "Error getting document:",
+        error
+      );
+    });
+}
+function PS_readQuizLimit() {
+  pt = undefined;
+  var docRef = db
+    .collection("UserData")
+    .doc(
+      JSON.parse(sessionStorage.loginUser).uid
+    );
+
+  docRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        console.log("Document data:", doc.data());
+        console.log(doc.data().PointOwned);
+        sessionStorage.DailyQuestionLimit = doc.data().DailyQuizLimit;
+      } else {
+        // do(c.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    })
+    .catch((error) => {
+      console.log(
+        "Error getting document:",
+        error
+      );
+    });
+}
+function readQuestionLimit() {
+  PS_readQuestionLimit();
+  return sessionStorage.DailyQuestionLimit;
+}
+function readQuizLimit() {
+  PS_readQuizLimit();
+  return sessionStorage.DailyQuizLimit;
+}
+
+function delQuestionLimit() {
+  var docRef = db
+    .collection("UserData")
+    .doc(
+      JSON.parse(sessionStorage.loginUser).uid
+    );
+  return docRef
+    .update({
+      DailyQuestionLimit:
+        parseInt(
+          sessionStorage.DailyQuestionLimit
+        ) + -1
+    })
+    .then(() => {
+      PS_readQuestionLimit();
+    });
+}
+function delQuizLimit() {
+  var docRef = db
+    .collection("UserData")
+    .doc(
+      JSON.parse(sessionStorage.loginUser).uid
+    );
+  return docRef
+    .update({
+      DailyQuizLimit:
+        parseInt(sessionStorage.DailyQuizLimit) +
+        -1
+    })
+    .then(() => {
+      PS_readQuizLimit();
     });
 }

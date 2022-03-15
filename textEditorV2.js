@@ -2,11 +2,15 @@ var url = "";
 function replaceStyle(startTag, endTag) {
   // javascript
   var txtarea = document.getElementById(
-    "editorTextInput"
+    textEditorName
   );
   var start = txtarea.selectionStart;
   var finish = txtarea.selectionEnd;
-  var allText = txtarea.value;
+  if (allowV2 == true) {
+    var allText = txtarea.innerHTML;
+  } else {
+    var allText = txtarea.value;
+  }
   var sel = allText.substring(start, finish);
   var newText =
     allText.substring(0, start) +
@@ -18,7 +22,38 @@ function replaceStyle(startTag, endTag) {
     endTag +
     ">" +
     allText.substring(finish, allText.length);
-  txtarea.value = newText;
+  if (allowV2 == true) {
+    txtarea.innerHTML = newText;
+  } else {
+    document.body.innerHTML = document.body.innerHTML.replace(
+      window.getSelection()
+    );
+  }
+}
+
+function EditorAddText(text) {
+  // javascript
+  var txtarea = document.getElementById(
+    textEditorName
+  );
+  var start = txtarea.selectionStart;
+  var finish = txtarea.selectionEnd;
+  if (allowV2 == true) {
+    var allText = txtarea.innerHTML;
+  } else {
+    var allText = txtarea.value;
+  }
+
+  var sel = allText.substring(start, finish);
+  var newText =
+    allText.substring(0, start) +
+    text +
+    allText.substring(finish, allText.length);
+  if (allowV2 == true) {
+    txtarea.innerHTML = newText;
+  } else {
+    txtarea.value = newText;
+  }
 }
 
 function replaceStyleWithInnerHTML(
@@ -28,11 +63,15 @@ function replaceStyleWithInnerHTML(
 ) {
   // javascript
   var txtarea = document.getElementById(
-    "editorTextInput"
+    textEditorName
   );
   var start = txtarea.selectionStart;
   var finish = txtarea.selectionEnd;
-  var allText = txtarea.value;
+  if (allowV2 == true) {
+    var allText = txtarea.innerHTML;
+  } else {
+    var allText = txtarea.value;
+  }
   var newText =
     allText.substring(0, start) +
     "<" +
@@ -43,7 +82,11 @@ function replaceStyleWithInnerHTML(
     endTag +
     ">" +
     allText.substring(finish, allText.length);
-  txtarea.value = newText;
+  if (allowV2 == true) {
+    txtarea.innerHTML = newText;
+  } else {
+    txtarea.value = newText;
+  }
 }
 
 function textStyle(style) {
@@ -176,7 +219,7 @@ function updateText() {
     "editorTextInput"
   ).value = document
     .getElementById("editorTextInput")
-    .value.replace(/\n/g, "<br />");
+    .value.replace(/\n/g, "<br/>");
   document.getElementById(
     "displayTextOutput"
   ).innerHTML = document.getElementById(
@@ -210,4 +253,32 @@ function addImg() {
     "img"
   );
   updateText();
+}
+
+document
+  .getElementById("displayTextOutput")
+  .addEventListener("input", (event) => {
+    var patt2 = new RegExp("<div>", "g");
+    var patt3 = new RegExp("</div>", "g");
+    var t = document
+      .getElementById("displayTextOutput")
+      .innerHTML.replace(patt2, "<br/>")
+      .replace(patt3, "");
+    document.getElementById(
+      "editorTextInput"
+    ).value = t;
+  });
+
+var allowV2 = false;
+var textEditorName = "editorTextInput";
+// PASTE FUNCTION
+
+function toggleEditorMode(modeV) {
+  if (modeV == 1) {
+    textEditorName = "editorTextInput";
+    allowV2 = false;
+  } else if (modeV == 2) {
+    textEditorName = "displayTextOutput";
+    allowV2 - true;
+  }
 }

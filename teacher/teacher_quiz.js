@@ -133,36 +133,15 @@ function listMSG(Group, Form) {
       console.log("Error getting document:", error);
     });
 }
-
-function sendComment(Group, Form, Post) {
-  var docRef = db.collection("Quiz").doc(Group).collection(Form).doc(Post);
-
-  // Set the "capital" field of the city 'DC'
-  return docRef
-    .update({
-      Comment: firebase.firestore.FieldValue.arrayUnion({
-        CommentText: utoa(
-          document
-            .getElementById("textEditor")
-            .contentWindow.document.getElementById("editorTextInput").value
-        ),
-        EditTime: firebase.firestore.Timestamp.now(),
-        CommenterUID: JSON.parse(sessionStorage.loginUser).uid
-      })
-    })
-    .then(() => {
-      readMSG(Group, Form, Post);
-    })
-    .catch((error) => {
-      // The document probably doesn't exist.
-      console.error("Error updating document: ", error);
-    });
-}
-
+//new post( display only)
 function newPost(Group, Form) {
   document.getElementById("PostAreaforquiz").innerHTML =
     `<h5>Post Title</h5><input id="PostTitleInput"class="form-control"></input><h5>Content</h5>` +
     `<iframe class="embed-responsive" id="textEditor" style="width: 100%; height: 72.5vh;" src="../textEditor.html"></iframe>` +
+    `<button class="btn" onclick="  AnswerSelected=A " >A</button>` +
+    `<button class="btn" onclick="  AnswerSelected=B " >B</button>` +
+    `<button class="btn" onclick="  AnswerSelected=C " >C</button>` +
+    `<button class="btn" onclick="  AnswerSelected=D " >D</button>` +
     `<button class="btn btn-success" onclick="sendPost('` +
     Group +
     `','` +
@@ -170,7 +149,7 @@ function newPost(Group, Form) {
     `')">Post</button>`;
   document.getElementById("CommentAreaforquiz").innerHTML = "";
 }
-
+//send post ( real send to db)
 function sendPost(Group, Form) {
   var titleInput = document.getElementById("PostTitleInput");
   var input = document
@@ -185,9 +164,10 @@ function sendPost(Group, Form) {
     .add({
       PostTitle: utoa(titleInput.value),
       EditTime: firebase.firestore.Timestamp.now(),
-      PostText: utoa(input.value),
-      Comment: [],
+      QAText: utoa(input.value),
       PosterUID: JSON.parse(sessionStorage.loginUser).uid
+      //NO SURE
+      AnswerSelected: 
     })
     .then((docRef) => {
       console.log("Document written with ID: ", docRef.id);
@@ -253,7 +233,7 @@ function sendPost(Group, Form) {
       console.error("Error adding document: ", error);
     });
 }
-
+//del post
 function delPost(Group, Form, Post, Title) {
   var docRef = db.collection("Quiz").doc(Group).collection(Form).doc(Post);
   docRef
@@ -322,82 +302,7 @@ function delPost(Group, Form, Post, Title) {
       console.error("Error removing document: ", error);
     });
 }
-function delComment(Group, Form, Post, CommentT, CommentU, CommentE) {
-  var docRef = db.collection("Quiz").doc(Group).collection(Form).doc(Post);
-  console.log({
-    CommentText: CommentT,
-    CommenterUID: CommentU,
-    EditTime: CommentE
-  });
-  docRef
-    .update({
-      Comment: firebase.firestore.FieldValue.arrayRemove({
-        CommentText: CommentT,
-        CommenterUID: CommentU,
-        EditTime: firebase.firestore.Timestamp.fromMillis(CommentE)
-      })
-    })
-    .then(readMSG(Group, Form, Post));
-}
-
-function editCommentPage(Group, Form, Post, CommentT, CommentU, CommentE, id) {
-  document.getElementById("c-" + id).innerHTML =
-    `<iframe class="embed-responsive" id="textEditor-` +
-    id +
-    `" style="width: 100%; height: 50vh;" src="../textEditor.html"></iframe>` +
-    `<button class="btn btn-warning" onclick="editComment('` +
-    Group +
-    `','` +
-    Form +
-    `','` +
-    Post +
-    `','` +
-    CommentT +
-    `','` +
-    CommentU +
-    `',` +
-    CommentE +
-    `,` +
-    id +
-    `)">Edit Comment</button>`;
-  document
-    .getElementById("textEditor-" + id)
-    .addEventListener("load", function () {
-      document
-        .getElementById("textEditor-" + id)
-        .contentWindow.document.getElementById("editorTextInput").value = atou(
-        CommentT
-      );
-    });
-}
-
-function editComment(Group, Form, Post, CommentT, CommentU, CommentE, id) {
-  delComment(Group, Form, Post, CommentT, CommentU, CommentE);
-
-  var docRef = db.collection("Quiz").doc(Group).collection(Form).doc(Post);
-
-  // Set the "capital" field of the city 'DC'
-  return docRef
-    .update({
-      Comment: firebase.firestore.FieldValue.arrayUnion({
-        CommentText: utoa(
-          document
-            .getElementById("textEditor-" + id)
-            .contentWindow.document.getElementById("editorTextInput").value
-        ),
-        EditTime: firebase.firestore.Timestamp.now(),
-        CommenterUID: JSON.parse(sessionStorage.loginUser).uid
-      })
-    })
-    .then(() => {
-      readMSG(Group, Form, Post);
-    })
-    .catch((error) => {
-      // The document probably doesn't exist.
-      console.error("Error updating document: ", error);
-    });
-}
-
+//edit
 function editPostPage(Group, Form, Post, Title, text) {
   document.getElementById("PostAreaforquiz").innerHTML =
     `<h5>Post title</h5>` +

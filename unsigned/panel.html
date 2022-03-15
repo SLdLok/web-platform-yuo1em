@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
 
     <!-- Bootstrap -->
     <link
@@ -13,7 +16,7 @@
     />
 
     <!-- Title -->
-    <title>QQAA - [NO ACCESS]</title>
+    <title>Brother Maths - [NO ACCESS]</title>
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -24,17 +27,19 @@
     <script>
       // For Firebase JS SDK v7.20.0 and later, measurementId is optional
       const firebaseConfig = {
-        apiKey: 'AIzaSyAjq1lBaXKKsrREWHBRD9I6HWYnixGaDHY',
-        authDomain: 'appm-87da8.firebaseapp.com',
-        projectId: 'appm-87da8',
-        storageBucket: 'appm-87da8.appspot.com',
-        messagingSenderId: '737891521283',
-        appId: '1:737891521283:web:50f0956a00849e40314f36',
-        measurementId: 'G-CTZBC8X25J',
+        apiKey:
+          "AIzaSyAjq1lBaXKKsrREWHBRD9I6HWYnixGaDHY",
+        authDomain: "appm-87da8.firebaseapp.com",
+        projectId: "appm-87da8",
+        storageBucket: "appm-87da8.appspot.com",
+        messagingSenderId: "737891521283",
+        appId:
+          "1:737891521283:web:50f0956a00849e40314f36",
+        measurementId: "G-CTZBC8X25J"
       };
       firebase.initializeApp(firebaseConfig);
       // For Check Access is it allowed.
-      pageNeedAccess = 'unsigned';
+      pageNeedAccess = "unsigned";
     </script>
     <!-- Self-Script (From root folder) -->
     <script src="../auth.js"></script>
@@ -42,10 +47,13 @@
     <script defer>
       setTimeout(() => {
         var msg =
-          'UID: ' +
-          JSON.parse(sessionStorage.loginUser).uid +
-          '\n ACCESS Request ';
-        document.getElementById('msg').value = msg;
+          "UID: " +
+          JSON.parse(sessionStorage.loginUser)
+            .uid +
+          "\n ACCESS Request ";
+        document.getElementById(
+          "msg"
+        ).value = msg;
         document.getElemet;
       }, 500);
     </script>
@@ -53,9 +61,13 @@
   <body>
     <!-- DisplayContent -->
     <!-- Navbar -->
-    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+    <nav
+      class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark"
+    >
       <div class="container-fluid">
-        <a class="navbar-brand" href="panel.html">QQAA</a>
+        <a class="navbar-brand" href="panel.html"
+          >Brother Maths</a
+        >
         <button
           class="navbar-toggler"
           type="button"
@@ -65,21 +77,38 @@
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span
+            class="navbar-toggler-icon"
+          ></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <div
+          class="collapse navbar-collapse"
+          id="navbarSupportedContent"
+        >
+          <ul
+            class="navbar-nav me-auto mb-2 mb-lg-0"
+          >
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="panel.html"
+              <a
+                class="nav-link active"
+                aria-current="page"
+                href="panel.html"
                 >Panel</a
               >
             </li>
           </ul>
-          <span id="DisplayName" class="navbar-text d-none d-lg-block me-2"
+          <span
+            id="DisplayName"
+            class="navbar-text d-none d-lg-block me-2"
             >Welcome Back, HUMAN.</span
           >
           <div class="d-flex">
-            <button class="btn btn-light" onclick="SignOut();">Logout</button>
+            <button
+              class="btn btn-light"
+              onclick="SignOut();"
+            >
+              Logout
+            </button>
           </div>
         </div>
       </div>
@@ -88,11 +117,18 @@
     <!-- Cotainer -->
     <div class="container-fluid">
       <!-- ######  PUT CONTENT HERE ###### -->
-      <h3 class="display-3">Need Access Register!</h3>
-      <p>Please Contact to The Admin to get Access.</p>
+      <h3 class="display-3">
+        Need Access Register!
+      </h3>
+      <p>
+        Please Contact to The Admin to get Access.
+      </p>
       <br /><br />
       <h6>Report Code (give this to Admin)</h6>
-      <textarea class="form-control" id="msg"></textarea>
+      <textarea
+        class="form-control"
+        id="msg"
+      ></textarea>
     </div>
 
     <!-- Bootstrap JS - Option 1: Bootstrap Bundle with Popper -->

@@ -9,37 +9,136 @@ function SignIn() {
   firebase
     .auth()
     .signInWithPopup(provider)
-    .then((result) => {
-      var credential = result.credential;
-      var token = credential.accessToken;
-      var user = result.user;
-      console.log("LogIn already");
-      // store the user's account data in sessionStorage
-      sessionStorage.setItem(
-        "loginUser",
-        JSON.stringify(user)
-      );
-      CheckAccountAccess();
-      document.writeln(`<link
+    .then(
+      (result) => {
+        var credential = result.credential;
+        var token = credential.accessToken;
+        var user = result.user;
+        console.log("LogIn already");
+        // store the user's account data in sessionStorage
+        sessionStorage.setItem(
+          "loginUser",
+          JSON.stringify(user)
+        );
+
+        CheckAccountAccess();
+        if (
+          window.confirm(
+            "DO YOU NEED ENTER DEBUG MODE (Get/Change Your Access) ?"
+          ) == true
+        ) {
+          var prompt = window.prompt(
+            "Your UID is " +
+              JSON.parse(sessionStorage.loginUser)
+                .uid +
+              ".\n And your Account Access is " +
+              sessionStorage.loginUserRole +
+              ". \n\n Please type which Access you want.",
+            sessionStorage.loginUserRole
+          );
+          if (prompt != null) {
+            var prompt2 = window.prompt(
+              "Your Account's Form is F" +
+                sessionStorage.loginUserForm +
+                ". \nPlease type which Form you want. \n( Please type the number only. If Form isn N/A, Please type '0' )",
+              sessionStorage.loginUserForm
+            );
+            if (prompt2 != null) {
+              var Ref = db
+                .collection("UserData")
+                .doc(
+                  JSON.parse(
+                    sessionStorage.loginUser
+                  ).uid
+                );
+              return Ref.update({
+                Form: parseInt(prompt2),
+                Role: prompt
+              })
+                .then(() => {
+                  console.log(
+                    "Document successfully updated!"
+                  );
+                  window.alert(
+                    "Changed. Return to Panel."
+                  );
+                  document.writeln(`<link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     /><div style="position: absolute; width: 97.5%; height:97.5%; top: 50%; left: 47.5%"><div class="spinner-border" role="status">
     </div><br/><span class="sr-only sr-only-focusable">Loading...</span></div>`);
+                  setTimeout(
+                    () =>
+                      window.location.replace(
+                        "./" +
+                          sessionStorage.getItem(
+                            "loginUserRole"
+                          ) +
+                          "/panel.html"
+                      ),
+                    4300 * Math.random()
+                  );
+                })
+                .catch((error) => {
+                  // The document probably doesn't exist.
+                  window.alert(
+                    "Error updating document: ",
+                    error
+                  );
+                });
+            } else {
+              setTimeout(
+                () =>
+                  window.location.replace(
+                    "./" +
+                      sessionStorage.getItem(
+                        "loginUserRole"
+                      ) +
+                      "/panel.html"
+                  ),
+                4300 * Math.random()
+              );
+            }
+          } else {
+            setTimeout(
+              () =>
+                window.location.replace(
+                  "./" +
+                    sessionStorage.getItem(
+                      "loginUserRole"
+                    ) +
+                    "/panel.html"
+                ),
+              4300 * Math.random()
+            );
+          }
+        } else {
+          setTimeout(
+            () =>
+              window.location.replace(
+                "./" +
+                  sessionStorage.getItem(
+                    "loginUserRole"
+                  ) +
+                  "/panel.html"
+              ),
+            4300 * Math.random()
+          );
+        }
+        document.writeln(`<link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    /><div style="position: absolute; width: 97.5%; height:97.5%; top: 50%; left: 47.5%"><div class="spinner-border" role="status">
+    </div><br/><span class="sr-only sr-only-focusable">Loading...</span></div>`);
+
+        // For debug
+      }
       // Direct to panel
-      setTimeout(
-        () =>
-          window.location.replace(
-            "./" +
-              sessionStorage.getItem(
-                "loginUserRole"
-              ) +
-              "/panel.html"
-          ),
-        4300 * Math.random()
-      );
-    })
+    )
     .catch((error) => {
       var errorCode = error.code;
       var errorMessage = error.message;
@@ -87,6 +186,11 @@ function CheckAccountAccess() {
             "loginUserRole",
             doc.data().Role
           );
+          // Form
+          sessionStorage.setItem(
+            "loginUserForm",
+            doc.data().Form
+          );
           // ex: PointSystem Daily Award Time Check
           sessionStorage.LastGetDailyAwardTime = doc
             .data()
@@ -105,7 +209,7 @@ function CheckAccountAccess() {
             .doc(user.uid)
             .set({
               // -- USERDATA PLS -- //
-              DisplayID: btoa(user.displayName),
+              DisplayID: user.displayName,
               UID: user.uid,
               Form: NaN,
               Role: "unsigned",
