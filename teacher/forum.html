@@ -14,15 +14,55 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+      crossorigin="anonymous"
+    ></script>
     <!-- SeldCSS-->
     <link
       rel="stylesheet"
       href="../scrollbar.css"
     />
+    <style>
+      .animated-alert {
+        animation-name: animated-alert-in;
+        animation-duration: 0.15s;
+      }
+      .animated-alert-del {
+        animation-name: animated-alert-out;
+        animation-duration: 0.15s;
+      }
+      @keyframes animated-alert-in {
+        from {
+          opacity: 0%;
+        }
+        to {
+          opacity: 100%;
+        }
+      }
+      @keyframes animated-alert-out {
+        from {
+          opacity: 100%;
+        }
+        to {
+          opacity: 0%;
+        }
+      }
+    </style>
 
     <!-- Title -->
     <title>Brother Maths - Forum</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="../favicon.ico"
+    />
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -57,10 +97,17 @@
     <!-- Self-Script (From root folder) -->
     <script src="../auth.js"></script>
     <script defer src="../pageCustom.js"></script>
-
     <script
       defer
-      src="./student_forum.js"
+      src="./teacher_forum.js"
+    ></script>
+    <script
+      defer
+      src="./m_teacher_forum.js"
+    ></script>
+    <script
+      defer
+      src="../pointSystem.js"
     ></script>
   </head>
   <body>
@@ -124,7 +171,7 @@
           <span
             id="DisplayName"
             class="navbar-text d-none d-lg-block me-2"
-            >Welcome Back, HUMAN.</span
+            >MAYBE_HUMAN 🪙? &nbsp;&nbsp;</span
           >
           <div class="d-flex">
             <button
@@ -141,13 +188,91 @@
     <!-- Cotainer -->
     <div class="container-fluid">
       <!-- ######  PUT CONTENT HERE ###### -->
-      <div class="d-block">
+      <div
+        class="row w-100"
+        id="alertBox"
+        style="position: absolute;"
+      ></div>
+      <div class="d-block d-lg-none">
+        <div class="row-2">
+          <label
+            for="exampleDataList"
+            class="form-label"
+            >Form</label
+          >
+          <select
+            class="form-select form-select-sm"
+            id="m_input_formSelect"
+            placeholder="Select Form"
+            onchange="selectionFormInput()"
+          >
+            <option
+              id="m_input_formSelect_F1"
+              value="F1"
+              >Form 1</option
+            >
+            <option
+              id="m_input_formSelect_F2"
+              value="F2"
+              >Form 2</option
+            >
+            <option
+              id="m_input_formSelect_F3"
+              value="F3"
+              >Form 3</option
+            >
+            <option
+              id="m_input_formSelect_F4"
+              value="F4"
+              >Form 4</option
+            >
+            <option
+              id="m_input_formSelect_F5"
+              value="F5"
+              >Form 5</option
+            >
+            <option
+              id="m_input_formSelect_F6"
+              value="F6"
+              >Form 6</option
+            >
+          </select>
+          <label
+            for="exampleDataList"
+            class="form-label"
+            >Post</label
+          >
+          <select
+            class="form-select form-select-sm"
+            id="m_PostList"
+            placeholder="Select Post"
+          >
+          </select>
+          <button
+            class="btn btn-success w-100"
+            onclick="SerachnRead_M()"
+          >
+            Enter
+          </button>
+        </div>
+        <div class="row"><br /></div>
+        <div class="row border" id="m_PostArea">
+          Nothing Here
+        </div>
+        <div
+          class="row border"
+          id="m_CommentArea"
+        ></div>
+      </div>
+      <div class="d-none d-lg-block">
         <div class="row" style="height: 90vh;">
           <div class="col-3 border overflow-auto">
             <!-- GroupList -->
             <div class="row-1 border">
               <button
                 class="btn"
+                id="BTNLISTForm1"
+                style="font-size: 1.5rem;"
                 onclick="listMSG('LowerForm','F1')"
               >
                 Form 1
@@ -156,6 +281,8 @@
             <div class="row-1 border">
               <button
                 class="btn"
+                id="BTNLISTForm2"
+                style="font-size: 1.5rem;"
                 onclick="listMSG('LowerForm','F2')"
               >
                 Form 2
@@ -164,6 +291,8 @@
             <div class="row-1 border">
               <button
                 class="btn"
+                id="BTNLISTForm3"
+                style="font-size: 1.5rem;"
                 onclick="listMSG('LowerForm','F3')"
               >
                 Form 3
@@ -172,6 +301,8 @@
             <div class="row-1 border">
               <button
                 class="btn"
+                id="BTNLISTForm4"
+                style="font-size: 1.5rem;"
                 onclick="listMSG('HigherForm','F4')"
               >
                 Form 4
@@ -180,6 +311,8 @@
             <div class="row-1 border">
               <button
                 class="btn"
+                id="BTNLISTForm5"
+                style="font-size: 1.5rem;"
                 onclick="listMSG('HigherForm','F5')"
               >
                 Form 5
@@ -188,6 +321,8 @@
             <div class="row-1 border">
               <button
                 class="btn"
+                id="BTNLISTForm6"
+                style="font-size: 1.5rem;"
                 onclick="listMSG('HigherForm','F6')"
               >
                 Form 6
@@ -222,6 +357,212 @@
               id="CommentArea"
             >
               <!-- COMMENT -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Send Post -->
+    <div
+      class="modal fade"
+      id="PostPagePopUp"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5
+              class="modal-title"
+              id="exampleModalLabel"
+            >
+              Are you sure to Post?
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              onclick="$('.modal').modal('hide')"
+            ></button>
+          </div>
+          <div
+            class="modal-body"
+            id="PostPopUpMSG"
+          ></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <div id="PostPopUpBtn">
+              <button
+                type="button"
+                class="btn btn-primary"
+              >
+                Post
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Delte Post -->
+    <div
+      class="modal fade"
+      id="DelPostPagePopUp"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5
+              class="modal-title"
+              id="exampleModalLabel"
+            >
+              Are you sure to delete?
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              onclick="$('.modal').modal('hide')"
+            ></button>
+          </div>
+          <div
+            class="modal-body"
+            id="DelPostPopUpMSG"
+          >
+            ...
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <div id="DelPostPopUpBtn">
+              <button
+                type="button"
+                class="btn btn-primary"
+              >
+                Post
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Send Comment -->
+    <div
+      class="modal fade"
+      id="SendCommentPagePopUp"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5
+              class="modal-title"
+              id="exampleModalLabel"
+            >
+              Are you sure to comment?
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              onclick="$('.modal').modal('hide')"
+            ></button>
+          </div>
+          <div
+            class="modal-body"
+            id="SendCommentPopUpMSG"
+          >
+            ...
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <div id="SendCommentPopUpBtn">
+              <button
+                type="button"
+                class="btn btn-primary"
+              >
+                Comment
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Del Comment -->
+    <div
+      class="modal fade"
+      id="DelCommentPagePopUp"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5
+              class="modal-title"
+              id="exampleModalLabel"
+            >
+              Are you sure to delete?
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              onclick="$('.modal').modal('hide')"
+            ></button>
+          </div>
+          <div
+            class="modal-body"
+            id="DelCommentPopUpMSG"
+          >
+            ...
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <div id="DelCommentPopUpBtn">
+              <button
+                type="button"
+                class="btn btn-primary"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>

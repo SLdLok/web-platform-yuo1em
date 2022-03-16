@@ -1,6 +1,95 @@
 console.log("Loading Forum");
 var db = firebase.firestore();
 GetBalance();
+// Screen Size Check
+function getViewport() {
+  const width = Math.max(
+    document.documentElement.clientWidth,
+    window.innerWidth || 0
+  );
+  if (width <= 576) return "xs";
+  if (width <= 768) return "sm";
+  if (width <= 992) return "md";
+  if (width <= 1200) return "lg";
+  return "xl";
+}
+direct();
+// Direct
+function direct() {
+  const weblink = window.location.search;
+  const urlParams = new URLSearchParams(weblink);
+  var group = urlParams.get("group");
+  var form = urlParams.get("form");
+  var post = urlParams.get("post");
+  var f = "F" + form;
+  var t = "";
+  if (group == "1") {
+    t = "LowerForm";
+  } else if (group == "2") {
+    t = "HigherForm";
+  }
+  console.log(f, t, post);
+  if (
+    urlParams.has("group") == true &&
+    urlParams.has("form") == true &&
+    urlParams.has("post") == true
+  ) {
+    if (
+      getViewport() == "xl" ||
+      getViewport() == "lg"
+    ) {
+      listMSG(t, f);
+      readMSG(t, f, post);
+    } else {
+      m_listMSG(t, f);
+      m_readMSG(t, f, post);
+    }
+  }
+}
+
+// Sorting
+function DBSorting(text) {
+  var ast = atou(text).toLowerCase();
+  console.log(ast);
+  var KT = db
+    .collection("Sorting")
+    .doc("RelativeTopic");
+  KT.get()
+    .then((doc) => {
+      if (doc.exists) {
+        console.log("Document data:", doc.data());
+        var arrayKT = doc.data().KT;
+        document.getElementById(
+          "relativeArea"
+        ).innerHTML = "Relative to: ";
+        for (let i = 0; i < arrayKT.length; i++) {
+          if (
+            ast.indexOf(arrayKT[i].keyword) >= 0
+          ) {
+            document.getElementById(
+              "relativeArea"
+            ).innerHTML +=
+              `<span class="badge rounded-pill bg-primary" onclick="window.location.href=('` +
+              arrayKT[i].link +
+              `'` +
+              `)">` +
+              arrayKT[i].keyword +
+              `</span>`;
+          } else {
+          }
+        }
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    })
+    .catch((error) => {
+      console.log(
+        "Error getting document:",
+        error
+      );
+    });
+}
 // Balance Value Ex
 var BPTExValue = {
   PostPTEx: {
@@ -70,6 +159,7 @@ function DelBalance(Form) {
         console.log(
           "Document successfully updated!"
         );
+        m_GetBalance(Form);
         GetBalance(Form);
       });
   } else if (Form == "F2") {
@@ -87,6 +177,7 @@ function DelBalance(Form) {
         console.log(
           "Document successfully updated!"
         );
+        m_GetBalance(Form);
         GetBalance(Form);
       });
   } else if (Form == "F3") {
@@ -104,6 +195,7 @@ function DelBalance(Form) {
         console.log(
           "Document successfully updated!"
         );
+        m_GetBalance(Form);
         GetBalance(Form);
       });
   } else if (Form == "F4") {
@@ -121,13 +213,14 @@ function DelBalance(Form) {
         console.log(
           "Document successfully updated!"
         );
+        m_GetBalance(Form);
         GetBalance(Form);
       });
   } else if (Form == "F5") {
     db.collection("Forum")
       .doc("Balance")
       .update({
-        "PostNum.F4": firebase.firestore.FieldValue.increment(
+        "PostNum.F5": firebase.firestore.FieldValue.increment(
           -1
         ),
         "PostNum.All": firebase.firestore.FieldValue.increment(
@@ -138,13 +231,14 @@ function DelBalance(Form) {
         console.log(
           "Document successfully updated!"
         );
+        m_GetBalance(Form);
         GetBalance(Form);
       });
   } else if (Form == "F6") {
     db.collection("Forum")
       .doc("Balance")
       .update({
-        "PostNum.F4": firebase.firestore.FieldValue.increment(
+        "PostNum.F6": firebase.firestore.FieldValue.increment(
           -1
         ),
         "PostNum.All": firebase.firestore.FieldValue.increment(
@@ -155,6 +249,7 @@ function DelBalance(Form) {
         console.log(
           "Document successfully updated!"
         );
+        m_GetBalance(Form);
         GetBalance(Form);
       });
   }
@@ -175,6 +270,7 @@ function UpdateBalance(Form) {
         console.log(
           "Document successfully updated!"
         );
+        m_GetBalance(Form);
         GetBalance(Form);
       });
   } else if (Form == "F2") {
@@ -192,6 +288,7 @@ function UpdateBalance(Form) {
         console.log(
           "Document successfully updated!"
         );
+        m_GetBalance(Form);
         GetBalance(Form);
       });
   } else if (Form == "F3") {
@@ -209,6 +306,7 @@ function UpdateBalance(Form) {
         console.log(
           "Document successfully updated!"
         );
+        m_GetBalance(Form);
         GetBalance(Form);
       });
   } else if (Form == "F4") {
@@ -226,13 +324,14 @@ function UpdateBalance(Form) {
         console.log(
           "Document successfully updated!"
         );
+        m_GetBalance(Form);
         GetBalance(Form);
       });
   } else if (Form == "F5") {
     db.collection("Forum")
       .doc("Balance")
       .update({
-        "PostNum.F4": firebase.firestore.FieldValue.increment(
+        "PostNum.F5": firebase.firestore.FieldValue.increment(
           1
         ),
         "PostNum.All": firebase.firestore.FieldValue.increment(
@@ -243,13 +342,14 @@ function UpdateBalance(Form) {
         console.log(
           "Document successfully updated!"
         );
+        m_GetBalance(Form);
         GetBalance(Form);
       });
   } else if (Form == "F6") {
     db.collection("Forum")
       .doc("Balance")
       .update({
-        "PostNum.F4": firebase.firestore.FieldValue.increment(
+        "PostNum.F6": firebase.firestore.FieldValue.increment(
           1
         ),
         "PostNum.All": firebase.firestore.FieldValue.increment(
@@ -260,6 +360,7 @@ function UpdateBalance(Form) {
         console.log(
           "Document successfully updated!"
         );
+        m_GetBalance(Form);
         GetBalance(Form);
       });
   }
@@ -443,6 +544,7 @@ function readMSG(Group, Form, Post) {
             `<br/><small class="text-muted">Post by [` +
             doc.data().PosterUID +
             `]</small>` +
+            `<div class="row-1 border overflow-auto w-100" id="relativeArea"></div>` +
             `<div class="border">` +
             atou(doc.data().PostText) +
             `</div></div>`;
@@ -450,12 +552,13 @@ function readMSG(Group, Form, Post) {
           document.getElementById(
             "PostArea"
           ).innerHTML =
-            `<div class="row-4 border"><h1>` +
+            `<div class="row-3 border"><h1>` +
             atou(doc.data().PostTitle) +
             `</h1></div>` +
             `<small class="text-muted">Last Edit Date: ` +
             doc.data().EditTime.toDate() +
             `</small>` +
+            `<div class="row-1 border overflow-auto w-100" id="relativeArea"></div>` +
             `<div class="row-4 border">` +
             atou(doc.data().PostText) +
             `</div>`;
@@ -561,6 +664,13 @@ function readMSG(Group, Form, Post) {
           }
         }
         MathJax.typeset();
+        DBSorting(
+          utoa(
+            atou(doc.data().PostTitle) +
+              " " +
+              atou(doc.data().PostText)
+          )
+        );
       } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
@@ -577,13 +687,25 @@ function readMSG(Group, Form, Post) {
 
 // Normal
 function listMSG(Group, Form) {
+  m_GetBalance(Form);
   GetBalance(Form);
-  document.getElementById("PostList").innerHTML =
-    `<div class="row-1 border"><button class="btn btn-success" onclick="newPost('` +
-    Group +
-    `','` +
-    Form +
-    `')">New Post</button></div>`;
+  if (
+    "F" + sessionStorage.loginUserForm ==
+    Form
+  ) {
+    document.getElementById(
+      "PostList"
+    ).innerHTML =
+      `<div class="row-1 border"><button class="btn btn-success" onclick="newPost('` +
+      Group +
+      `','` +
+      Form +
+      `')">New Post</button></div>`;
+  } else {
+    document.getElementById(
+      "PostList"
+    ).innerHTML = `<div class="row-1 border"><button class="btn btn-success disabled">New Post</button></div>`;
+  }
   var docRef = db.collection("Forum").doc(Group);
   var array = [];
   docRef
@@ -638,42 +760,100 @@ function listMSG(Group, Form) {
 }
 
 function sendComment(Group, Form, Post) {
-  var docRef = db
-    .collection("Forum")
-    .doc(Group)
-    .collection(Form)
-    .doc(Post);
+  if (
+    document
+      .getElementById("textEditor-" + id)
+      .contentWindow.document.getElementById(
+        "editorTextInput"
+      ).value.length > 20
+  ) {
+    var docRef = db
+      .collection("Forum")
+      .doc(Group)
+      .collection(Form)
+      .doc(Post);
 
-  // Set the "capital" field of the city 'DC'
-  return docRef
-    .update({
-      Comment: firebase.firestore.FieldValue.arrayUnion(
-        {
-          CommentText: utoa(
-            document
-              .getElementById("textEditor")
-              .contentWindow.document.getElementById(
-                "editorTextInput"
-              ).value
-          ),
-          EditTime: firebase.firestore.Timestamp.now(),
-          CommenterUID: JSON.parse(
-            sessionStorage.loginUser
-          ).uid
-        }
-      )
-    })
-    .then(() => {
-      addPoint(commentPointAward);
-      readMSG(Group, Form, Post);
-    })
-    .catch((error) => {
-      // The document probably doesn't exist.
-      console.error(
-        "Error updating document: ",
-        error
-      );
-    });
+    // Set the "capital" field of the city 'DC'
+    return docRef
+      .update({
+        Comment: firebase.firestore.FieldValue.arrayUnion(
+          {
+            CommentText: utoa(
+              document
+                .getElementById("textEditor")
+                .contentWindow.document.getElementById(
+                  "editorTextInput"
+                ).value
+            ),
+            EditTime: firebase.firestore.Timestamp.now(),
+            CommenterUID: JSON.parse(
+              sessionStorage.loginUser
+            ).uid
+          }
+        )
+      })
+      .then(() => {
+        se1.play();
+        docRef
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              console.log(
+                "Document data:",
+                doc.data()
+              );
+              if (
+                doc.data().PosterUID ==
+                JSON.parse(
+                  sessionStorage.loginUser
+                ).uid
+              ) {
+                alertBox(
+                  "This is your post. You cannot get any pt from comment yourself.",
+                  "warning",
+                  5000
+                );
+              }
+              readMSG(Group, Form, Post);
+            } else {
+              // doc.data() will be undefined in this case
+              addPoint(commentPointAward);
+              alertBox(
+                "Comment is uploaded. You get " +
+                  commentPointAward +
+                  "pt. Now, you have " +
+                  (parseInt(
+                    sessionStorage.PointOwned
+                  ) +
+                    commentPointAward) +
+                  "pt now.",
+                "success",
+                5000
+              );
+              console.log("No such document!");
+            }
+          })
+          .catch((error) => {
+            console.log(
+              "Error getting document:",
+              error
+            );
+          });
+      })
+      .catch((error) => {
+        // The document probably doesn't exist.
+        console.error(
+          "Error updating document: ",
+          error
+        );
+      });
+  } else {
+    alertBox(
+      "Your Post isn't long enough. Please type more Info.",
+      "warning",
+      5000
+    );
+  }
 }
 
 function newPost(Group, Form) {
@@ -691,144 +871,170 @@ function newPost(Group, Form) {
 }
 
 function sendPost(Group, Form) {
-  if (readQuestionLimit() > 0) {
-    if (readPoint() > 0 + postPointUsed) {
-      var titleInput = document.getElementById(
-        "PostTitleInput"
-      );
-      var input = document
-        .getElementById("textEditor")
-        .contentWindow.document.getElementById(
-          "editorTextInput"
+  if (
+    document
+      .getElementById("textEditor")
+      .contentWindow.document.getElementById(
+        "editorTextInput"
+      ).value.length > 20
+  ) {
+    if (readQuestionLimit() > 0) {
+      if (readPoint() > 0 + postPointUsed) {
+        var titleInput = document.getElementById(
+          "PostTitleInput"
         );
-      if (
-        (titleInput.value == "") |
-        " " |
-        "   "
-      ) {
-        titleInput.value =
-          "Untitled Post on" + Date(Date.now());
+        var input = document
+          .getElementById("textEditor")
+          .contentWindow.document.getElementById(
+            "editorTextInput"
+          );
+        if (
+          (titleInput.value == "") |
+          " " |
+          "   "
+        ) {
+          titleInput.value =
+            "Untitled Post on" + Date(Date.now());
+        }
+        db.collection("Forum")
+          .doc(Group)
+          .collection(Form)
+          .add({
+            PostTitle: utoa(titleInput.value),
+            EditTime: firebase.firestore.Timestamp.now(),
+            PostText: utoa(input.value),
+            Comment: [],
+            PosterUID: JSON.parse(
+              sessionStorage.loginUser
+            ).uid
+          })
+          .then((docRef) => {
+            console.log(
+              "Document written with ID: ",
+              docRef.id
+            );
+            if (Form === "F1") {
+              db.collection("Forum")
+                .doc(Group)
+                .update({
+                  F1DocArray: firebase.firestore.FieldValue.arrayUnion(
+                    {
+                      id: docRef.id,
+                      title: utoa(
+                        titleInput.value
+                      )
+                    }
+                  )
+                });
+            } else if (Form === "F2") {
+              db.collection("Forum")
+                .doc(Group)
+                .update({
+                  F2DocArray: firebase.firestore.FieldValue.arrayUnion(
+                    {
+                      id: docRef.id,
+                      title: utoa(
+                        titleInput.value
+                      )
+                    }
+                  )
+                });
+            } else if (Form === "F3") {
+              db.collection("Forum")
+                .doc(Group)
+                .update({
+                  F3DocArray: firebase.firestore.FieldValue.arrayUnion(
+                    {
+                      id: docRef.id,
+                      title: utoa(
+                        titleInput.value
+                      )
+                    }
+                  )
+                });
+            } else if (Form === "F4") {
+              db.collection("Forum")
+                .doc(Group)
+                .update({
+                  F4DocArray: firebase.firestore.FieldValue.arrayUnion(
+                    {
+                      id: docRef.id,
+                      title: utoa(
+                        titleInput.value
+                      )
+                    }
+                  )
+                });
+            } else if (Form === "F5") {
+              db.collection("Forum")
+                .doc(Group)
+                .update({
+                  F5DocArray: firebase.firestore.FieldValue.arrayUnion(
+                    {
+                      id: docRef.id,
+                      title: utoa(
+                        titleInput.value
+                      )
+                    }
+                  )
+                });
+            } else if (Form === "F6") {
+              db.collection("Forum")
+                .doc(Group)
+                .update({
+                  F6DocArray: firebase.firestore.FieldValue.arrayUnion(
+                    {
+                      id: docRef.id,
+                      title: utoa(
+                        titleInput.value
+                      )
+                    }
+                  )
+                });
+            }
+            delPoint(postPointUsed);
+            delQuestionLimit();
+            UpdateBalance(Form);
+            alertBox(
+              "Posted. " +
+                postPointUsed +
+                "pt is used to post. <br/>You still have " +
+                (readPoint() - postPointUsed) +
+                "pt and " +
+                (readQuestionLimit() - 1) +
+                " times to Post Qustion now. ",
+              "success",
+              5000
+            );
+            readMSG(Group, Form, docRef.id);
+            listMSG(Group, Form);
+          })
+          .catch((error) => {
+            console.error(
+              "Error adding document: ",
+              error
+            );
+          });
+      } else {
+        alertBox(
+          "You're only have " +
+            readPoint() +
+            "pt. You don't have enough Point to Post the Question",
+          "danger",
+          5000
+        );
       }
-      db.collection("Forum")
-        .doc(Group)
-        .collection(Form)
-        .add({
-          PostTitle: utoa(titleInput.value),
-          EditTime: firebase.firestore.Timestamp.now(),
-          PostText: utoa(input.value),
-          Comment: [],
-          PosterUID: JSON.parse(
-            sessionStorage.loginUser
-          ).uid
-        })
-        .then((docRef) => {
-          console.log(
-            "Document written with ID: ",
-            docRef.id
-          );
-          if (Form === "F1") {
-            db.collection("Forum")
-              .doc(Group)
-              .update({
-                F1DocArray: firebase.firestore.FieldValue.arrayUnion(
-                  {
-                    id: docRef.id,
-                    title: utoa(titleInput.value)
-                  }
-                )
-              });
-          } else if (Form === "F2") {
-            db.collection("Forum")
-              .doc(Group)
-              .update({
-                F2DocArray: firebase.firestore.FieldValue.arrayUnion(
-                  {
-                    id: docRef.id,
-                    title: utoa(titleInput.value)
-                  }
-                )
-              });
-          } else if (Form === "F3") {
-            db.collection("Forum")
-              .doc(Group)
-              .update({
-                F3DocArray: firebase.firestore.FieldValue.arrayUnion(
-                  {
-                    id: docRef.id,
-                    title: utoa(titleInput.value)
-                  }
-                )
-              });
-          } else if (Form === "F4") {
-            db.collection("Forum")
-              .doc(Group)
-              .update({
-                F4DocArray: firebase.firestore.FieldValue.arrayUnion(
-                  {
-                    id: docRef.id,
-                    title: utoa(titleInput.value)
-                  }
-                )
-              });
-          } else if (Form === "F5") {
-            db.collection("Forum")
-              .doc(Group)
-              .update({
-                F5DocArray: firebase.firestore.FieldValue.arrayUnion(
-                  {
-                    id: docRef.id,
-                    title: utoa(titleInput.value)
-                  }
-                )
-              });
-          } else if (Form === "F6") {
-            db.collection("Forum")
-              .doc(Group)
-              .update({
-                F6DocArray: firebase.firestore.FieldValue.arrayUnion(
-                  {
-                    id: docRef.id,
-                    title: utoa(titleInput.value)
-                  }
-                )
-              });
-          }
-          delPoint(postPointUsed);
-          delQuestionLimit();
-          UpdateBalance(Form);
-          alertBox(
-            "Posted. " +
-              postPointUsed +
-              "pt is used to post. <br/>You still have " +
-              (readPoint() - postPointUsed) +
-              "pt and " +
-              (readQuestionLimit() - 1) +
-              " times to Post Qustion now. ",
-            "success",
-            5000
-          );
-          readMSG(Group, Form, docRef.id);
-          listMSG(Group, Form);
-        })
-        .catch((error) => {
-          console.error(
-            "Error adding document: ",
-            error
-          );
-        });
     } else {
       alertBox(
-        "You're only have " +
-          readPoint() +
-          "pt. You don't have enough Point to Post the Question",
+        "You reached Today Question Limit. Question Limit can be refreshed by Daily Award.",
         "danger",
         5000
       );
     }
   } else {
     alertBox(
-      "You reached Today Question Limit. Question Limit can be refreshed by Daily Award.",
-      "danger",
+      "Your Post isn't long enough. Please type more Info.",
+      "warning",
       5000
     );
   }
@@ -985,6 +1191,11 @@ function editCommentPage(
         .contentWindow.document.getElementById(
           "editorTextInput"
         ).value = atou(CommentT);
+      document
+        .getElementById("textEditor-" + id)
+        .contentWindow.document.getElementById(
+          "m_editorTextInput"
+        ).value = atou(CommentT);
     });
 }
 
@@ -1072,6 +1283,11 @@ function editPostPage(
         .getElementById("textEditor-")
         .contentWindow.document.getElementById(
           "editorTextInput"
+        ).value = atou(text);
+      document
+        .getElementById("textEditor-")
+        .contentWindow.document.getElementById(
+          "m_editorTextInput"
         ).value = atou(text);
     });
   document.getElementById(

@@ -1,0 +1,82 @@
+<html>
+  <head>
+    <script>
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey:
+          "AIzaSyAjq1lBaXKKsrREWHBRD9I6HWYnixGaDHY",
+        authDomain: "appm-87da8.firebaseapp.com",
+        projectId: "appm-87da8",
+        storageBucket: "appm-87da8.appspot.com",
+        messagingSenderId: "737891521283",
+        appId:
+          "1:737891521283:web:50f0956a00849e40314f36",
+        measurementId: "G-CTZBC8X25J"
+      };
+      firebase.initializeApp(firebaseConfig);
+      // This Value is used to check the page is it AuthPage only.
+      IsAuthPage = true;
+    </script>
+    <!-- Self-Script -->
+    <script src="auth.js"></script>
+    <title>Brother Maths - DirectPage</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="favicon.ico"
+    />
+    <script>
+      IsAuthPage = true;
+      if (
+        sessionStorage.loginUser != undefined ||
+        null
+      ) {
+        direct();
+      } else {
+        alert(
+          "please Sign In First. Then type again."
+        );
+        window.location.href = "./index.html";
+      }
+      // Direct
+      function direct() {
+        const weblink = window.location.search;
+        const urlParams = new URLSearchParams(
+          weblink
+        );
+        var group = urlParams.get("group");
+        var form = urlParams.get("form");
+        var post = urlParams.get("post");
+        var page = urlParams.get("page");
+        var f = "F" + form;
+        var t = "";
+        if (group == "1") {
+          t = "LowerForm";
+        } else if (group == "2") {
+          t = "HigherForm";
+        }
+        console.log(f, t, post);
+        if (
+          urlParams.has("page") == true &&
+          urlParams.has("group") == true &&
+          urlParams.has("form") == true &&
+          urlParams.has("post") == true
+        ) {
+          window.location.href =
+            "./" +
+            sessionStorage.loginUserRole +
+            "/" +
+            page +
+            ".html?group=" +
+            group +
+            "&form=" +
+            form +
+            "&post=" +
+            post;
+        } else {
+          window.location.href = "./index.html";
+        }
+      }
+    </script>
+  </head>
+</html>

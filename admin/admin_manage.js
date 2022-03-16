@@ -1,31 +1,38 @@
+display("account-manager");
 function display(screenName) {
   if (screenName === "account-manager") {
     document.getElementById(
       "ContentBox"
     ).innerHTML = `<div class="h-100 w-100" style="margin: 1.25rem;">
     <div class="row">
-      <div class="col-1"><label class="form-label text-center text-secondary">UID : </label></div>
+      <div class="col-2"><label class="form-label text-center text-secondary">UID : </label></div>
       <div class="col-8"><input type="" id="input_UID" class="form-control w-100"/></div>
-      <div class="col-3"><button class="btn w-75 btn-primary" onclick="accountLoadData()">Search & Load</button></div>
+      <div class="col-2"></div>
+    </div>
+    <br/>
+    <div class="row">
+    
+    <div class="col-10"><button class="btn btn-sm w-100 btn-primary" onclick="accountLoadData()">Search & Load</button></div>
+    <div class="col-2"></div>
     </div>
 
     <div class="row">
     <br/>
-      <label class="text-secondary" id="SearchOutput"> > Nothing Happened</label>
+      <label class="text-secondary" id="SearchOutput" style="font-size: 0.75rem;"> > Nothing Happened</label>
       <br/><br/>
     </div>
     <div class="row">
 
-      <div class="col-6">
+      <div class="col-12">
       <!-- INPUT -->
         <div class="row">
-          <div class="col-2"><label class="form-label text-center text-secondary"><span style="font-size: 0.4rem;">Display Name :</span></label></div>
-          <div class="col-10"><input id="input_displayName" type='text' class="form-control w-100"/></div>
+          <div class="col-3"><label class="form-label text-center text-secondary"><span style="font-size: 0.4rem;">Display Name :</span></label></div>
+          <div class="col-9"><input id="input_displayName" type='text' class="form-control w-75"/></div>
         </div>
         <div class="row">
-          <div class="col-2"><label class="form-label text-center text-secondary"><span style="font-size: 0.4rem;">Access :</span></label></div>
-          <div class="col-10">
-          <select class="form-select form-select-sm" id="input_access" aria-label=".form-select-sm example">
+          <div class="col-3"><label class="form-label text-center text-secondary"><span style="font-size: 0.4rem;">Access :</span></label></div>
+          <div class="col-9">
+          <select class="form-select form-select-sm w-75" id="input_access" aria-label=".form-select-sm example">
           <option selected></option>
           <option value="unsigned">Unsigned</option>
           <option value="student">student</option>
@@ -35,26 +42,25 @@ function display(screenName) {
         </div>
         </div>
         <div class="row">
-          <div class="col-2"><label class="form-label text-center text-secondary"><span style="font-size: 0.4rem;">Owned Point :</span></label></div>
-          <div class="col-10"><input type='number' id="input_pointOwned" class="form-control w-100"/></div>
+          <div class="col-3"><label class="form-label text-center text-secondary"><span style="font-size: 0.4rem;">Owned Point :</span></label></div>
+          <div class="col-9"><input type='number' id="input_pointOwned" class="form-control w-75"/></div>
         </div>
         <div class="row">
-          <div class="col-2"><label class="form-label text-center text-secondary"><span style="font-size: 0.4rem;">Daily Question Limit :</span></label></div>
-          <div class="col-10"><input type='number' id="input_dailyQuestionLimit" class="form-control w-100"/></div>
+          <div class="col-3"><label class="form-label text-center text-secondary"><span style="font-size: 0.4rem;">Daily Question Limit :</span></label></div>
+          <div class="col-9"><input type='number' id="input_dailyQuestionLimit" class="form-control w-75"/></div>
         </div>
         <div class="row">
-          <div class="col-2"><label class="form-label text-center text-secondary"><span style="font-size: 0.4rem;">Daily Quiz Limit :</span></label></div>
-          <div class="col-10"><input type='number' id="input_dailyQuizLimit" class="form-control w-100"/></div>
+          <div class="col-3"><label class="form-label text-center text-secondary"><span style="font-size: 0.4rem;">Daily Quiz Limit :</span></label></div>
+          <div class="col-9"><input type='number' id="input_dailyQuizLimit" class="form-control w-75"/></div>
         </div>
+        <div class="row">
+        <label class="form-label text-secondary hide w-100"></label>
+      <button type="button" class="btn btn-success w-25" onclick="accountSaveData()">Save</button>
+      <button type="button" class="btn btn-secondary w-25" onclick="accountLoadData()">Load</button>
+      <button type="button" class="btn btn-danger w-25">Del.</button>
+      </div>
       </div>
 
-      <div class="col-6 h-100">
-      <label class="form-label text-secondary hide w-100"></label>
-      <div style="height: 22.25vh;" id="JSONViewer" class="hide w-75"></div><br/>
-    <button type="button" class="btn btn-success w-25" onclick="accountSaveData()">Save</button>
-    <button type="button" class="btn btn-secondary w-25" onclick="accountLoadData()">Load</button>
-    <button type="button" class="btn btn-danger w-25">Delete</button>
-    </div>
 
     </div>
 

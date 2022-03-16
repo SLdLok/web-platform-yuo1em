@@ -1,12 +1,13 @@
 read 
 4 btn 
 + send ans
-
+---ok
 New post
 4 btn
-
+---ok
 Send post 
 db. collection-- + Ans selected
+--ok
 
 edit post page 
 + 4 btn

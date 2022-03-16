@@ -58,6 +58,11 @@
 
     <!-- Title -->
     <title>Brother Maths - Forum</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="../favicon.ico"
+    />
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -92,9 +97,10 @@
     <!-- Self-Script (From root folder) -->
     <script src="../auth.js"></script>
     <script defer src="../pageCustom.js"></script>
+    <script defer src="./admin_forum.js"></script>
     <script
       defer
-      src="./admin_forum.js"
+      src="./m_admin_forum.js"
     ></script>
     <script
       defer
@@ -142,20 +148,15 @@
             <li class="nav-item">
               <a
                 class="nav-link"
-                href="learn.html"
-                >Learn</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="quiz.html"
-                >Quiz</a
+                href="forum.html"
+                >Forum</a
               >
             </li>
             <li class="nav-item">
               <a
                 class="nav-link active"
-                href="forum.html"
-                >Forum</a
+                href="manage.html"
+                >Manage</a
               >
             </li>
           </ul>
@@ -179,12 +180,83 @@
     <!-- Cotainer -->
     <div class="container-fluid">
       <!-- ######  PUT CONTENT HERE ###### -->
-      <div class="d-block">
+      <div
+        class="row w-100"
+        id="alertBox"
+        style="position: absolute;"
+      ></div>
+      <div class="d-block d-lg-none">
+        <div class="row-2">
+          <label
+            for="exampleDataList"
+            class="form-label"
+            >Form</label
+          >
+          <select
+            class="form-select form-select-sm"
+            id="m_input_formSelect"
+            placeholder="Select Form"
+            onchange="selectionFormInput()"
+          >
+            <option
+              id="m_input_formSelect_F1"
+              value="F1"
+              >Form 1</option
+            >
+            <option
+              id="m_input_formSelect_F2"
+              value="F2"
+              >Form 2</option
+            >
+            <option
+              id="m_input_formSelect_F3"
+              value="F3"
+              >Form 3</option
+            >
+            <option
+              id="m_input_formSelect_F4"
+              value="F4"
+              >Form 4</option
+            >
+            <option
+              id="m_input_formSelect_F5"
+              value="F5"
+              >Form 5</option
+            >
+            <option
+              id="m_input_formSelect_F6"
+              value="F6"
+              >Form 6</option
+            >
+          </select>
+          <label
+            for="exampleDataList"
+            class="form-label"
+            >Post</label
+          >
+          <select
+            class="form-select form-select-sm"
+            id="m_PostList"
+            placeholder="Select Post"
+          >
+          </select>
+          <button
+            class="btn btn-success w-100"
+            onclick="SerachnRead_M()"
+          >
+            Enter
+          </button>
+        </div>
+        <div class="row"><br /></div>
+        <div class="row border" id="m_PostArea">
+          Nothing Here
+        </div>
         <div
-          class="row w-100"
-          id="alertBox"
-          style="position: absolute;"
+          class="row border"
+          id="m_CommentArea"
         ></div>
+      </div>
+      <div class="d-none d-lg-block">
         <div class="row" style="height: 90vh;">
           <div class="col-3 border overflow-auto">
             <!-- GroupList -->
@@ -192,7 +264,7 @@
               <button
                 class="btn"
                 id="BTNLISTForm1"
-                style='font-size: 1.5rem'
+                style="font-size: 1.5rem;"
                 onclick="listMSG('LowerForm','F1')"
               >
                 Form 1
@@ -202,7 +274,7 @@
               <button
                 class="btn"
                 id="BTNLISTForm2"
-                style='font-size: 1.5rem'
+                style="font-size: 1.5rem;"
                 onclick="listMSG('LowerForm','F2')"
               >
                 Form 2
@@ -212,7 +284,7 @@
               <button
                 class="btn"
                 id="BTNLISTForm3"
-                style='font-size: 1.5rem'
+                style="font-size: 1.5rem;"
                 onclick="listMSG('LowerForm','F3')"
               >
                 Form 3
@@ -222,7 +294,7 @@
               <button
                 class="btn"
                 id="BTNLISTForm4"
-                style='font-size: 1.5rem'
+                style="font-size: 1.5rem;"
                 onclick="listMSG('HigherForm','F4')"
               >
                 Form 4
@@ -232,7 +304,7 @@
               <button
                 class="btn"
                 id="BTNLISTForm5"
-                style='font-size: 1.5rem'
+                style="font-size: 1.5rem;"
                 onclick="listMSG('HigherForm','F5')"
               >
                 Form 5
@@ -242,7 +314,7 @@
               <button
                 class="btn"
                 id="BTNLISTForm6"
-                style='font-size: 1.5rem'
+                style="font-size: 1.5rem;"
                 onclick="listMSG('HigherForm','F6')"
               >
                 Form 6
@@ -304,7 +376,8 @@
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
-              aria-label="Close" onclick="$('.modal').modal('hide')"
+              aria-label="Close"
+              onclick="$('.modal').modal('hide')"
             ></button>
           </div>
           <div
@@ -353,7 +426,8 @@
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
-              aria-label="Close" onclick="$('.modal').modal('hide')" onclick=“$('.modal').modal('hide')”
+              aria-label="Close"
+              onclick="$('.modal').modal('hide')"
             ></button>
           </div>
           <div
@@ -404,7 +478,8 @@
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
-              aria-label="Close" onclick="$('.modal').modal('hide')" onclick=“$('.modal').modal('hide')”
+              aria-label="Close"
+              onclick="$('.modal').modal('hide')"
             ></button>
           </div>
           <div
@@ -455,7 +530,8 @@
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
-              aria-label="Close" onclick="$('.modal').modal('hide')" onclick=“$('.modal').modal('hide')”
+              aria-label="Close"
+              onclick="$('.modal').modal('hide')"
             ></button>
           </div>
           <div

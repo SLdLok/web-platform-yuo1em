@@ -15,7 +15,42 @@ function atou(str) {
 }
 
 AnswerSelected = "";
-
+function getViewport() {
+  const width = Math.max(
+    document.documentElement.clientWidth,
+    window.innerWidth || 0
+  );
+  if (width <= 576) return "xs";
+  if (width <= 768) return "sm";
+  if (width <= 992) return "md";
+  if (width <= 1200) return "lg";
+  return "xl";
+}
+direct();
+// Direct
+function direct() {
+  const weblink = window.location.search;
+  const urlParams = new URLSearchParams(weblink);
+  var group = urlParams.get("group");
+  var form = urlParams.get("form");
+  var post = urlParams.get("post");
+  if (
+    urlParams.has("group") &&
+    urlParams.has("form") &&
+    urlParams.has("post")
+  ) {
+    if (
+      getViewport() == "xl" ||
+      getViewport() == "lg"
+    ) {
+      listMSG(group, form);
+      readMSG(group, form, post);
+    } else {
+      m_listMSG(group, form);
+      m_readMSG(group, form, post);
+    }
+  }
+}
 // Basic Function
 function readMSG(Group, Form, Post, Answer) {
   var docRef = db

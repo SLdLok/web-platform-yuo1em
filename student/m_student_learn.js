@@ -2,63 +2,78 @@ console.log("Learning area");
 var db = firebase.firestore();
 
 // ucs-2 string to base64 encoded ascii
-function utoa(str) {
-  return window.btoa(
-    unescape(encodeURIComponent(str))
-  );
-}
-// base64 encoded ascii to ucs-2 string
-function atou(str) {
-  return decodeURIComponent(
-    escape(window.atob(str))
-  );
-}
-function getViewport() {
-  const width = Math.max(
-    document.documentElement.clientWidth,
-    window.innerWidth || 0
-  );
-  if (width <= 576) return "xs";
-  if (width <= 768) return "sm";
-  if (width <= 992) return "md";
-  if (width <= 1200) return "lg";
-  return "xl";
-}
-direct();
-// Direct
-function direct() {
-  const weblink = window.location.search;
-  const urlParams = new URLSearchParams(weblink);
-  var group = urlParams.get("group");
-  var form = urlParams.get("form");
-  var post = urlParams.get("post");
-  var f = "F" + form;
-  var t = "";
-  if (group == "1") {
-    t = "LowerForm";
-  } else if (group == "2") {
-    t = "HigherForm";
-  }
-  console.log(f, t, post);
+
+// Input
+selectionFormInput();
+function selectionFormInput() {
+  var e = "";
   if (
-    urlParams.has("group") == true &&
-    urlParams.has("form") == true &&
-    urlParams.has("post") == true
+    document.getElementById("m_input_formSelect")
+      .value == `F1` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F2` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F3`
   ) {
-    if (
-      getViewport() == "xl" ||
-      getViewport() == "lg"
-    ) {
-      listMSG(t, f);
-      readMSG(t, f, post);
-    } else {
-      m_listMSG(t, f);
-      m_readMSG(t, f, post);
-    }
+    e = `LowerForm`;
+  }
+  if (
+    document.getElementById("m_input_formSelect")
+      .value == `F4` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F5` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F6`
+  ) {
+    e = `HigherForm`;
+  }
+  m_listMSG(
+    e,
+    document.getElementById("m_input_formSelect")
+      .value
+  );
+}
+function SerachnRead_M() {
+  var e = "";
+  if (
+    document.getElementById("m_input_formSelect")
+      .value == `F1` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F2` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F3`
+  ) {
+    e = `LowerForm`;
+  }
+  if (
+    document.getElementById("m_input_formSelect")
+      .value == `F4` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F5` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F6`
+  ) {
+    e = `HigherForm`;
+  }
+  if (
+    document.getElementById("m_PostListforlearn")
+      .value == "newPost"
+  ) {
+  } else {
+    m_readMSG(
+      e,
+      document.getElementById(
+        "m_input_formSelect"
+      ).value,
+      document.getElementById(
+        "m_PostListforlearn"
+      ).value
+    );
   }
 }
+
 // Basic Function
-function readMSG(Group, Form, Post) {
+function m_readMSG(Group, Form, Post) {
   var docRef = db
     .collection("Learn")
     .doc(Group)
@@ -74,16 +89,18 @@ function readMSG(Group, Form, Post) {
         if (
           sessionStorage.loginUserRole ===
             "admin" ||
+          sessionStorage.loginUserRole ===
+            "admin" ||
           doc.data().PosFterUID ===
             JSON.parse(sessionStorage.loginUser)
               .uid
         ) {
           document.getElementById(
-            "PostAreaforlearn"
+            "m_PostAreaforlearn"
           ).innerHTML =
             `` +
             `<div class="d-md-flex justify-content-md-end">` +
-            `<button class="btn btn-warning btn-sm" onclick="editPostPage('` +
+            `<button class="btn btn-warning btn-sm" onclick="m_editPostPage('` +
             Group +
             `','` +
             Form +
@@ -94,7 +111,7 @@ function readMSG(Group, Form, Post) {
             `','` +
             doc.data().PostText +
             `')">Edit</button>&nbsp;` +
-            `<button class="btn btn-danger btn-sm" onclick="delPost('` +
+            `<button class="btn btn-danger btn-sm" onclick="m_delPost('` +
             Group +
             `','` +
             Form +
@@ -117,7 +134,7 @@ function readMSG(Group, Form, Post) {
             `</div></div>`;
         } else {
           document.getElementById(
-            "PostAreaforlearn"
+            "m_PostAreaforlearn"
           ).innerHTML =
             `<div class="row-4 border"><h1>` +
             atou(doc.data().PostTitle) +
@@ -144,28 +161,39 @@ function readMSG(Group, Form, Post) {
 }
 
 // Normal
-function listMSG(Group, Form) {
+function m_listMSG(Group, Form) {
   document.getElementById(
-    "PostListforlearn"
+    "m_PostListforlearn"
   ).innerHTML = "";
   var docRef = db.collection("Learn").doc(Group);
   var array = [];
   docRef
     .get()
     .then((doc) => {
+      if (
+        sessionStorage.loginUserRole == "teacher"
+      ) {
+        document.getElementById(
+          "m_PostListforlearn"
+        ).innerHTML = `<option value="newPost">[NEW POST]</option>`;
+      } else {
+        document.getElementById(
+          "m_PostListforlearn"
+        ).innerHTML = ``;
+      }
       if (doc.exists) {
         console.log("Document data:", doc.data());
-        if (Form === "F1") {
+        if (Form == "F1") {
           array = doc.data().F1DocArray;
-        } else if (Form === "F2") {
+        } else if (Form == "F2") {
           array = doc.data().F2DocArray;
-        } else if (Form === "F3") {
+        } else if (Form == "F3") {
           array = doc.data().F3DocArray;
-        } else if (Form === "F4") {
+        } else if (Form == "F4") {
           array = doc.data().F4DocArray;
-        } else if (Form === "F5") {
+        } else if (Form == "F5") {
           array = doc.data().F5DocArray;
-        } else if (Form === "F6") {
+        } else if (Form == "F6") {
           array = doc.data().F6DocArray;
         }
         for (
@@ -174,18 +202,15 @@ function listMSG(Group, Form) {
           i--
         ) {
           console.log(array[i]);
+          var ptitle = atou(array[i].title);
           document.getElementById(
-            "PostListforlearn"
+            "m_PostListforlearn"
           ).innerHTML +=
-            `<div class="row-1 border"><button class="btn" onclick="readMSG('` +
-            Group +
-            `','` +
-            Form +
-            `','` +
+            `<option value="` +
             array[i].id +
-            `')">` +
-            atou(array[i].title) +
-            `</button></div>`;
+            `">` +
+            ptitle +
+            `</option>`;
         }
         MathJax.typeset();
       } else {
@@ -201,7 +226,7 @@ function listMSG(Group, Form) {
     });
 }
 
-function sendComment(Group, Form, Post) {
+function m_sendComment(Group, Form, Post) {
   var docRef = db
     .collection("Learn")
     .doc(Group)
@@ -228,7 +253,7 @@ function sendComment(Group, Form, Post) {
       )
     })
     .then(() => {
-      readMSG(Group, Form, Post);
+      m_readMSG(Group, Form, Post);
     })
     .catch((error) => {
       // The document probably doesn't exist.
@@ -239,7 +264,7 @@ function sendComment(Group, Form, Post) {
     });
 }
 
-function sendPost(Group, Form) {
+function m_sendPost(Group, Form) {
   var titleInput = document.getElementById(
     "PostTitleInput"
   );
@@ -336,8 +361,8 @@ function sendPost(Group, Form) {
             )
           });
       }
-      readMSG(Group, Form, docRef.id);
-      listMSG(Group, Form);
+      m_readMSG(Group, Form, docRef.id);
+      m_listMSG(Group, Form);
     })
     .catch((error) => {
       console.error(
@@ -347,7 +372,7 @@ function sendPost(Group, Form) {
     });
 }
 
-function delPost(Group, Form, Post, Title) {
+function m_delPost(Group, Form, Post, Title) {
   var docRef = db
     .collection("Learn")
     .doc(Group)
@@ -436,7 +461,7 @@ function delPost(Group, Form, Post, Title) {
       );
     });
 }
-function delComment(
+function m_delComment(
   Group,
   Form,
   Post,
@@ -466,10 +491,10 @@ function delComment(
         }
       )
     })
-    .then(readMSG(Group, Form, Post));
+    .then(m_readMSG(Group, Form, Post));
 }
 
-function editCommentPage(
+function m_editCommentPage(
   Group,
   Form,
   Post,
@@ -505,10 +530,15 @@ function editCommentPage(
         .contentWindow.document.getElementById(
           "editorTextInput"
         ).value = atou(CommentT);
+      document
+        .getElementById("textEditor-" + id)
+        .contentWindow.document.getElementById(
+          "m_editorTextInput"
+        ).value = atou(CommentT);
     });
 }
 
-function editComment(
+function m_editComment(
   Group,
   Form,
   Post,
@@ -517,7 +547,7 @@ function editComment(
   CommentE,
   id
 ) {
-  delComment(
+  m_delComment(
     Group,
     Form,
     Post,
@@ -552,7 +582,7 @@ function editComment(
       )
     })
     .then(() => {
-      readMSG(Group, Form, Post);
+      m_readMSG(Group, Form, Post);
     })
     .catch((error) => {
       // The document probably doesn't exist.
@@ -563,7 +593,7 @@ function editComment(
     });
 }
 
-function editPostPage(
+function m_editPostPage(
   Group,
   Form,
   Post,
@@ -571,7 +601,7 @@ function editPostPage(
   text
 ) {
   document.getElementById(
-    "PostAreaforlearn"
+    "m_PostAreaforlearn"
   ).innerHTML =
     `<h5>Post title</h5>` +
     `<input id="PostTitleInput-"class="form-control">` +
@@ -594,6 +624,11 @@ function editPostPage(
         .getElementById("textEditor-")
         .contentWindow.document.getElementById(
           "editorTextInput"
+        ).value = atou(text);
+      document
+        .getElementById("textEditor-")
+        .contentWindow.document.getElementById(
+          "m_editorTextInput"
         ).value = atou(text);
     });
   document.getElementById(
@@ -763,7 +798,7 @@ function editPost(Group, Form, Post, oldTitle) {
             )
           });
       }
-      listMSG(Group, Form);
-      readMSG(Group, Form, Post);
+      m_listMSG(Group, Form);
+      m_readMSG(Group, Form, Post);
     });
 }

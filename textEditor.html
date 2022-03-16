@@ -26,7 +26,13 @@
     />
 
     <!-- Title -->
+
     <title>Brother Maths - TextEditor</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="favicon.ico"
+    />
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -60,11 +66,12 @@
     <!-- Self-Script (From root folder) -->
     <script defer src="fileUpload.js"></script>
     <script defer src="textEditor.js"></script>
+    <script defer src="m_textEditor.js"></script>
   </head>
   <body>
     <!-- DisplayContent -->
     <div class="container-fluid">
-      <div class="row">
+      <div class="row w-100">
         <div class="col-6 border text-middle">
           Input
         </div>
@@ -72,132 +79,369 @@
           Output
         </div>
       </div>
-      <div class="row">
-        <div class="col border">
-          <div
-            class="btn-group"
-            style="width: '99vw';"
-          >
-            <button
-              onclick="textStyle('bold');"
-              type="button"
-              class="btn btn-secondary"
-              data-element="bold"
-            >
-              <i class="bi bi-type-bold"></i>
-            </button>
-            <button
-              onclick='textStyle("italic");'
-              type="button"
-              class="btn btn-secondary"
-              data-element="italic"
-            >
-              <i class="bi bi-type-italic"></i>
-            </button>
-            <button
-              onclick="textStyle('underline');"
-              type="button"
-              class="btn btn-secondary"
-              data-element="underline"
-            >
-              <i class="bi bi-type-underline"></i>
-            </button>
-            <button
-              onclick="textStyle('insertUnorderedList');"
-              type="button"
-              class="btn btn-secondary"
-              data-element="insertUnorderedList"
-            >
-              <i class="bi bi-list-ul"></i>
-            </button>
-            <button
-              onclick="textStyle('insertOrderedList');"
-              type="button"
-              class="btn btn-secondary"
-              data-element="insertOrderedList"
-            >
-              <i class="bi bi-list-ol"></i>
-            </button>
-            <button
-              onclick="textStyle('insertLink');"
-              type="button"
-              class="btn btn-secondary"
-              data-element="insertLink"
-              href="#popup-link"
-              data-bs-toggle="modal"
-              data-bs-target="#popup-link"
-            >
-              <i class="bi bi-link"></i>
-            </button>
-            <button
-              onclick="textStyle('justifyLeft');"
-              type="button"
-              class="btn btn-secondary"
-              data-element="justifyLeft"
-            >
-              <i class="bi bi-text-left"></i>
-            </button>
-            <button
-              onclick="textStyle('justifyCenter');"
-              type="button"
-              class="btn btn-secondary"
-              data-element="justifyCenter"
-            >
-              <i class="bi bi-text-center"></i>
-            </button>
-            <button
-              onclick="textStyle('justifyRight');"
-              type="button"
-              class="btn btn-secondary"
-              data-element="justifyRight"
-            >
-              <i class="bi bi-text-right"></i>
-            </button>
-            <button
-              onclick="textStyle('justifyFull');"
-              type="button"
-              class="btn btn-secondary"
-              data-element="justifyFull"
-            >
-              <i class="bi bi-justify"></i>
-            </button>
-            <button
-              onclick="textStyle('InsertImage');"
-              type="button"
-              class="btn btn-secondary"
-              data-element="InsertImage"
-              href="#popup-img"
-              data-bs-toggle="modal"
-              data-bs-target="#popup-img"
-            >
-              <i class="bi bi-image"></i>
-            </button>
+      <div class="row w-100">
+        <div class="col border w-100">
+          <div class="d-block d-md-none">
+            <div class="btn-group w-100">
+              <button
+                onclick="m_textStyle('bold');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="bold"
+              >
+                <i class="bi bi-type-bold"></i>
+              </button>
+              <button
+                onclick='m_textStyle("italic");'
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="italic"
+              >
+                <i class="bi bi-type-italic"></i>
+              </button>
+              <button
+                onclick="m_textStyle('underline');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="underline"
+              >
+                <i
+                  class="bi bi-type-underline"
+                ></i>
+              </button>
+              <button
+                onclick="m_textStyle('insertUnorderedList');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="insertUnorderedList"
+              >
+                <i class="bi bi-list-ul"></i>
+              </button>
+              <button
+                onclick="m_textStyle('insertOrderedList');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="insertOrderedList"
+              >
+                <i class="bi bi-list-ol"></i>
+              </button>
+              <button
+                onclick="m_textStyle('insertLink');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="insertLink"
+                href="#m_popup-link"
+                data-bs-toggle="modal"
+                data-bs-target="#m_popup-link"
+              >
+                <i class="bi bi-link"></i>
+              </button>
+              <button
+                onclick="m_textStyle('justifyLeft');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="justifyLeft"
+              >
+                <i class="bi bi-text-left"></i>
+              </button>
+              <button
+                onclick="m_textStyle('justifyCenter');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="justifyCenter"
+              >
+                <i class="bi bi-text-center"></i>
+              </button>
+              <button
+                onclick="m_textStyle('justifyRight');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="justifyRight"
+              >
+                <i class="bi bi-text-right"></i>
+              </button>
+              <button
+                onclick="m_textStyle('justifyFull');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="justifyFull"
+              >
+                <i class="bi bi-justify"></i>
+              </button>
+              <button
+                onclick="m_textStyle('InsertImage');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="InsertImage"
+                href="#m_popup-img"
+                data-bs-toggle="modal"
+                data-bs-target="#m_popup-img"
+              >
+                <i class="bi bi-image"></i>
+              </button>
+            </div>
+          </div>
+          <div class="d-none d-md-block">
+            <div class="btn-group w-100">
+              <button
+                onclick="textStyle('bold');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="bold"
+              >
+                <i class="bi bi-type-bold"></i>
+              </button>
+              <button
+                onclick='textStyle("italic");'
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="italic"
+              >
+                <i class="bi bi-type-italic"></i>
+              </button>
+              <button
+                onclick="textStyle('underline');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="underline"
+              >
+                <i
+                  class="bi bi-type-underline"
+                ></i>
+              </button>
+              <button
+                onclick="textStyle('insertUnorderedList');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="insertUnorderedList"
+              >
+                <i class="bi bi-list-ul"></i>
+              </button>
+              <button
+                onclick="textStyle('insertOrderedList');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="insertOrderedList"
+              >
+                <i class="bi bi-list-ol"></i>
+              </button>
+              <button
+                onclick="textStyle('insertLink');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="insertLink"
+                href="#popup-link"
+                data-bs-toggle="modal"
+                data-bs-target="#popup-link"
+              >
+                <i class="bi bi-link"></i>
+              </button>
+              <button
+                onclick="textStyle('justifyLeft');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="justifyLeft"
+              >
+                <i class="bi bi-text-left"></i>
+              </button>
+              <button
+                onclick="textStyle('justifyCenter');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="justifyCenter"
+              >
+                <i class="bi bi-text-center"></i>
+              </button>
+              <button
+                onclick="textStyle('justifyRight');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="justifyRight"
+              >
+                <i class="bi bi-text-right"></i>
+              </button>
+              <button
+                onclick="textStyle('justifyFull');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="justifyFull"
+              >
+                <i class="bi bi-justify"></i>
+              </button>
+              <button
+                onclick="textStyle('InsertImage');"
+                type="button"
+                class="btn btn-sm btn-secondary"
+                data-element="InsertImage"
+                href="#popup-img"
+                data-bs-toggle="modal"
+                data-bs-target="#popup-img"
+              >
+                <i class="bi bi-image"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-6 border">
-          <textarea
-            id="editorTextInput"
-            class="form-control"
-            style="
-              font-size: 0.5rem;
-              height: 90vh;
-            "
-          ></textarea>
+      <div class="row" class="w-100">
+        <div class="d-block d-md-none">
+          <div class="col">
+            <div class="row border w-100">
+              <textarea
+                id="m_editorTextInput"
+                class="form-control"
+                style="
+                  font-size: 0.5rem;
+                  min-height: 45vh;
+                "
+              ></textarea>
+            </div>
+            <div class="row border w-100">
+              <div class="card">
+                <div
+                  class="card-body"
+                  id="m_displayTextOutput"
+                  style="min-height: 45vh;"
+                ></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-6 border">
-          <div class="card">
-            <div
-              class="card-body"
-              id="displayTextOutput"
-              style="height: 90vh;"
-            ></div>
+        <div class="d-none d-md-block">
+          <div class="row">
+            <div class="col-6 border w-50">
+              <textarea
+                id="editorTextInput"
+                class="form-control"
+                style="
+                  font-size: 0.5rem;
+                  min-height: 90vh;
+                "
+              ></textarea>
+            </div>
+            <div class="col-6 border w-50">
+              <div class="card">
+                <div
+                  class="card-body"
+                  id="displayTextOutput"
+                  style="min-height: 90vh;"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- POPUP Mobile-->
+    <div
+      class="modal fade"
+      tabindex="-1"
+      id="m_popup-link"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Link</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>Put your Text here:</p>
+            <input
+              class="form-control"
+              id="m_popup-link-input2"
+              type="text"
+              value=" "
+            />
+            <p>Put your link here:</p>
+            <input
+              class="form-control"
+              id="m_popup-link-input1"
+              type="link"
+              value="https://"
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="m_addLink()"
+              data-bs-dismiss="modal"
+            >
+              Add Link
+            </button>
           </div>
         </div>
       </div>
     </div>
 
+    <div
+      class="modal fade"
+      tabindex="-1"
+      id="m_popup-img"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Image</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>Put your Image here:</p>
+            <input
+              class="form-control-file"
+              id="m_popup-file-input"
+              type="file"
+            />
+            <button
+              class="btn btn-secondary"
+              onclick="uploadFile(
+              document.getElementById('m_popup-file-input').files[0], 'img', metadata);"
+            >
+              Upload</button
+            ><br />
+            <label
+              class="text-muted"
+              id="m_progressLabel"
+              >110</label
+            >
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="m_addImg()"
+              data-bs-dismiss="modal"
+            >
+              Add Image
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- POPUP -->
     <div
       class="modal fade"

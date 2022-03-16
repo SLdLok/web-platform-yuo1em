@@ -1,371 +1,81 @@
-console.log("Loading Forum");
+console.log("Loading Forum_Mobile");
 var db = firebase.firestore();
-GetBalance();
-// Screen Size Check
-function getViewport() {
-  const width = Math.max(
-    document.documentElement.clientWidth,
-    window.innerWidth || 0
-  );
-  if (width <= 576) return "xs";
-  if (width <= 768) return "sm";
-  if (width <= 992) return "md";
-  if (width <= 1200) return "lg";
-  return "xl";
-}
-direct();
-// Direct
-function direct() {
-  const weblink = window.location.search;
-  const urlParams = new URLSearchParams(weblink);
-  var group = urlParams.get("group");
-  var form = urlParams.get("form");
-  var post = urlParams.get("post");
-  var f = "F" + form;
-  var t = "";
-  if (group == "1") {
-    t = "LowerForm";
-  } else if (group == "2") {
-    t = "HigherForm";
-  }
-  console.log(f, t, post);
+m_GetBalance();
+
+// input
+selectionFormInput();
+function selectionFormInput() {
+  var e = "";
   if (
-    urlParams.has("group") == true &&
-    urlParams.has("form") == true &&
-    urlParams.has("post") == true
+    document.getElementById("m_input_formSelect")
+      .value == `F1` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F2` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F3`
   ) {
-    if (
-      getViewport() == "xl" ||
-      getViewport() == "lg"
-    ) {
-      listMSG(t, f);
-      readMSG(t, f, post);
-    } else {
-      m_listMSG(t, f);
-      m_readMSG(t, f, post);
-    }
+    e = `LowerForm`;
   }
-}
-
-// Sorting
-function DBSorting(text) {
-  var ast = atou(text).toLowerCase();
-  console.log(ast);
-  var KT = db
-    .collection("Sorting")
-    .doc("RelativeTopic");
-  KT.get()
-    .then((doc) => {
-      if (doc.exists) {
-        console.log("Document data:", doc.data());
-        var arrayKT = doc.data().KT;
-        document.getElementById(
-          "relativeArea"
-        ).innerHTML = "Relative to: ";
-        for (let i = 0; i < arrayKT.length; i++) {
-          if (
-            ast.indexOf(arrayKT[i].keyword) >= 0
-          ) {
-            document.getElementById(
-              "relativeArea"
-            ).innerHTML +=
-              `<span class="badge rounded-pill bg-primary" onclick="window.location.href=('` +
-              arrayKT[i].link +
-              `'` +
-              `)">` +
-              arrayKT[i].keyword +
-              `</span>`;
-          } else {
-          }
-        }
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-      }
-    })
-    .catch((error) => {
-      console.log(
-        "Error getting document:",
-        error
-      );
-    });
-}
-// Balance Value Ex
-var BPTExValue = {
-  PostPTEx: {
-    base: 10,
-    diff: 0.8,
-    power: 1.1
-  },
-  CommentPTEx: {
-    base: 5,
-    diff: 1.2,
-    power: 1.1
+  if (
+    document.getElementById("m_input_formSelect")
+      .value == `F4` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F5` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F6`
+  ) {
+    e = `HigherForm`;
   }
-};
-function BalanceCalPostPTEx(varx) {
-  var axb = BPTExValue.PostPTEx.diff + varx;
-  var result = Math.pow(
-    axb * BPTExValue.PostPTEx.base,
-    BPTExValue.PostPTEx.power
-  );
-  return Math.round(result);
-}
-function BalanceCalCommentPTEx(varx) {
-  var axb = BPTExValue.CommentPTEx.diff - varx;
-  var result = Math.pow(
-    axb * BPTExValue.CommentPTEx.base,
-    BPTExValue.CommentPTEx.power
-  );
-  return Math.round(result);
-}
-// data
-BalanceValue = 1;
-postPointUsed = 10;
-commentPointAward = 5;
-let se1 = new Audio("../SE_success.ogg");
-let se2 = new Audio("../SE_fail.ogg");
-
-// ucs-2 string to base64 encoded ascii
-function utoa(str) {
-  return window.btoa(
-    unescape(encodeURIComponent(str))
+  m_listMSG(
+    e,
+    document.getElementById("m_input_formSelect")
+      .value
   );
 }
-// base64 encoded ascii to ucs-2 string
-function atou(str) {
-  return decodeURIComponent(
-    escape(window.atob(str))
-  );
-}
-// round to 4 digit
-function roundTo2(num) {
-  return +(Math.round(num + "e+2") + "e-2");
+function SerachnRead_M() {
+  var e = "";
+  if (
+    document.getElementById("m_input_formSelect")
+      .value == `F1` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F2` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F3`
+  ) {
+    e = `LowerForm`;
+  }
+  if (
+    document.getElementById("m_input_formSelect")
+      .value == `F4` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F5` ||
+    document.getElementById("m_input_formSelect")
+      .value == `F6`
+  ) {
+    e = `HigherForm`;
+  }
+  if (
+    document.getElementById("m_PostList").value ==
+    "newPost"
+  ) {
+    m_newPost(
+      e,
+      document.getElementById(
+        "m_input_formSelect"
+      ).value
+    );
+  } else {
+    m_readMSG(
+      e,
+      document.getElementById(
+        "m_input_formSelect"
+      ).value,
+      document.getElementById("m_PostList").value
+    );
+  }
 }
 // Balance
-function DelBalance(Form) {
-  if (Form == "F1") {
-    db.collection("Forum")
-      .doc("Balance")
-      .update({
-        "PostNum.F1": firebase.firestore.FieldValue.increment(
-          -1
-        ),
-        "PostNum.All": firebase.firestore.FieldValue.increment(
-          -1
-        )
-      })
-      .then(() => {
-        console.log(
-          "Document successfully updated!"
-        );
-        m_GetBalance(Form);
-        GetBalance(Form);
-      });
-  } else if (Form == "F2") {
-    db.collection("Forum")
-      .doc("Balance")
-      .update({
-        "PostNum.F2": firebase.firestore.FieldValue.increment(
-          -1
-        ),
-        "PostNum.All": firebase.firestore.FieldValue.increment(
-          -1
-        )
-      })
-      .then(() => {
-        console.log(
-          "Document successfully updated!"
-        );
-        m_GetBalance(Form);
-        GetBalance(Form);
-      });
-  } else if (Form == "F3") {
-    db.collection("Forum")
-      .doc("Balance")
-      .update({
-        "PostNum.F3": firebase.firestore.FieldValue.increment(
-          -1
-        ),
-        "PostNum.All": firebase.firestore.FieldValue.increment(
-          -1
-        )
-      })
-      .then(() => {
-        console.log(
-          "Document successfully updated!"
-        );
-        m_GetBalance(Form);
-        GetBalance(Form);
-      });
-  } else if (Form == "F4") {
-    db.collection("Forum")
-      .doc("Balance")
-      .update({
-        "PostNum.F4": firebase.firestore.FieldValue.increment(
-          -1
-        ),
-        "PostNum.All": firebase.firestore.FieldValue.increment(
-          -1
-        )
-      })
-      .then(() => {
-        console.log(
-          "Document successfully updated!"
-        );
-        m_GetBalance(Form);
-        GetBalance(Form);
-      });
-  } else if (Form == "F5") {
-    db.collection("Forum")
-      .doc("Balance")
-      .update({
-        "PostNum.F5": firebase.firestore.FieldValue.increment(
-          -1
-        ),
-        "PostNum.All": firebase.firestore.FieldValue.increment(
-          -1
-        )
-      })
-      .then(() => {
-        console.log(
-          "Document successfully updated!"
-        );
-        m_GetBalance(Form);
-        GetBalance(Form);
-      });
-  } else if (Form == "F6") {
-    db.collection("Forum")
-      .doc("Balance")
-      .update({
-        "PostNum.F6": firebase.firestore.FieldValue.increment(
-          -1
-        ),
-        "PostNum.All": firebase.firestore.FieldValue.increment(
-          -1
-        )
-      })
-      .then(() => {
-        console.log(
-          "Document successfully updated!"
-        );
-        m_GetBalance(Form);
-        GetBalance(Form);
-      });
-  }
-}
-function UpdateBalance(Form) {
-  if (Form == "F1") {
-    db.collection("Forum")
-      .doc("Balance")
-      .update({
-        "PostNum.F1": firebase.firestore.FieldValue.increment(
-          1
-        ),
-        "PostNum.All": firebase.firestore.FieldValue.increment(
-          1
-        )
-      })
-      .then(() => {
-        console.log(
-          "Document successfully updated!"
-        );
-        m_GetBalance(Form);
-        GetBalance(Form);
-      });
-  } else if (Form == "F2") {
-    db.collection("Forum")
-      .doc("Balance")
-      .update({
-        "PostNum.F2": firebase.firestore.FieldValue.increment(
-          1
-        ),
-        "PostNum.All": firebase.firestore.FieldValue.increment(
-          1
-        )
-      })
-      .then(() => {
-        console.log(
-          "Document successfully updated!"
-        );
-        m_GetBalance(Form);
-        GetBalance(Form);
-      });
-  } else if (Form == "F3") {
-    db.collection("Forum")
-      .doc("Balance")
-      .update({
-        "PostNum.F3": firebase.firestore.FieldValue.increment(
-          1
-        ),
-        "PostNum.All": firebase.firestore.FieldValue.increment(
-          1
-        )
-      })
-      .then(() => {
-        console.log(
-          "Document successfully updated!"
-        );
-        m_GetBalance(Form);
-        GetBalance(Form);
-      });
-  } else if (Form == "F4") {
-    db.collection("Forum")
-      .doc("Balance")
-      .update({
-        "PostNum.F4": firebase.firestore.FieldValue.increment(
-          1
-        ),
-        "PostNum.All": firebase.firestore.FieldValue.increment(
-          1
-        )
-      })
-      .then(() => {
-        console.log(
-          "Document successfully updated!"
-        );
-        m_GetBalance(Form);
-        GetBalance(Form);
-      });
-  } else if (Form == "F5") {
-    db.collection("Forum")
-      .doc("Balance")
-      .update({
-        "PostNum.F5": firebase.firestore.FieldValue.increment(
-          1
-        ),
-        "PostNum.All": firebase.firestore.FieldValue.increment(
-          1
-        )
-      })
-      .then(() => {
-        console.log(
-          "Document successfully updated!"
-        );
-        m_GetBalance(Form);
-        GetBalance(Form);
-      });
-  } else if (Form == "F6") {
-    db.collection("Forum")
-      .doc("Balance")
-      .update({
-        "PostNum.F6": firebase.firestore.FieldValue.increment(
-          1
-        ),
-        "PostNum.All": firebase.firestore.FieldValue.increment(
-          1
-        )
-      })
-      .then(() => {
-        console.log(
-          "Document successfully updated!"
-        );
-        m_GetBalance(Form);
-        GetBalance(Form);
-      });
-  }
-}
-function GetBalance(Form) {
+function m_GetBalance(Form) {
   var docRef = db
     .collection("Forum")
     .doc("Balance");
@@ -398,7 +108,7 @@ function GetBalance(Form) {
           doc.data().PostNum["F1"] /
           doc.data().PostNum.All;
         document.getElementById(
-          "BTNLISTForm1"
+          "m_input_formSelect_F1"
         ).innerHTML =
           `<span style='font-size: 1.5rem'>Form 1 </span><span class="text-secondary" style='font-size: 0.8rem'>[Dense: ` +
           roundTo2(sbal1 * 100) +
@@ -412,7 +122,7 @@ function GetBalance(Form) {
           doc.data().PostNum["F2"] /
           doc.data().PostNum.All;
         document.getElementById(
-          "BTNLISTForm2"
+          "m_input_formSelect_F2"
         ).innerHTML =
           `<span style='font-size: 1.5rem'>Form 2 </span><span class="text-secondary" style='font-size: 0.8rem'>[Dense: ` +
           roundTo2(sbal2 * 100) +
@@ -426,7 +136,7 @@ function GetBalance(Form) {
           doc.data().PostNum["F3"] /
           doc.data().PostNum.All;
         document.getElementById(
-          "BTNLISTForm3"
+          "m_input_formSelect_F3"
         ).innerHTML =
           `<span style='font-size: 1.5rem'>Form 3 </span><span class="text-secondary" style='font-size: 0.8rem'>[Dense: ` +
           roundTo2(sbal3 * 100) +
@@ -440,7 +150,7 @@ function GetBalance(Form) {
           doc.data().PostNum["F4"] /
           doc.data().PostNum.All;
         document.getElementById(
-          "BTNLISTForm4"
+          "m_input_formSelect_F4"
         ).innerHTML =
           `<span style='font-size: 1.5rem'>Form 4 </span><span class="text-secondary" style='font-size: 0.8rem'>[Dense: ` +
           roundTo2(sbal4 * 100) +
@@ -454,7 +164,7 @@ function GetBalance(Form) {
           doc.data().PostNum["F5"] /
           doc.data().PostNum.All;
         document.getElementById(
-          "BTNLISTForm5"
+          "m_input_formSelect_F5"
         ).innerHTML =
           `<span style='font-size: 1.5rem'>Form 5 </span><span class="text-secondary" style='font-size: 0.8rem'>[Dense: ` +
           roundTo2(sbal5 * 100) +
@@ -468,7 +178,7 @@ function GetBalance(Form) {
           doc.data().PostNum["F6"] /
           doc.data().PostNum.All;
         document.getElementById(
-          "BTNLISTForm6"
+          "m_input_formSelect_F6"
         ).innerHTML =
           `<span style='font-size: 1.5rem'>Form 6 </span><span class="text-secondary" style='font-size: 0.8rem'>[Dense: ` +
           roundTo2(sbal6 * 100) +
@@ -490,7 +200,7 @@ function GetBalance(Form) {
     });
 }
 // Basic Function
-function readMSG(Group, Form, Post) {
+function m_readMSG(Group, Form, Post) {
   var docRef = db
     .collection("Forum")
     .doc(Group)
@@ -511,11 +221,11 @@ function readMSG(Group, Form, Post) {
               .uid
         ) {
           document.getElementById(
-            "PostArea"
+            "m_PostArea"
           ).innerHTML =
             `` +
             `<div class="d-md-flex justify-content-md-end">` +
-            `<button class="btn btn-warning btn-sm" onclick="editPostPage('` +
+            `<button class="btn btn-warning btn-sm" onclick="m_editPostPage('` +
             Group +
             `','` +
             Form +
@@ -526,7 +236,7 @@ function readMSG(Group, Form, Post) {
             `','` +
             doc.data().PostText +
             `')">Edit</button>&nbsp;` +
-            `<button class="btn btn-danger btn-sm" data-bs-toggle='modal' data-bs-target='#DelPostPagePopUp' onclick="delPostPage('` +
+            `<button class="btn btn-danger btn-sm" data-bs-toggle='modal' data-bs-target='#DelPostPagePopUp' onclick="m_delPostPage('` +
             Group +
             `','` +
             Form +
@@ -550,9 +260,9 @@ function readMSG(Group, Form, Post) {
             `</div></div>`;
         } else {
           document.getElementById(
-            "PostArea"
+            "m_PostArea"
           ).innerHTML =
-            `<div class="row-3 border"><h1>` +
+            `<div class="row-4 border"><h1>` +
             atou(doc.data().PostTitle) +
             `</h1></div>` +
             `<small class="text-muted">Last Edit Date: ` +
@@ -565,12 +275,12 @@ function readMSG(Group, Form, Post) {
         }
 
         document.getElementById(
-          "CommentArea"
+          "m_CommentArea"
         ).innerHTML =
           // Post Comment Area
           `<div class="row-4 border-top-0"><h3>Comment The Post</h3>` +
           `<iframe id="textEditor" class="embed-responsive" style="width: 100%; min-height: 20rem;" src="../textEditor.html"></iframe>` +
-          `<button class="btn btn-success" data-bs-toggle='modal' data-bs-target='#SendCommentPagePopUp' onclick="sendCommentPage('` +
+          `<button class="btn btn-success" data-bs-toggle='modal' data-bs-target='#SendCommentPagePopUp' onclick="m_sendCommentPage('` +
           Group +
           `','` +
           Form +
@@ -597,13 +307,13 @@ function readMSG(Group, Form, Post) {
                 .uid
           ) {
             document.getElementById(
-              "CommentArea"
+              "m_CommentArea"
             ).innerHTML +=
               `<div id="c-` +
               i +
               `">` +
               `<div class="d-md-flex justify-content-md-end">` +
-              `<button class="btn btn-warning btn-sm" onclick="editCommentPage('` +
+              `<button class="btn btn-warning btn-sm" onclick="m_editCommentPage('` +
               Group +
               `','` +
               Form +
@@ -620,7 +330,7 @@ function readMSG(Group, Form, Post) {
               `,` +
               i +
               `)">edit</button><span>&nbsp;</span>` +
-              `<button class="btn btn-danger btn-sm" onclick="delCommentPage('` +
+              `<button class="btn btn-danger btn-sm" onclick="m_delCommentPage('` +
               Group +
               `','` +
               Form +
@@ -648,7 +358,7 @@ function readMSG(Group, Form, Post) {
               `</label></div></div>`;
           } else {
             document.getElementById(
-              "CommentArea"
+              "m_CommentArea"
             ).innerHTML +=
               `<div class="row-4 border">` +
               `<small class="">&num;` +
@@ -663,7 +373,6 @@ function readMSG(Group, Form, Post) {
               `</label></div>`;
           }
         }
-        MathJax.typeset();
         DBSorting(
           utoa(
             atou(doc.data().PostTitle) +
@@ -671,6 +380,7 @@ function readMSG(Group, Form, Post) {
               atou(doc.data().PostText)
           )
         );
+        MathJax.typeset();
       } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
@@ -686,25 +396,19 @@ function readMSG(Group, Form, Post) {
 }
 
 // Normal
-function listMSG(Group, Form) {
+function m_listMSG(Group, Form) {
   m_GetBalance(Form);
-  GetBalance(Form);
   if (
     "F" + sessionStorage.loginUserForm ==
     Form
   ) {
     document.getElementById(
-      "PostList"
-    ).innerHTML =
-      `<div class="row-1 border"><button class="btn btn-success" onclick="newPost('` +
-      Group +
-      `','` +
-      Form +
-      `')">New Post</button></div>`;
+      "m_PostList"
+    ).innerHTML = `<option value="newPost">[NEW POST]</option>`;
   } else {
     document.getElementById(
-      "PostList"
-    ).innerHTML = `<div class="row-1 border"><button class="btn btn-success disabled">New Post</button></div>`;
+      "m_PostList"
+    ).innerHTML = ``;
   }
   var docRef = db.collection("Forum").doc(Group);
   var array = [];
@@ -732,18 +436,16 @@ function listMSG(Group, Form) {
           i--
         ) {
           console.log(array[i]);
+          var ptitle = atou(array[i].title);
+          console.log(ptitle);
           document.getElementById(
-            "PostList"
+            "m_PostList"
           ).innerHTML +=
-            `<div class="row-1 border"><button class="btn" onclick="readMSG('` +
-            Group +
-            `','` +
-            Form +
-            `','` +
+            `<option value="` +
             array[i].id +
-            `')">` +
-            atou(array[i].title) +
-            `</button></div>`;
+            `">` +
+            ptitle +
+            `</option>`;
         }
         MathJax.typeset();
       } else {
@@ -759,10 +461,10 @@ function listMSG(Group, Form) {
     });
 }
 
-function sendComment(Group, Form, Post) {
+function m_sendComment(Group, Form, Post) {
   if (
     document
-      .getElementById("textEditor-" + id)
+      .getElementById("textEditor")
       .contentWindow.document.getElementById(
         "editorTextInput"
       ).value.length > 20
@@ -814,7 +516,7 @@ function sendComment(Group, Form, Post) {
                   5000
                 );
               }
-              readMSG(Group, Form, Post);
+              m_readMSG(Group, Form, Post);
             } else {
               // doc.data() will be undefined in this case
               addPoint(commentPointAward);
@@ -848,6 +550,7 @@ function sendComment(Group, Form, Post) {
         );
       });
   } else {
+    se2.play();
     alertBox(
       "Your Post isn't long enough. Please type more Info.",
       "warning",
@@ -856,21 +559,23 @@ function sendComment(Group, Form, Post) {
   }
 }
 
-function newPost(Group, Form) {
-  document.getElementById("PostArea").innerHTML =
+function m_newPost(Group, Form) {
+  document.getElementById(
+    "m_PostArea"
+  ).innerHTML =
     `<h5>Post Title</h5><input id="PostTitleInput"class="form-control"></input><h5>Content</h5>` +
-    `<iframe class="embed-responsive" id="textEditor" style="width: 100%; height: 72.5vh;" src="../textEditor.html"></iframe>` +
-    `<button class="btn btn-success" data-bs-toggle='modal' data-bs-target='#PostPagePopUp' onclick="sendPostPage('` +
+    `<iframe class="embed-responsive" id="textEditor" style="width: 100%; height: 65vh;" src="../textEditor.html"></iframe>` +
+    `<button class="btn btn-success" data-bs-toggle='modal' data-bs-target='#PostPagePopUp' onclick="m_sendPostPage('` +
     Group +
     `','` +
     Form +
     `')">Post</button>`;
   document.getElementById(
-    "CommentArea"
+    "m_CommentArea"
   ).innerHTML = "";
 }
 
-function sendPost(Group, Form) {
+function m_sendPost(Group, Form) {
   if (
     document
       .getElementById("textEditor")
@@ -1006,8 +711,8 @@ function sendPost(Group, Form) {
               "success",
               5000
             );
-            readMSG(Group, Form, docRef.id);
-            listMSG(Group, Form);
+            m_readMSG(Group, Form, docRef.id);
+            m_listMSG(Group, Form);
           })
           .catch((error) => {
             console.error(
@@ -1040,7 +745,7 @@ function sendPost(Group, Form) {
   }
 }
 
-function delPost(Group, Form, Post, Title) {
+function m_delPost(Group, Form, Post, Title) {
   var docRef = db
     .collection("Forum")
     .doc(Group)
@@ -1122,7 +827,7 @@ function delPost(Group, Form, Post, Title) {
       );
     });
 }
-function delComment(
+function m_delComment(
   Group,
   Form,
   Post,
@@ -1152,10 +857,10 @@ function delComment(
         }
       )
     })
-    .then(readMSG(Group, Form, Post));
+    .then(m_readMSG(Group, Form, Post));
 }
 
-function editCommentPage(
+function m_editCommentPage(
   Group,
   Form,
   Post,
@@ -1168,7 +873,7 @@ function editCommentPage(
     `<iframe class="embed-responsive" id="textEditor-` +
     id +
     `" style="width: 100%; height: 50vh;" src="../textEditor.html"></iframe>` +
-    `<button class="btn btn-warning" onclick="editComment('` +
+    `<button class="btn btn-warning" onclick="m_editComment('` +
     Group +
     `','` +
     Form +
@@ -1194,7 +899,7 @@ function editCommentPage(
     });
 }
 
-function editComment(
+function m_editComment(
   Group,
   Form,
   Post,
@@ -1203,7 +908,7 @@ function editComment(
   CommentE,
   id
 ) {
-  delComment(
+  m_delComment(
     Group,
     Form,
     Post,
@@ -1238,7 +943,7 @@ function editComment(
       )
     })
     .then(() => {
-      readMSG(Group, Form, Post);
+      m_readMSG(Group, Form, Post);
     })
     .catch((error) => {
       // The document probably doesn't exist.
@@ -1249,20 +954,22 @@ function editComment(
     });
 }
 
-function editPostPage(
+function m_editPostPage(
   Group,
   Form,
   Post,
   Title,
   text
 ) {
-  document.getElementById("PostArea").innerHTML =
+  document.getElementById(
+    "m_PostArea"
+  ).innerHTML =
     `<h5>Post title</h5>` +
     `<input id="PostTitleInput-"class="form-control">` +
     `<h5>Content</h5>` +
     `<iframe class="embed-responsive" id="textEditor-` +
     `" style="width: 100%; height: 50vh;" src="../textEditor.html"></iframe>` +
-    `<button class="btn btn-warning" onclick="editPost('` +
+    `<button class="btn btn-warning" onclick="m_editPost('` +
     Group +
     `','` +
     Form +
@@ -1285,7 +992,7 @@ function editPostPage(
   ).value = atou(Title);
 }
 
-function editPost(Group, Form, Post, oldTitle) {
+function m_editPost(Group, Form, Post, oldTitle) {
   var titleInput = document.getElementById(
     "PostTitleInput-"
   );
@@ -1429,13 +1136,13 @@ function editPost(Group, Form, Post, oldTitle) {
             )
           });
       }
-      listMSG(Group, Form);
-      readMSG(Group, Form, Post);
+      m_listMSG(Group, Form);
+      m_readMSG(Group, Form, Post);
     });
 }
 
 // Page Post
-function sendPostPage(Group, Form) {
+function m_sendPostPage(Group, Form) {
   document.getElementById(
     "PostPopUpMSG"
   ).innerHTML =
@@ -1448,14 +1155,14 @@ function sendPostPage(Group, Form) {
   ).innerHTML =
     ` <button
   type="button"
-  class="btn btn-primary" onclick="sendPost('` +
+  class="btn btn-primary" onclick="m_sendPost('` +
     Group +
     `','` +
     Form +
     `');$('#PostPagePopUp').modal('hide');">Post</button>`;
 }
 // Page Del Post
-function delPostPage(Group, Form, Post, Title) {
+function m_delPostPage(Group, Form, Post, Title) {
   document.getElementById(
     "DelPostPopUpMSG"
   ).innerHTML =
@@ -1467,7 +1174,7 @@ function delPostPage(Group, Form, Post, Title) {
   ).innerHTML =
     ` <button
   type="button"
-  class="btn btn-primary" onclick="delPost('` +
+  class="btn btn-primary" onclick="m_delPost('` +
     Group +
     `','` +
     Form +
@@ -1479,7 +1186,7 @@ function delPostPage(Group, Form, Post, Title) {
 }
 
 // Comment Post
-function sendCommentPage(Group, Form, Post) {
+function m_sendCommentPage(Group, Form, Post) {
   document.getElementById(
     "SendCommentPopUpMSG"
   ).innerHTML =
@@ -1492,7 +1199,7 @@ function sendCommentPage(Group, Form, Post) {
   ).innerHTML =
     ` <button
   type="button"
-  class="btn btn-primary" onclick="sendComment('` +
+  class="btn btn-primary" onclick="m_sendComment('` +
     Group +
     `','` +
     Form +
@@ -1501,7 +1208,7 @@ function sendCommentPage(Group, Form, Post) {
     `');$('#SendCommentPagePopUp').modal('hide');">Submit Comment</button>`;
 }
 // Del Comment
-function delCommentPage(
+function m_delCommentPage(
   Group,
   Form,
   Post,
@@ -1520,7 +1227,7 @@ function delCommentPage(
   ).innerHTML =
     ` <button
   type="button"
-  class="btn btn-primary" onclick="delComment('` +
+  class="btn btn-primary" onclick="m_delComment('` +
     Group +
     `','` +
     Form +

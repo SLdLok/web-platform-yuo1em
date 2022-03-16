@@ -196,9 +196,16 @@ function msgProgress(state, progress) {
     document.getElementById(
       "progressLabel"
     ).innerHTML = progress + "% of File Uploaded";
+    document.getElementById(
+      "m_progressLabel"
+    ).innerHTML = progress + "% of File Uploaded";
   } else if (state == "ended") {
     document.getElementById(
       "progressLabel"
+    ).innerHTML = "Uploaded";
+    url = progress;
+    document.getElementById(
+      "m_progressLabel"
     ).innerHTML = "Uploaded";
     url = progress;
   }
