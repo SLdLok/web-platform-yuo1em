@@ -101,7 +101,7 @@ function m_readMSG(Group, Form, Post) {
           ).innerHTML =
             `` +
             `<div class="d-md-flex justify-content-md-end">` +
-            `<button class="btn btn-warning btn-sm" onclick="m_editPostPage('` +
+            `<button class="btn btn-warning btn-sm" onclick="editPostPage('` +
             Group +
             `','` +
             Form +
@@ -112,7 +112,7 @@ function m_readMSG(Group, Form, Post) {
             `','` +
             doc.data().QAText +
             `')">Edit</button>&nbsp;` +
-            `<button class="btn btn-danger btn-sm" onclick="m_delPost('` +
+            `<button class="btn btn-danger btn-sm" onclick="delPost('` +
             Group +
             `','` +
             Form +
@@ -472,7 +472,7 @@ function m_editPostPage(
     `<h5>Content</h5>` +
     `<iframe class="embed-responsive" id="textEditor-` +
     `" style="width: 100%; height: 50vh;" src="../textEditor.html"></iframe>` +
-    `<button class="btn btn-warning" onclick="m_editPost('` +
+    `<button class="btn btn-warning" onclick="editPost('` +
     Group +
     `','` +
     Form +

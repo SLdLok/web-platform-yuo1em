@@ -1,5 +1,8 @@
-console.log("Quiz area");
+console.log("Learning area");
 var db = firebase.firestore();
+
+// ucs-2 string to base64 encoded ascii
+
 // Input
 selectionFormInput();
 function selectionFormInput() {
@@ -53,30 +56,26 @@ function SerachnRead_M() {
     e = `HigherForm`;
   }
   if (
-    document.getElementById("m_PostListforquiz")
+    document.getElementById("m_PostListforlearn")
       .value == "newPost"
   ) {
-    m_newPost(
-      e,
-      document.getElementById(
-        "m_input_formSelect"
-      ).value
-    );
   } else {
     m_readMSG(
       e,
       document.getElementById(
         "m_input_formSelect"
       ).value,
-      document.getElementById("m_PostListforquiz")
-        .value
+      document.getElementById(
+        "m_PostListforlearn"
+      ).value
     );
   }
 }
+
 // Basic Function
 function m_readMSG(Group, Form, Post) {
   var docRef = db
-    .collection("Quiz")
+    .collection("Learn")
     .doc(Group)
     .collection(Form)
     .doc(Post);
@@ -89,15 +88,15 @@ function m_readMSG(Group, Form, Post) {
         // POST MESSAGE
         if (
           sessionStorage.loginUserRole ===
-            "teacher" ||
+            "admin" ||
           sessionStorage.loginUserRole ===
             "admin" ||
-          doc.data().PosterUID ===
+          doc.data().PosFterUID ===
             JSON.parse(sessionStorage.loginUser)
               .uid
         ) {
           document.getElementById(
-            "m_PostAreaforquiz"
+            "m_PostAreaforlearn"
           ).innerHTML =
             `` +
             `<div class="d-md-flex justify-content-md-end">` +
@@ -110,7 +109,7 @@ function m_readMSG(Group, Form, Post) {
             `','` +
             doc.data().PostTitle +
             `','` +
-            doc.data().QAText +
+            doc.data().PostText +
             `')">Edit</button>&nbsp;` +
             `<button class="btn btn-danger btn-sm" onclick="m_delPost('` +
             Group +
@@ -131,20 +130,11 @@ function m_readMSG(Group, Form, Post) {
             doc.data().PosterUID +
             `]</small>` +
             `<div class="border">` +
-            atou(doc.data().QAText) +
-            `</div><div id="AnswerArea">Your Answer: ` +
-            `<button class="btn btn-secondary" onclick="  AnswerSelected='A' " >A</button>` +
-            `<button class="btn btn-secondary" onclick="  AnswerSelected='B' " >B</button>` +
-            `<button class="btn btn-secondary" onclick="  AnswerSelected='C' " >C</button>` +
-            `<button class="btn btn-secondary" onclick="  AnswerSelected='D' " >D</button>` +
-            `<div class="d-md-flex justify-content-md-end">` +
-            `<button class="btn btn-success" onclick="submitAnswer('` +
-            doc.data().Answer +
-            `')" >Submit Quiz</button></div></div></div>` +
-            `</div>`;
+            atou(doc.data().PostText) +
+            `</div></div>`;
         } else {
           document.getElementById(
-            "m_PostAreaforquiz"
+            "m_PostAreaforlearn"
           ).innerHTML =
             `<div class="row-4 border"><h1>` +
             atou(doc.data().PostTitle) +
@@ -153,15 +143,7 @@ function m_readMSG(Group, Form, Post) {
             doc.data().EditTime.toDate() +
             `</small>` +
             `<div class="row-4 border">` +
-            atou(doc.data().QAText) +
-            `<div id="AnswerArea">Your Answer: ` +
-            `<button class="btn btn-secondary" onclick="  AnswerSelected='A' " >A</button>` +
-            `<button class="btn btn-secondary" onclick="  AnswerSelected='B' " >B</button>` +
-            `<button class="btn btn-secondary" onclick="  AnswerSelected='C' " >C</button>` +
-            `<button class="btn btn-secondary" onclick="  AnswerSelected='D' " >D</button>` +
-            `<div class="d-md-flex justify-content-md-end"><button class="btn btn-success" onclick="submitAnswer('` +
-            doc.data().Answer +
-            `')" >Submit Quiz</button></div></div>` +
+            atou(doc.data().PostText) +
             `</div>`;
         }
 
@@ -180,33 +162,38 @@ function m_readMSG(Group, Form, Post) {
 
 // Normal
 function m_listMSG(Group, Form) {
-  if (sessionStorage.loginUserRole == "teacher") {
-    document.getElementById(
-      "m_PostListforquiz"
-    ).innerHTML = `<option value="newPost">[NEW POST]</option>`;
-  } else {
-    document.getElementById(
-      "m_PostListforquiz"
-    ).innerHTML = ``;
-  }
-  var docRef = db.collection("Quiz").doc(Group);
+  document.getElementById(
+    "m_PostListforlearn"
+  ).innerHTML = "";
+  var docRef = db.collection("Learn").doc(Group);
   var array = [];
   docRef
     .get()
     .then((doc) => {
+      if (
+        sessionStorage.loginUserRole == "teacher"
+      ) {
+        document.getElementById(
+          "m_PostListforlearn"
+        ).innerHTML = `<option value="newPost">[NEW POST]</option>`;
+      } else {
+        document.getElementById(
+          "m_PostListforlearn"
+        ).innerHTML = ``;
+      }
       if (doc.exists) {
         console.log("Document data:", doc.data());
-        if (Form === "F1") {
+        if (Form == "F1") {
           array = doc.data().F1DocArray;
-        } else if (Form === "F2") {
+        } else if (Form == "F2") {
           array = doc.data().F2DocArray;
-        } else if (Form === "F3") {
+        } else if (Form == "F3") {
           array = doc.data().F3DocArray;
-        } else if (Form === "F4") {
+        } else if (Form == "F4") {
           array = doc.data().F4DocArray;
-        } else if (Form === "F5") {
+        } else if (Form == "F5") {
           array = doc.data().F5DocArray;
-        } else if (Form === "F6") {
+        } else if (Form == "F6") {
           array = doc.data().F6DocArray;
         }
         for (
@@ -217,7 +204,7 @@ function m_listMSG(Group, Form) {
           console.log(array[i]);
           var ptitle = atou(array[i].title);
           document.getElementById(
-            "m_PostListforquiz"
+            "m_PostListforlearn"
           ).innerHTML +=
             `<option value="` +
             array[i].id +
@@ -238,27 +225,45 @@ function m_listMSG(Group, Form) {
       );
     });
 }
-//new post( display only)
-function m_newPost(Group, Form) {
-  document.getElementById(
-    "m_PostAreaforquiz"
-  ).innerHTML =
-    `<h5>Post Title</h5><input id="PostTitleInput"class="form-control"></input><h5>Content</h5>` +
-    `<iframe class="embed-responsive" id="textEditor" style="width: 100%; height: 72.5vh;" src="../textEditor.html"></iframe>` +
-    `<button class="btn btn-success" onclick="  AnswerSelected='A' " >A</button>` +
-    `<button class="btn btn-success" onclick="  AnswerSelected='B' " >B</button>` +
-    `<button class="btn btn-success" onclick="  AnswerSelected='C' " >C</button>` +
-    `<button class="btn btn-success" onclick="  AnswerSelected='D' " >D</button>` +
-    `<button class="btn btn-success" onclick="m_sendPost('` +
-    Group +
-    `','` +
-    Form +
-    `')">Post</button>`;
-  document.getElementById(
-    "m_CommentAreaforquiz"
-  ).innerHTML = "";
+
+function m_sendComment(Group, Form, Post) {
+  var docRef = db
+    .collection("Learn")
+    .doc(Group)
+    .collection(Form)
+    .doc(Post);
+
+  // Set the "capital" field of the city 'DC'
+  return docRef
+    .update({
+      Comment: firebase.firestore.FieldValue.arrayUnion(
+        {
+          CommentText: utoa(
+            document
+              .getElementById("textEditor")
+              .contentWindow.document.getElementById(
+                "editorTextInput"
+              ).value
+          ),
+          EditTime: firebase.firestore.Timestamp.now(),
+          CommenterUID: JSON.parse(
+            sessionStorage.loginUser
+          ).uid
+        }
+      )
+    })
+    .then(() => {
+      m_readMSG(Group, Form, Post);
+    })
+    .catch((error) => {
+      // The document probably doesn't exist.
+      console.error(
+        "Error updating document: ",
+        error
+      );
+    });
 }
-//send post ( real send to db)
+
 function m_sendPost(Group, Form) {
   var titleInput = document.getElementById(
     "PostTitleInput"
@@ -272,17 +277,17 @@ function m_sendPost(Group, Form) {
     titleInput.value =
       "Untitled Post on" + Date(Date.now());
   }
-  db.collection("Quiz")
+  db.collection("Learn")
     .doc(Group)
     .collection(Form)
     .add({
       PostTitle: utoa(titleInput.value),
       EditTime: firebase.firestore.Timestamp.now(),
-      QAText: utoa(input.value),
+      PostText: utoa(input.value),
+      Comment: [],
       PosterUID: JSON.parse(
         sessionStorage.loginUser
-      ).uid,
-      Answer: AnswerSelected
+      ).uid
     })
     .then((docRef) => {
       console.log(
@@ -290,7 +295,7 @@ function m_sendPost(Group, Form) {
         docRef.id
       );
       if (Form === "F1") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F1DocArray: firebase.firestore.FieldValue.arrayUnion(
@@ -301,7 +306,7 @@ function m_sendPost(Group, Form) {
             )
           });
       } else if (Form === "F2") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F2DocArray: firebase.firestore.FieldValue.arrayUnion(
@@ -312,7 +317,7 @@ function m_sendPost(Group, Form) {
             )
           });
       } else if (Form === "F3") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F3DocArray: firebase.firestore.FieldValue.arrayUnion(
@@ -323,7 +328,7 @@ function m_sendPost(Group, Form) {
             )
           });
       } else if (Form === "F4") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F4DocArray: firebase.firestore.FieldValue.arrayUnion(
@@ -334,7 +339,7 @@ function m_sendPost(Group, Form) {
             )
           });
       } else if (Form === "F5") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F5DocArray: firebase.firestore.FieldValue.arrayUnion(
@@ -345,7 +350,7 @@ function m_sendPost(Group, Form) {
             )
           });
       } else if (Form === "F6") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F6DocArray: firebase.firestore.FieldValue.arrayUnion(
@@ -366,10 +371,10 @@ function m_sendPost(Group, Form) {
       );
     });
 }
-//del post
+
 function m_delPost(Group, Form, Post, Title) {
   var docRef = db
-    .collection("Quiz")
+    .collection("Learn")
     .doc(Group)
     .collection(Form)
     .doc(Post);
@@ -381,7 +386,7 @@ function m_delPost(Group, Form, Post, Title) {
       );
       // Array Del
       if (Form == "F1") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F1DocArray: firebase.firestore.FieldValue.arrayRemove(
@@ -392,7 +397,7 @@ function m_delPost(Group, Form, Post, Title) {
             )
           });
       } else if (Form == "F2") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F2DocArray: firebase.firestore.FieldValue.arrayRemove(
@@ -403,7 +408,7 @@ function m_delPost(Group, Form, Post, Title) {
             )
           });
       } else if (Form == "F3") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F3DocArray: firebase.firestore.FieldValue.arrayRemove(
@@ -414,7 +419,7 @@ function m_delPost(Group, Form, Post, Title) {
             )
           });
       } else if (Form == "F4") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F4DocArray: firebase.firestore.FieldValue.arrayRemove(
@@ -425,7 +430,7 @@ function m_delPost(Group, Form, Post, Title) {
             )
           });
       } else if (Form == "F5") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F5DocArray: firebase.firestore.FieldValue.arrayRemove(
@@ -436,7 +441,7 @@ function m_delPost(Group, Form, Post, Title) {
             )
           });
       } else if (Form == "F6") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F6DocArray: firebase.firestore.FieldValue.arrayRemove(
@@ -456,7 +461,138 @@ function m_delPost(Group, Form, Post, Title) {
       );
     });
 }
-//edit
+function m_delComment(
+  Group,
+  Form,
+  Post,
+  CommentT,
+  CommentU,
+  CommentE
+) {
+  var docRef = db
+    .collection("Learn")
+    .doc(Group)
+    .collection(Form)
+    .doc(Post);
+  console.log({
+    CommentText: CommentT,
+    CommenterUID: CommentU,
+    EditTime: CommentE
+  });
+  docRef
+    .update({
+      Comment: firebase.firestore.FieldValue.arrayRemove(
+        {
+          CommentText: CommentT,
+          CommenterUID: CommentU,
+          EditTime: firebase.firestore.Timestamp.fromMillis(
+            CommentE
+          )
+        }
+      )
+    })
+    .then(m_readMSG(Group, Form, Post));
+}
+
+function m_editCommentPage(
+  Group,
+  Form,
+  Post,
+  CommentT,
+  CommentU,
+  CommentE,
+  id
+) {
+  document.getElementById("c-" + id).innerHTML =
+    `<iframe class="embed-responsive" id="textEditor-` +
+    id +
+    `" style="width: 100%; height: 50vh;" src="../textEditor.html"></iframe>` +
+    `<button class="btn btn-warning" onclick="editComment('` +
+    Group +
+    `','` +
+    Form +
+    `','` +
+    Post +
+    `','` +
+    CommentT +
+    `','` +
+    CommentU +
+    `',` +
+    CommentE +
+    `,` +
+    id +
+    `)">Edit Comment</button>`;
+  document
+    .getElementById("textEditor-" + id)
+    .addEventListener("load", function () {
+      document
+        .getElementById("textEditor-" + id)
+        .contentWindow.document.getElementById(
+          "editorTextInput"
+        ).value = atou(CommentT);
+      document
+        .getElementById("textEditor-" + id)
+        .contentWindow.document.getElementById(
+          "m_editorTextInput"
+        ).value = atou(CommentT);
+    });
+}
+
+function m_editComment(
+  Group,
+  Form,
+  Post,
+  CommentT,
+  CommentU,
+  CommentE,
+  id
+) {
+  m_delComment(
+    Group,
+    Form,
+    Post,
+    CommentT,
+    CommentU,
+    CommentE
+  );
+
+  var docRef = db
+    .collection("Learn")
+    .doc(Group)
+    .collection(Form)
+    .doc(Post);
+
+  // Set the "capital" field of the city 'DC'
+  return docRef
+    .update({
+      Comment: firebase.firestore.FieldValue.arrayUnion(
+        {
+          CommentText: utoa(
+            document
+              .getElementById("textEditor-" + id)
+              .contentWindow.document.getElementById(
+                "editorTextInput"
+              ).value
+          ),
+          EditTime: firebase.firestore.Timestamp.now(),
+          CommenterUID: JSON.parse(
+            sessionStorage.loginUser
+          ).uid
+        }
+      )
+    })
+    .then(() => {
+      m_readMSG(Group, Form, Post);
+    })
+    .catch((error) => {
+      // The document probably doesn't exist.
+      console.error(
+        "Error updating document: ",
+        error
+      );
+    });
+}
+
 function m_editPostPage(
   Group,
   Form,
@@ -465,14 +601,14 @@ function m_editPostPage(
   text
 ) {
   document.getElementById(
-    "m_PostAreaforquiz"
+    "m_PostAreaforlearn"
   ).innerHTML =
     `<h5>Post title</h5>` +
     `<input id="PostTitleInput-"class="form-control">` +
     `<h5>Content</h5>` +
     `<iframe class="embed-responsive" id="textEditor-` +
     `" style="width: 100%; height: 50vh;" src="../textEditor.html"></iframe>` +
-    `<button class="btn btn-warning" onclick="m_editPost('` +
+    `<button class="btn btn-warning" onclick="editPost('` +
     Group +
     `','` +
     Form +
@@ -500,7 +636,7 @@ function m_editPostPage(
   ).value = atou(Title);
 }
 
-function m_editPost(Group, Form, Post, oldTitle) {
+function editPost(Group, Form, Post, oldTitle) {
   var titleInput = document.getElementById(
     "PostTitleInput-"
   );
@@ -513,23 +649,22 @@ function m_editPost(Group, Form, Post, oldTitle) {
     titleInput.value =
       "Untitled Post on" + Date(Date.now());
   }
-  db.collection("Quiz")
+  db.collection("Learn")
     .doc(Group)
     .collection(Form)
     .doc(Post)
     .update({
       PostTitle: utoa(titleInput.value),
       EditTime: firebase.firestore.Timestamp.now(),
-      QAText: utoa(input.value),
+      PostText: utoa(input.value),
       PosterUID: JSON.parse(
         sessionStorage.loginUser
-      ).uid,
-      Answer: AnswerSelected
+      ).uid
     })
     .then(() => {
       // Array Remove
       if (Form == "F1") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F1DocArray: firebase.firestore.FieldValue.arrayRemove(
@@ -540,7 +675,7 @@ function m_editPost(Group, Form, Post, oldTitle) {
             )
           });
       } else if (Form == "F2") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F2DocArray: firebase.firestore.FieldValue.arrayRemove(
@@ -551,7 +686,7 @@ function m_editPost(Group, Form, Post, oldTitle) {
             )
           });
       } else if (Form == "F3") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F3DocArray: firebase.firestore.FieldValue.arrayRemove(
@@ -562,7 +697,7 @@ function m_editPost(Group, Form, Post, oldTitle) {
             )
           });
       } else if (Form == "F4") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F4DocArray: firebase.firestore.FieldValue.arrayRemove(
@@ -573,7 +708,7 @@ function m_editPost(Group, Form, Post, oldTitle) {
             )
           });
       } else if (Form == "F5") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F5DocArray: firebase.firestore.FieldValue.arrayRemove(
@@ -584,7 +719,7 @@ function m_editPost(Group, Form, Post, oldTitle) {
             )
           });
       } else if (Form == "F6") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F6DocArray: firebase.firestore.FieldValue.arrayRemove(
@@ -597,7 +732,7 @@ function m_editPost(Group, Form, Post, oldTitle) {
       }
       // Array Update
       if (Form === "F1") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F1DocArray: firebase.firestore.FieldValue.arrayUnion(
@@ -608,7 +743,7 @@ function m_editPost(Group, Form, Post, oldTitle) {
             )
           });
       } else if (Form === "F2") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F2DocArray: firebase.firestore.FieldValue.arrayUnion(
@@ -619,7 +754,7 @@ function m_editPost(Group, Form, Post, oldTitle) {
             )
           });
       } else if (Form === "F3") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F3DocArray: firebase.firestore.FieldValue.arrayUnion(
@@ -630,7 +765,7 @@ function m_editPost(Group, Form, Post, oldTitle) {
             )
           });
       } else if (Form === "F4") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F4DocArray: firebase.firestore.FieldValue.arrayUnion(
@@ -641,7 +776,7 @@ function m_editPost(Group, Form, Post, oldTitle) {
             )
           });
       } else if (Form === "F5") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F5DocArray: firebase.firestore.FieldValue.arrayUnion(
@@ -652,7 +787,7 @@ function m_editPost(Group, Form, Post, oldTitle) {
             )
           });
       } else if (Form === "F6") {
-        db.collection("Quiz")
+        db.collection("Learn")
           .doc(Group)
           .update({
             F6DocArray: firebase.firestore.FieldValue.arrayUnion(

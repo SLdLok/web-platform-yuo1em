@@ -168,7 +168,7 @@ function PS_readQuizLimit() {
       if (doc.exists) {
         console.log("Document data:", doc.data());
         console.log(doc.data().PointOwned);
-        sessionStorage.DailyQuestionLimit = doc.data().DailyQuizLimit;
+        sessionStorage.DailyQuizLimit = doc.data().DailyQuizLimit;
       } else {
         // do(c.data() will be undefined in this case
         console.log("No such document!");

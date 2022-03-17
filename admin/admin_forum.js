@@ -762,7 +762,7 @@ function listMSG(Group, Form) {
 function sendComment(Group, Form, Post) {
   if (
     document
-      .getElementById("textEditor-" + id)
+      .getElementById("textEditor")
       .contentWindow.document.getElementById(
         "editorTextInput"
       ).value.length > 20
@@ -1191,11 +1191,6 @@ function editCommentPage(
         .contentWindow.document.getElementById(
           "editorTextInput"
         ).value = atou(CommentT);
-      document
-        .getElementById("textEditor-" + id)
-        .contentWindow.document.getElementById(
-          "m_editorTextInput"
-        ).value = atou(CommentT);
     });
 }
 
@@ -1283,11 +1278,6 @@ function editPostPage(
         .getElementById("textEditor-")
         .contentWindow.document.getElementById(
           "editorTextInput"
-        ).value = atou(text);
-      document
-        .getElementById("textEditor-")
-        .contentWindow.document.getElementById(
-          "m_editorTextInput"
         ).value = atou(text);
     });
   document.getElementById(

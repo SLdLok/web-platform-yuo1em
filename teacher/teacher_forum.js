@@ -41,6 +41,12 @@ function direct() {
       listMSG(t, f);
       readMSG(t, f, post);
     } else {
+      document.getElementById(
+        "m_input_formSelect"
+      ).value = form;
+      document.getElementById(
+        "m_PostList"
+      ).value = post;
       m_listMSG(t, f);
       m_readMSG(t, f, post);
     }
@@ -762,7 +768,7 @@ function listMSG(Group, Form) {
 function sendComment(Group, Form, Post) {
   if (
     document
-      .getElementById("textEditor-" + id)
+      .getElementById("textEditor")
       .contentWindow.document.getElementById(
         "editorTextInput"
       ).value.length > 20

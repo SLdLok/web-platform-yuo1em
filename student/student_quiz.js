@@ -1,6 +1,8 @@
 console.log("Quiz area");
 var db = firebase.firestore();
-
+AnswerSelected = "A";
+let se1 = new Audio("../SE_success.ogg");
+let se2 = new Audio("../SE_fail.ogg");
 // ucs-2 string to base64 encoded ascii
 function utoa(str) {
   return window.btoa(
@@ -13,8 +15,6 @@ function atou(str) {
     escape(window.atob(str))
   );
 }
-
-AnswerSelected = "";
 function getViewport() {
   const width = Math.max(
     document.documentElement.clientWidth,
@@ -26,6 +26,7 @@ function getViewport() {
   if (width <= 1200) return "lg";
   return "xl";
 }
+
 direct();
 // Direct
 function direct() {
@@ -34,25 +35,39 @@ function direct() {
   var group = urlParams.get("group");
   var form = urlParams.get("form");
   var post = urlParams.get("post");
+  var f = "F" + form;
+  var t = "";
+  if (group == "1") {
+    t = "LowerForm";
+  } else if (group == "2") {
+    t = "HigherForm";
+  }
+  console.log(f, t, post);
   if (
-    urlParams.has("group") &&
-    urlParams.has("form") &&
-    urlParams.has("post")
+    urlParams.has("group") == true &&
+    urlParams.has("form") == true &&
+    urlParams.has("post") == true
   ) {
     if (
       getViewport() == "xl" ||
       getViewport() == "lg"
     ) {
-      listMSG(group, form);
-      readMSG(group, form, post);
+      listMSG(t, f);
+      readMSG(t, f, post);
     } else {
-      m_listMSG(group, form);
-      m_readMSG(group, form, post);
+      document.getElementById(
+        "m_input_formSelect"
+      ).value = form;
+      document.getElementById(
+        "m_PostListforquiz"
+      ).value = post;
+      m_listMSG(t, f);
+      m_readMSG(t, f, post);
     }
   }
 }
 // Basic Function
-function readMSG(Group, Form, Post, Answer) {
+function readMSG(Group, Form, Post) {
   var docRef = db
     .collection("Quiz")
     .doc(Group)
@@ -67,8 +82,10 @@ function readMSG(Group, Form, Post, Answer) {
         // POST MESSAGE
         if (
           sessionStorage.loginUserRole ===
+            "teacher" ||
+          sessionStorage.loginUserRole ===
             "admin" ||
-          doc.data().PosFterUID ===
+          doc.data().PosterUID ===
             JSON.parse(sessionStorage.loginUser)
               .uid
         ) {
@@ -86,7 +103,7 @@ function readMSG(Group, Form, Post, Answer) {
             `','` +
             doc.data().PostTitle +
             `','` +
-            doc.data().PostText +
+            doc.data().QAText +
             `')">Edit</button>&nbsp;` +
             `<button class="btn btn-danger btn-sm" onclick="delPost('` +
             Group +
@@ -107,8 +124,17 @@ function readMSG(Group, Form, Post, Answer) {
             doc.data().PosterUID +
             `]</small>` +
             `<div class="border">` +
-            atou(doc.data().PostText) +
-            `</div></div>`;
+            atou(doc.data().QAText) +
+            `</div><div id="AnswerArea">Your Answer: ` +
+            `<button class="btn btn-secondary" onclick="  AnswerSelected='A' " >A</button>` +
+            `<button class="btn btn-secondary" onclick="  AnswerSelected='B' " >B</button>` +
+            `<button class="btn btn-secondary" onclick="  AnswerSelected='C' " >C</button>` +
+            `<button class="btn btn-secondary" onclick="  AnswerSelected='D' " >D</button>` +
+            `<div class="d-md-flex justify-content-md-end">` +
+            `<button class="btn btn-success" onclick="submitAnswer('` +
+            doc.data().Answer +
+            `')" >Submit Quiz</button></div></div></div>` +
+            `</div>`;
         } else {
           document.getElementById(
             "PostAreaforquiz"
@@ -120,7 +146,15 @@ function readMSG(Group, Form, Post, Answer) {
             doc.data().EditTime.toDate() +
             `</small>` +
             `<div class="row-4 border">` +
-            atou(doc.data().PostText) +
+            atou(doc.data().QAText) +
+            `<div id="AnswerArea">Your Answer: ` +
+            `<button class="btn btn-secondary" onclick="  AnswerSelected='A' " >A</button>` +
+            `<button class="btn btn-secondary" onclick="  AnswerSelected='B' " >B</button>` +
+            `<button class="btn btn-secondary" onclick="  AnswerSelected='C' " >C</button>` +
+            `<button class="btn btn-secondary" onclick="  AnswerSelected='D' " >D</button>` +
+            `<div class="d-md-flex justify-content-md-end"><button class="btn btn-success" onclick="submitAnswer('` +
+            doc.data().Answer +
+            `')" >Submit Quiz</button></div></div>` +
             `</div>`;
         }
 
@@ -141,7 +175,7 @@ function readMSG(Group, Form, Post, Answer) {
 function listMSG(Group, Form) {
   document.getElementById(
     "PostListforquiz"
-  ).innerHTML = "";
+  ).innerHTML = ``;
   var docRef = db.collection("Quiz").doc(Group);
   var array = [];
   docRef
@@ -194,25 +228,27 @@ function listMSG(Group, Form) {
       );
     });
 }
-
-// New QA + right 
+//new post( display only)
 function newPost(Group, Form) {
   document.getElementById(
     "PostAreaforquiz"
   ).innerHTML =
     `<h5>Post Title</h5><input id="PostTitleInput"class="form-control"></input><h5>Content</h5>` +
     `<iframe class="embed-responsive" id="textEditor" style="width: 100%; height: 72.5vh;" src="../textEditor.html"></iframe>` +
-    `<button class="btn" onclick=" AnswerSelected=A " >A</button>` +
-    `<button class="btn" onclick=  AnswerSelected=B >B</button>` +
-    `<button class="btn" onclick=  AnswerSelected=C >C</button>` +
-    `<button class="btn" onclick=  AnswerSelected=D >D</button>` +
-    `<button class="btn btn-success" onclick="sendPost('` +Group +`','` +Form +`')">Post</button>`;
-
+    `<button class="btn btn-success" onclick="  AnswerSelected='A' " >A</button>` +
+    `<button class="btn btn-success" onclick="  AnswerSelected='B' " >B</button>` +
+    `<button class="btn btn-success" onclick="  AnswerSelected='C' " >C</button>` +
+    `<button class="btn btn-success" onclick="  AnswerSelected='D' " >D</button>` +
+    `<button class="btn btn-success" onclick="sendPost('` +
+    Group +
+    `','` +
+    Form +
+    `')">Post</button>`;
   document.getElementById(
     "CommentAreaforquiz"
   ).innerHTML = "";
 }
-
+//send post ( real send to db)
 function sendPost(Group, Form) {
   var titleInput = document.getElementById(
     "PostTitleInput"
@@ -233,7 +269,9 @@ function sendPost(Group, Form) {
       PostTitle: utoa(titleInput.value),
       EditTime: firebase.firestore.Timestamp.now(),
       QAText: utoa(input.value),
-      PosterUID: JSON.parse(sessionStorage.loginUser).uid
+      PosterUID: JSON.parse(
+        sessionStorage.loginUser
+      ).uid,
       Answer: AnswerSelected
     })
     .then((docRef) => {
@@ -318,7 +356,7 @@ function sendPost(Group, Form) {
       );
     });
 }
-
+//del post
 function delPost(Group, Form, Post, Title) {
   var docRef = db
     .collection("Quiz")
@@ -408,44 +446,7 @@ function delPost(Group, Form, Post, Title) {
       );
     });
 }
-
-  var docRef = db
-    .collection("Quiz")
-    .doc(Group)
-    .collection(Form)
-    .doc(Post);
-
-  // Set the "capital" field of the city 'DC'
-  return docRef
-    .update({
-      Comment: firebase.firestore.FieldValue.arrayUnion(
-        {
-          CommentText: utoa(
-            document
-              .getElementById("textEditor-" + id)
-              .contentWindow.document.getElementById(
-                "editorTextInput"
-              ).value
-          ),
-          EditTime: firebase.firestore.Timestamp.now(),
-          CommenterUID: JSON.parse(
-            sessionStorage.loginUser
-          ).uid
-        }
-      )
-    })
-    .then(() => {
-      readMSG(Group, Form, Post);
-    })
-    .catch((error) => {
-      // The document probably doesn't exist.
-      console.error(
-        "Error updating document: ",
-        error
-      );
-    });
-}
-
+//edit
 function editPostPage(
   Group,
   Form,
@@ -650,4 +651,62 @@ function editPost(Group, Form, Post, oldTitle) {
       listMSG(Group, Form);
       readMSG(Group, Form, Post);
     });
+}
+
+function submitAnswer(CorrectAns) {
+  if (readQuizLimit() > 0) {
+    if (CorrectAns === AnswerSelected) {
+      delQuizLimit();
+      addPoint(5);
+      alertBox(
+        "Correct. You get 5pt as an award.",
+        "success",
+        5000
+      );
+    } else {
+      alertBox(
+        "Wrong. Correct Answer is " +
+          CorrectAns +
+          ". ",
+        "danger",
+        5000
+      );
+    }
+  } else {
+    alertBox(
+      "You reached the quiz limit of today. Please refresh it by getting daily award.",
+      "danger",
+      5000
+    );
+  }
+}
+// Alert
+
+function alertBox(msg, type, time) {
+  if (type == "danger") {
+    se2.play();
+  } else if (type == "success") {
+    se1.play();
+  }
+  var id = Math.random * 1000;
+  document.getElementById("alertBox").innerHTML +=
+    `<div id="alert-` +
+    id +
+    `" class="alert animated-alert alert-dismissible alert-` +
+    type +
+    `" role="alert">` +
+    msg +
+    `<a href="#" class="close btn-close" data-dismiss="alert" aria-label="close">&times;</a>` +
+    `</div>`;
+
+  setTimeout(() => {
+    document
+      .getElementById("alert-" + id)
+      .classList.add("animated-alert-del");
+  }, time - 150);
+  setTimeout(() => {
+    document
+      .getElementById("alert-" + id)
+      .remove();
+  }, time);
 }

@@ -70,8 +70,11 @@
     >
       <div class="container-fluid">
         <a class="navbar-brand" href="panel.html"
-          >Brother Maths</a
-        >
+          ><img
+            src="../icon.png"
+            width="30"
+            height="30"
+        /></a>
         <button
           class="navbar-toggler"
           type="button"
@@ -102,13 +105,15 @@
             </li>
             <li class="nav-item">
               <a
-                class="nav-link active"
+                class="nav-link"
                 href="learn.html"
-                >Learn</a
+                >Self Learning</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="quiz.html"
+              <a
+                class="nav-link active"
+                href="quiz.html"
                 >Quiz</a
               >
             </li>
@@ -117,6 +122,11 @@
                 class="nav-link"
                 href="forum.html"
                 >Forum</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="help.html"
+                >Help</a
               >
             </li>
           </ul>
@@ -146,71 +156,79 @@
         style="position: absolute;"
       ></div>
       <div class="d-block d-lg-none">
+        <div class="row-2">
+          <label
+            for="exampleDataList"
+            class="form-label"
+            >Form</label
+          >
           <select
-                class="form-select form-select-sm"
-                id="m_input_formSelect"
-                placeholder="Select Form"
-                onchange="selectionFormInput()"
-              >
-                <option
-                  id="m_input_formSelect_F1"
-                  value="F1"
-                  >Form 1</option
-                >
-                <option
-                  id="m_input_formSelect_F2"
-                  value="F2"
-                  >Form 2</option
-                >
-                <option
-                  id="m_input_formSelect_F3"
-                  value="F3"
-                  >Form 3</option
-                >
-                <option
-                  id="m_input_formSelect_F4"
-                  value="F4"
-                  >Form 4</option
-                >
-                <option
-                  id="m_input_formSelect_F5"
-                  value="F5"
-                  >Form 5</option
-                >
-                <option
-                  id="m_input_formSelect_F6"
-                  value="F6"
-                  >Form 6</option
-                >
-              </select>
-              <label
-                for="exampleDataList"
-                class="form-label"
-                >Post</label
-              >
-              <select
-                class="form-select form-select-sm"
-                id="m_PostListforquiz"
-                placeholder="Select Post"
-              >
-              </select>
-              <button
-                class="btn btn-success w-100"
-                onclick="SerachnRead_M()"
-              >
-                Enter
-              </button>
-            </div>
-            <div class="row"><br /></div>
-            <div class="row border" id="m_PostAreaforquiz">
-              Nothing Here
-            </div>
-            <div
-              class="row border"
-              id="m_CommentAreaforquiz"
-            ></div>
-          </div>
+            class="form-select form-select-sm"
+            id="m_input_formSelect"
+            placeholder="Select Form"
+            onchange="selectionFormInput()"
+          >
+            <option
+              id="m_input_formSelect_F1"
+              value="F1"
+              >Form 1</option
+            >
+            <option
+              id="m_input_formSelect_F2"
+              value="F2"
+              >Form 2</option
+            >
+            <option
+              id="m_input_formSelect_F3"
+              value="F3"
+              >Form 3</option
+            >
+            <option
+              id="m_input_formSelect_F4"
+              value="F4"
+              >Form 4</option
+            >
+            <option
+              id="m_input_formSelect_F5"
+              value="F5"
+              >Form 5</option
+            >
+            <option
+              id="m_input_formSelect_F6"
+              value="F6"
+              >Form 6</option
+            >
+          </select>
+          <label
+            for="exampleDataList"
+            class="form-label"
+            >Post</label
+          >
+          <select
+            class="form-select form-select-sm"
+            id="m_PostListforquiz"
+            placeholder="Select Post"
+          >
+          </select>
+          <button
+            class="btn btn-success w-100"
+            onclick="SerachnRead_M()"
+          >
+            Enter
+          </button>
         </div>
+        <div class="row"><br /></div>
+        <div
+          class="row border"
+          id="m_PostAreaforquiz"
+        >
+          Nothing Here
+        </div>
+        <div
+          class="row border"
+          id="m_CommentAreaforquiz"
+        ></div>
+      </div>
       <div class="d-none d-lg-block">
         <div class="row" style="height: 90vh;">
           <div class="col-3 border overflow-auto">

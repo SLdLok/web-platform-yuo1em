@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"
+    />
+
+    <!-- Title -->
+    <title>Brother Maths - Panel</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="../favicon.ico"
+    />
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <!-- Firebase Config & Intitailze -->
+    <script>
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey:
+          "AIzaSyAjq1lBaXKKsrREWHBRD9I6HWYnixGaDHY",
+        authDomain: "appm-87da8.firebaseapp.com",
+        projectId: "appm-87da8",
+        storageBucket: "appm-87da8.appspot.com",
+        messagingSenderId: "737891521283",
+        appId:
+          "1:737891521283:web:50f0956a00849e40314f36",
+        measurementId: "G-CTZBC8X25J"
+      };
+      firebase.initializeApp(firebaseConfig);
+      // For Check Access is it allowed.
+      pageNeedAccess = "teacher";
+    </script>
+    <!-- Self-Script (From root folder) -->
+    <script src="../auth.js"></script>
+    <script defer src="../pageCustom.js"></script>
+    <script
+      defer
+      src="../pointSystem.js"
+    ></script>
+  </head>
+  <body>
+    <!-- DisplayContent -->
+    <!-- Navbar -->
+    <nav
+      class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark"
+    >
+      <div class="container-fluid">
+        <a class="navbar-brand" href="panel.html"
+          ><img
+            src="../icon.png"
+            width="30"
+            height="30"
+        /></a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span
+            class="navbar-toggler-icon"
+          ></span>
+        </button>
+        <div
+          class="collapse navbar-collapse"
+          id="navbarSupportedContent"
+        >
+          <ul
+            class="navbar-nav me-auto mb-2 mb-lg-0"
+          >
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                aria-current="page"
+                href="panel.html"
+                >Panel</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="learn.html"
+                >Self Learning</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="quiz.html"
+                >Quiz</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="forum.html"
+                >Forum</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                href="help.html"
+                >Help</a
+              >
+            </li>
+          </ul>
+          <span
+            id="DisplayName"
+            class="navbar-text d-none d-lg-block me-2"
+            >Welcome Back, HUMAN.</span
+          >
+          <div class="d-flex">
+            <button
+              class="btn btn-light"
+              onclick="SignOut();"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Cotainer -->
+    <nav
+      id="navbar-example3"
+      class="navbar navbar-light bg-light flex-column align-items-stretch p-3"
+    >
+      <a class="navbar-brand" href="#">Help</a>
+      <nav class="nav nav-pills flex-column">
+        <a class="nav-link" href="#item-1"
+          >TextEditor</a
+        >
+        <nav class="nav nav-pills flex-column">
+          <a
+            class="nav-link ms-3 my-1"
+            href="#item-1-1"
+            >Introduce</a
+          >
+          <a
+            class="nav-link ms-3 my-1"
+            href="#item-1-2"
+            >Simple HTML</a
+          >
+          <a
+            class="nav-link ms-3 my-1"
+            href="#item-1-3"
+            >MathJax</a
+          >
+        </nav>
+        <a class="nav-link" href="#item-2"
+          >Self-Learning & Quiz</a
+        >
+        <a class="nav-link" href="#item-3"
+          >Forum Term</a
+        >
+        <nav class="nav nav-pills flex-column">
+          <a
+            class="nav-link ms-3 my-1"
+            href="#item-3-1"
+            >Item 3-1</a
+          >
+          <a
+            class="nav-link ms-3 my-1"
+            href="#item-3-2"
+            >Item 3-2</a
+          >
+        </nav>
+      </nav>
+    </nav>
+    <div class="container">
+      <div
+        data-bs-spy="scroll"
+        data-bs-target="#navbar-example3"
+        data-bs-offset="0"
+        tabindex="0"
+      >
+        <h2 id="item-1">Text Editor</h4>
+        <h3 id="item-1-1">Introduce</h5>
+          <p>Text Editor is added into Forum, Self-Learning & Quiz</p>
+          <p>The Text Editor is based on HTML & JS.</p>
+          <p>The Text Editor is only supported write in HTML.</p>
+          <p>The Text Editor's button will add HTML Code & Style.</p>
+          <p>The Text Editor supported upload Image & MathJax.</p>
+        <h3 id="item-1-2">Simple HTML</h5>
+        <p>
+          HTML (HyperText Markup Language) is the standard markup language for documents designed to be displayed in a web browser.
+        </p>
+        <p>
+          In HTML, Element is basic.<br/>
+          It looks this:
+          <pre class="bg-dark text-light">
+            <code>
+              &lt;Element&gt; Content &lt;/Element&gt</code>
+          </pre> Or
+          <pre class="bg-dark text-light"><code>
+            &lt;Element /&gt
+          </code></pre>
+        </p>
+        <br/>
+        <br/>
+        <p>
+            &lt;p&gt; is used to represent paragraph.
+            <pre class="bg-dark text-light"><code>
+              &lt;p&gt; Content &lt;/p&gt
+            </code></pre>
+        </p>
+        <p>
+            &lt;h1&gt; - &lt;h6&gt; is used to represent heading.
+            <pre class="bg-dark text-light"><code>
+              &lt;h1&gt; XXL Heading &lt;/h1&gt
+              &lt;h2&gt; XL Heading &lt;/h2&gt
+              &lt;h3&gt; L Heading &lt;/h3&gt
+              &lt;h4&gt; M Heading &lt;/h4&gt
+              &lt;h5&gt; S Heading &lt;/h5&gt
+              &lt;h6&gt; small Heading &lt;/h6&gt
+            </code></pre>
+        </p>
+        <p>
+            &lt;b&gt; is used to represent bold.
+            <pre class="bg-dark text-light"><code>
+              &lt;b&gt; Content &lt;/b&gt
+            </code></pre>
+        </p>
+        <p>
+            &lt;u&gt; is used to represent underline.
+            <pre class="bg-dark text-light"><code>
+              &lt;u&gt; Content &lt;/u&gt
+            </code></pre>
+        </p>
+        <p>
+            &lt;i&gt; is used to represent itatic.
+            <pre class="bg-dark text-light"><code>
+              &lt;i&gt; Content &lt;/i&gt
+            </code></pre>
+        </p>
+        <p>
+            &lt;a&gt; is used to represent link.
+            <pre class="bg-dark text-light"><code>
+              &lt;a src=' Link '&gt; Display Content &lt;/a&gt
+            </code></pre>
+        </p>
+        <p>
+            &lt;br&gt; is used to represent nextline.
+            <pre class="bg-dark text-light"><code>
+              &lt;br/&gt;
+            </code></pre>
+        </p>
+        <p>For advanced HTML, please go to <a href="https://www.w3schools.com/html/default.asp">w3schools</a> to learn.</p>
+        <h3 id="item-1-3">MathJax</h5>
+        <p>
+            MathJax is an open-source JavaScript display engine for LaTeX, MathML, and AsciiMath notation that works in all modern browsers.
+        </p>
+        <p>Supported LaTex ( We use ), & other Math Notation Language</p>
+        <p>
+          To started to write, first add a MATHJAX block.
+        <pre class="bg-dark text-light">
+            <code>
+              \( MathJaxCode \)
+            </code>
+          </pre> Or
+          <pre class="bg-dark text-light"><code>
+              \( MathJaxCode \)
+          </code></pre></p>
+          <p>
+              + & - eqation Just like normal writing. 
+            <pre class="bg-dark text-light">
+                <code>
+                  \( x+2=3-x \)
+                </code></pre></p>
+              <p>
+                  {} will let "the code inside" as a block</p>
+              <p>
+                _ & ^ represent Subscript and superscript
+                <pre class="bg-dark text-light">
+                  <code>
+                    \( x_1( {x_2}^4 ) \)
+                  </code></pre></p>
+              <p>
+                  \frac{}{} represent fraction
+                  <pre class="bg-dark text-light">
+                      <code>
+                        \( \frac{ numerator }{ denominator } \)
+                      </code></pre></p>
+
+              <p>advanced MathJax, please go to</p>
+                  
+        <h2 id="item-2">Self-Learning & Quiz</h4>
+        <p>
+          In Self-Learning, there are lots of Study material provided by teacher (& our team^).<br/>
+          You can read it but not copying.
+        </p>
+        <p>In Quiz, there are lots of Quiz material provided by teacher (& our team^)<br/>
+
+        </p>
+        <small><br/>^ Provided Material by our team, is a paid plan service.</small>
+        <h2 id="item-3">Forum Term</h4>
+        <p>The Forum Term must complyed with when use Forum.</p>
+        <h3 id="item-3-1">For Post</h5>
+        <p>
+          All Post must:
+          <ul>
+            <li>Not Post Any Rude Message</li>
+          </ul>
+          <ul>
+              <li>Post Message Politely</li>
+          </ul>
+          <ul>
+              <li>Post Message Relative with Homework, Learning & Study.</li>
+          </ul>
+          Admin have the right to delete your message if you're not complyed with. 
+        </p>
+        <h3 id="item-3-2">For Comment</h5>
+          <p>
+              All Comment must:
+              <ul>
+                <li>Not send Any Rude Message</li>
+              </ul>
+              <ul>
+                  <li>Comment Message Politely</li>
+              </ul>
+              <ul>
+                  <li>Comment Message Relative with The Post / Answering Question</li>
+              </ul>
+            </p>
+            Admin have the right to delete your message if you're not complyed with.
+      </div>
+    </div>
+
+    <!-- Bootstrap JS - Option 1: Bootstrap Bundle with Popper -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

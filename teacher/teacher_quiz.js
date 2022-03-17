@@ -26,6 +26,7 @@ function getViewport() {
   if (width <= 1200) return "lg";
   return "xl";
 }
+
 direct();
 // Direct
 function direct() {
@@ -54,6 +55,12 @@ function direct() {
       listMSG(t, f);
       readMSG(t, f, post);
     } else {
+      document.getElementById(
+        "m_input_formSelect"
+      ).value = form;
+      document.getElementById(
+        "m_PostListforquiz"
+      ).value = post;
       m_listMSG(t, f);
       m_readMSG(t, f, post);
     }
@@ -671,7 +678,7 @@ function submitAnswer(CorrectAns) {
       );
     }
   } else {
-    alert(
+    alertBox(
       "You reached the quiz limit of today. Please refresh it by getting daily award.",
       "danger",
       5000

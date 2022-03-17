@@ -762,7 +762,7 @@ function listMSG(Group, Form) {
 function sendComment(Group, Form, Post) {
   if (
     document
-      .getElementById("textEditor-" + id)
+      .getElementById("textEditor")
       .contentWindow.document.getElementById(
         "editorTextInput"
       ).value.length > 20
